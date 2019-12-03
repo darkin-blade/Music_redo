@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/tab_3"
+        android:text="Music Player">
+    </TextView>
+    <TextView
+        android:id="@+id/music_name"
+        style="@style/tab_1"
+        android:textColor="@color/theme_black"
+        android:text="no music"
+
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit ="marquee_forever"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+    </TextView>
+    <View
+        style="@style/line">
+    </View>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey">
+
+        <ScrollView
+            android:id="@+id/music_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="100dp">
+            <LinearLayout
+                android:id="@+id/music_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <View
+                style="@style/line">
+            </View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/cur_time"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:text="00:00"
+                    android:gravity="center">
+                </TextView>
+
+                <SeekBar
+                    android:id="@+id/music_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:layout_constraintBottom_toBottomOf="parent">
+                </SeekBar>
+
+                <TextView
+                    android:id="@+id/total_time"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:text="00:00"
+                    android:gravity="center">
+                </TextView>
+
+            </LinearLayout>
+
+            <View
+                style="@style/line">
+            </View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/main_to_mix"
+                    style="@style/button_8"
+                    android:text="edit">
+                </Button>
+
+                <View
+                    style="@style/tool_4"/>
+                <View
+                    android:id="@+id/button_prev"
+                    style="@style/tool_3"/>
+                <View
+                    android:id="@+id/button_play"
+                    style="@style/tool_1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
+                <View
+                    android:id="@+id/button_next"
+                    style="@style/tool_2"/>
+                <View
+                    android:id="@+id/mix_list"
+                    style="@style/tool_5"/>
+
+                <Button
+                    style="@style/button_8"
+                    android:text="mode">
+                </Button>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

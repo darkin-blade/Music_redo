@@ -83,7 +83,6 @@ public class MediaReceiver extends BroadcastReceiver {
                     MainPlayer.infoLog("media button: " + keycode);
                     switch (keycode) {
                         case KeyEvent.KEYCODE_MEDIA_NEXT:// TODO 下一首 87
-                            MainPlayer.playList.changeMusic(null, 1);
                             MainPlayer.infoLog("next");
                             break;
                         case KeyEvent.KEYCODE_HEADSETHOOK:// 播放/暂停 79
@@ -110,12 +109,9 @@ public class MediaReceiver extends BroadcastReceiver {
                                         if (last_click_times == -1) {
                                             MainPlayer.infoLog("click -1 time???");
                                         } else if (last_click_times == 0) {
-                                            MainPlayer.button_play.callOnClick();// 播放/暂停
                                         } else if (last_click_times == 1) {// TODO 下一首
-                                            MainPlayer.playList.changeMusic(null, 1);
                                             MainPlayer.infoLog("todo next");
                                         } else if (last_click_times == 2) {// TODO 上一首
-                                            MainPlayer.playList.changeMusic(null, 2);
                                             MainPlayer.infoLog("todo last");
                                         }
                                         MainPlayer.clickTimes = 0;// TODO 累计清零
