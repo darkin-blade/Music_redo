@@ -1,9 +1,15 @@
 package com.example.music_redo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -21,7 +27,7 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MainPlayer extends AppCompatActivity {
+public class MainPlayer extends AppCompatActivity implements DialogInterface.OnDismissListener {
     // ui组件
     // 按钮
     static public View button_play;
@@ -91,12 +97,39 @@ public class MainPlayer extends AppCompatActivity {
         initData();
     }
 
-    public void initApp() {// 初始化app核心变量
-        ;
+    public void initApp() {
+        // 检查权限
+        String permission = "android.permission.WRITE_EXTERNAL_STORAGE";
+        int check_result = ActivityCompat.checkSelfPermission(this, permission);// `允许`返回0,`拒绝`返回-1
+        if (check_result != PackageManager.PERMISSION_GRANTED) {// 没有`写`权限
+            ActivityCompat.requestPermissions(this, new String[]{permission}, 1);// 获取`写`权限
+        }
+
+        // 初始化功能编号
+        window_num = MAIN_PLAYER;
+
+        // 初始化路径字符串
+        appPath = getExternalFilesDir("").getAbsolutePath();
+
+        // 初始化数据库
+        database = SQLiteDatabase.openOrCreateDatabase(appPath + "/player.db", null);
     }
 
     public void initBluetooth() {
-        ;
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();// 获取蓝牙适配器
+        receiver = new MediaReceiver(this);
+
+        IntentFilter intentFilter = new IntentFilter();
+
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);// 监视蓝牙设备与APP连接的状态
+        intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);// 监听有线耳机的插拔
+        intentFilter.addAction(Intent.ACTION_MEDIA_BUTTON);// TODO 重复?
+
+        registerReceiver(this.receiver, intentFilter);// 注册广播 TODO 有报错
+        receiver.registerReceiver(this);
+
     }
 
     public void initPlayer() {
@@ -105,6 +138,7 @@ public class MainPlayer extends AppCompatActivity {
 
     public void initUI() {// 初始化ui,layout和dialog
         // 部件
+        // 按钮
         button_play = findViewById(R.id.button_play);
         button_next = findViewById(R.id.button_next);
         button_prev = findViewById(R.id.button_prev);
@@ -112,11 +146,11 @@ public class MainPlayer extends AppCompatActivity {
         button_bluetooth = findViewById(R.id.button_bluetooth);
         button_edit = findViewById(R.id.button_edit);
         button_mode = findViewById(R.id.button_mode);
-
+        // 播放器进度部件
         seekBar = findViewById(R.id.music_bar);// 进度条
         totalTime = findViewById(R.id.total_time);// 音乐总时长
         curTime = findViewById(R.id.cur_time);// 音乐进度
-
+        // 主体部件
         musicName = findViewById(R.id.music_name);
         scrollView = findViewById(R.id.layout_scroll);
         itemList = findViewById(R.id.item_list);
@@ -128,7 +162,8 @@ public class MainPlayer extends AppCompatActivity {
         addList = new AddList();
     }
 
-    public void initData() {// TODO 恢复数据
+    public void initData() {
+        // TODO 恢复数据
         ;
     }
 
@@ -160,33 +195,37 @@ public class MainPlayer extends AppCompatActivity {
 
     static public String pathSimplify(String path) {// TODO 简化路径
         path = path.replaceAll("/+\\./", "/");// 除去`/.`
-        infoLog("path: " + path);
 
         Pattern pattern = Pattern.compile("/+\\.[\\.]+");
         Matcher matcher = pattern.matcher(path);
         int count = 0;
         while (matcher.find()) {
-            count ++;
+            count++;
         }
 
         path = path.replaceAll("/+\\.[\\.]+", "");// 除去`/..`
 
         int index = path.length() - 1;
         if (path.charAt(index) == '/') {
-            index --;
+            index--;
         }
 
         while (index >= 0) {
             if (path.charAt(index) == '/') {
-                count --;
+                count--;
                 if (count == 0) {
                     infoLog("simplified path: " + path.substring(0, index));
                     return path.substring(0, index);
                 }
             }
-            index --;
+            index--;
         }
 
         return "/";
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        ;// TODO
     }
 }
