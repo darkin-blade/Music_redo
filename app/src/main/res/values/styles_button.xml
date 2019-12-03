@@ -1,0 +1,91 @@
+<resources>
+    <!--  按钮样式  -->
+
+    <!-- 窗口按钮 -->
+    <style name="button_1">
+        <!--    父类型    -->
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+
+        <item name="android:gravity">center</item>
+        <item name="android:lines">1</item>
+        <item name="android:textSize">16dp</item>
+
+        <item name="android:background">@drawable/button_1</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="button_2" parent="button_1">
+        <item name="android:background">@drawable/button_2</item>
+    </style>
+    <style name="button_5" parent="button_1">
+        <item name="android:background">@drawable/button_5</item>
+    </style>
+    <style name="button_6" parent="button_1">
+        <item name="android:background">@drawable/button_6</item>
+        <item name="android:textColor">@color/grey_dark</item>
+    </style>
+    <style name="button_7" parent="button_1">
+        <item name="android:background">@drawable/button_7</item>
+    </style>
+    <style name="button_8" parent="button_1">
+        <item name="android:background">@drawable/button_8</item>
+        <item name="android:textColor">@color/theme_black</item>
+    </style>
+
+    <!--  播放器按钮  -->
+    <style name="tool_1">
+        <!--    父类型    -->
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_width">40dp</item>
+
+        <item name="android:gravity">center</item>
+        <item name="android:lines">1</item>
+
+        <item name="android:background">@drawable/player_play</item>
+    </style>
+    <style name="tool_2" parent="tool_1">
+        <item name="android:background">@drawable/player_next</item>
+    </style>
+    <style name="tool_3" parent="tool_1">
+        <item name="android:background">@drawable/player_prev</item>
+    </style>
+    <style name="tool_4" parent="tool_1">
+        <item name="android:background">@drawable/player_bluetooth</item>
+    </style>
+    <style name="tool_5" parent="tool_1">
+        <item name="android:background">@drawable/player_list</item>
+    </style>
+
+    <!-- 主界面按钮 -->
+    <style name="item_1">
+        <!--    父类型    -->
+        <item name="android:layout_height">@dimen/item_height</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_margin">10dp</item>
+
+        <item name="android:gravity">center</item>
+        <item name="android:lines">1</item>
+        <item name="android:textSize">@dimen/item_text_size</item>
+
+        <item name="android:background">@drawable/button_1</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="item_2" parent="item_1">
+        <item name="android:background">@drawable/button_2</item>
+    </style>
+    <style name="item_3" parent="item_1">
+        <item name="android:background">@drawable/button_3</item>
+    </style>
+    <style name="item_4" parent="item_1">
+        <item name="android:background">@drawable/button_4</item>
+    </style>
+    <style name="item_7" parent="item_1">
+        <item name="android:background">@drawable/button_7</item>
+    </style>
+
+    <!--  主界面尺寸  -->
+    <dimen name="item_height">60dp</dimen>
+    <dimen name="item_text_size">20dp</dimen>
+
+</resources>

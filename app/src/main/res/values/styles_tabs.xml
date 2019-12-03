@@ -1,0 +1,81 @@
+<resources>
+    <!--  工具栏样式  -->
+
+    <!--  app样式  -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!-- 顶栏 -->
+    <style name="bar_1">
+        <!--    app标题    -->
+        <!--    父元素    -->
+        <item name="android:textSize">23dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/color_2</item>
+
+        <item name="android:layout_height">@dimen/bar_height</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <!-- 标题 -->
+    <style name="tab_1">
+        <!--    顶栏路径/功能提示    -->
+        <!--    父元素    -->
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@color/grey</item>
+
+        <item name="android:layout_height">@dimen/tab_height</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <style name="tab_2" parent="tab_1">
+        <item name="android:textSize">20dp</item>
+    </style>
+    <style name="tab_3" parent="tab_1">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/theme_black</item>
+    </style>
+
+    <!-- 分割线线 -->
+    <style name="line">
+        <item name="android:background">@color/grey_light</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+
+    <!-- 输入框 -->
+    <style name="input_1">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:background">@drawable/dialog_1</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:inputType">text</item>
+    </style>
+
+    <!-- 高宽参数 -->
+    <!-- 标题栏size -->
+    <dimen name="bar_height">55dp</dimen>
+
+    <!-- 工具栏size -->
+    <dimen name="tab_height">35dp</dimen>
+
+    <!-- 底栏size -->
+    <!-- 按钮  -->
+    <dimen name="bottom_1">60dp</dimen>
+    <!--  按钮 + 输入框  -->
+    <dimen name="bottom_2">120dp</dimen>
+    <!--  按钮 + 2输入框(input)  -->
+    <dimen name="bottom_3">180dp</dimen>
+    <!--  按钮 + 路径框(tab)  -->
+    <dimen name="bottom_4">95dp</dimen>
+
+</resources>
