@@ -2,7 +2,9 @@ package com.example.music_redo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.media.MediaPlayer;
@@ -30,14 +32,13 @@ public class MainPlayer extends AppCompatActivity {
     static public Button button_edit;
     static public Button button_mode;
     // 进度控制
-    static public MediaPlayer player;// 媒体播放器
     static public SeekBar seekBar;// 进度条
     static public TextView totalTime;// 音乐总时长
     static public TextView curTime;// 音乐已播放时长
     // 列表部分
     static public TextView musicName;// 歌名
     static public ScrollView scrollView;// 滚动界面
-    static public LinearLayout mainList;// 列表部分
+    static public LinearLayout itemList;// 列表部分
 
     // ui功能
     // dialog界面
@@ -53,6 +54,9 @@ public class MainPlayer extends AppCompatActivity {
     // 公共变量
     static public String appPath;
     static public SQLiteDatabase database;
+    // TODO media信号处理
+    static public Long myTime = System.currentTimeMillis();// 微秒时间
+    static public int clickTimes;// TODO 耳机信号次数
 
     // 功能代号
     static int window_num;
@@ -64,6 +68,16 @@ public class MainPlayer extends AppCompatActivity {
     static final int MIX_EDIT = 5;// 歌单列表管理歌单
     static final int MUSIC_EDIT = 6;// 歌曲列表管理歌曲
     static final int MIX_NEW = 7;// 新建歌单
+
+    // 核心组件
+    static public MediaPlayer player;// 媒体播放器
+    public MediaReceiver receiver;// 接收`蓝牙/媒体`信号
+    public BluetoothAdapter bluetoothAdapter;// 蓝牙
+    // 核心功能
+    static public MainList mainList;
+    static public MixList mixList;
+    static public MusicList musicList;
+    static public AddList addList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,11 +104,43 @@ public class MainPlayer extends AppCompatActivity {
     }
 
     public void initUI() {// 初始化ui,layout和dialog
+        // 部件
+        button_play = findViewById(R.id.button_play);
+        button_next = findViewById(R.id.button_next);
+        button_prev = findViewById(R.id.button_prev);
+        button_mix = findViewById(R.id.button_mix);
+        button_bluetooth = findViewById(R.id.button_bluetooth);
+        button_edit = findViewById(R.id.button_edit);
+        button_mode = findViewById(R.id.button_mode);
+
+        seekBar = findViewById(R.id.music_bar);// 进度条
+        totalTime = findViewById(R.id.total_time);// 音乐总时长
+        curTime = findViewById(R.id.cur_time);// 音乐进度
+
+        musicName = findViewById(R.id.music_name);
+        scrollView = findViewById(R.id.layout_scroll);
+        itemList = findViewById(R.id.item_list);
+
+        // 功能
+        mainList = new MainList();
+        mixList = new MixList();
+        musicList = new MusicList();
+        addList = new AddList();
+    }
+
+    public void initData() {// TODO 恢复数据
         ;
     }
 
-    public void initData() {
-        ;
+    static public int cmd(String sql) {// 操作数据库
+        try {
+            database.execSQL(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            MainPlayer.infoLog("database error: " + sql);
+            return -1;
+        }
+        return 0;
     }
 
     static public void infoLog(String log) {

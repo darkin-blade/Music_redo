@@ -33,12 +33,12 @@
         android:background="@color/grey">
 
         <ScrollView
-            android:id="@+id/music_scroll"
+            android:id="@+id/layout_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="100dp">
             <LinearLayout
-                android:id="@+id/music_list"
+                android:id="@+id/item_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -97,12 +97,13 @@
                 android:gravity="center">
 
                 <Button
-                    android:id="@+id/main_to_mix"
+                    android:id="@+id/button_edit"
                     style="@style/button_8"
                     android:text="edit">
                 </Button>
 
                 <View
+                    android:id="@+id/button_bluetooth"
                     style="@style/tool_4"/>
                 <View
                     android:id="@+id/button_prev"
@@ -116,10 +117,11 @@
                     android:id="@+id/button_next"
                     style="@style/tool_2"/>
                 <View
-                    android:id="@+id/mix_list"
+                    android:id="@+id/button_mix"
                     style="@style/tool_5"/>
 
                 <Button
+                    android:id="@+id/button_mode"
                     style="@style/button_8"
                     android:text="mode">
                 </Button>
