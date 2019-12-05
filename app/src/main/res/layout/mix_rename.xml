@@ -39,7 +39,7 @@
                 android:layout_marginRight="2dp"/>
             <Button
                 android:id="@+id/button_rename"
-                android:text="Create"
+                android:text="Rename"
                 style="@style/button_1"
                 android:layout_marginLeft="2dp"/>
 

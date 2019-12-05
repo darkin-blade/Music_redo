@@ -82,10 +82,10 @@ public class MixRename extends DialogFragment {
                 int result = MusicList.renameMix(MusicList.listManager.curMix, tmp);// TODO 重命名歌单
                 switch (result) {
                     case 0:
-                        MusicList.infoLog("create mix " + tmp + " succeed");
+                        MusicList.infoLog("rename mix " + tmp + " succeed");
                         break;
                     default:
-                        MusicList.infoLog("create mix " + tmp + " failed");
+                        MusicList.infoLog("rename mix " + tmp + " failed");
                         MusicList.infoToast(getContext(), "rename mix " + tmp + " failed");
                         break;
                 }

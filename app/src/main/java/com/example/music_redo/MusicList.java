@@ -306,6 +306,16 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     }
 
     static public int renameMix(String oldName, String newName) {
+        // 更改歌单名
+        int result = cmd("alter table " + oldName + " rename to " + newName + ";");
+        if (result != 0) {
+            return -1;// TODO 删除table失败
+        }
+
+        result = cmd("update mix_list set name = '" + newName + "' where name = '" + oldName + "';");
+        if (result != 0) {
+            return -2;// 从歌单列表删除失败
+        }
         return 0;
     }
 
@@ -389,7 +399,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 }
                 break;
             case MIX_RENAME:
-                ;// TODO 更新顶部 curMix
+                window_num = MUSIC_LIST;// TODO 更新顶部 curMix
                 break;
         }
     }
