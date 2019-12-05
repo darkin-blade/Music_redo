@@ -16,14 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainPlayer">
+        <activity android:name=".MusicList">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".MediaReceiver">
+        <receiver android:name=".components.MediaReceiver">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.MEDIA_BUTTON"></action>
             </intent-filter>

@@ -1,4 +1,4 @@
-package com.example.music_redo;
+package com.example.music_redo.components;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.view.KeyEvent;
+
+import com.example.music_redo.MusicList;
 
 public class MediaReceiver extends BroadcastReceiver {
     public Context myContext = null;
@@ -22,10 +24,10 @@ public class MediaReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {// 接收信号
-//        MainPlayer.infoLog("receive");
+//        MusicList.infoLog("receive");
         String action = intent.getAction();
         if (action != null) {
-            MainPlayer.infoLog("action: " + action);// TODO debug
+            MusicList.infoLog("action: " + action);// TODO debug
             switch (action) {
                 // 有线耳机状态改变
                 case Intent.ACTION_HEADSET_PLUG:
@@ -42,16 +44,16 @@ public class MediaReceiver extends BroadcastReceiver {
                     int bluetoothState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);// 获取蓝牙状态
                     switch (bluetoothState) {
                         case BluetoothAdapter.STATE_TURNING_ON:
-                            MainPlayer.infoLog("turning on");
+                            MusicList.infoLog("turning on");
                             break;
                         case BluetoothAdapter.STATE_ON:
-                            MainPlayer.infoLog("on");
+                            MusicList.infoLog("on");
                             break;
                         case BluetoothAdapter.STATE_TURNING_OFF:
-                            MainPlayer.infoLog("turning off");
+                            MusicList.infoLog("turning off");
                             break;
                         case BluetoothAdapter.STATE_OFF:
-                            MainPlayer.infoLog("off");
+                            MusicList.infoLog("off");
                             break;
                     }
                     break;
@@ -72,10 +74,10 @@ public class MediaReceiver extends BroadcastReceiver {
 
                     // up
                     int keycode = keyEvent.getKeyCode();
-                    MainPlayer.infoLog("media button: " + keycode);
+                    MusicList.infoLog("media button: " + keycode);
                     switch (keycode) {
                         case KeyEvent.KEYCODE_MEDIA_NEXT:// TODO 下一首 87
-                            MainPlayer.infoLog("next");
+                            MusicList.infoLog("next");
                             break;
                         case KeyEvent.KEYCODE_HEADSETHOOK:// 播放/暂停 79
                             // TODO 切歌
