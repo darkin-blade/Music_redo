@@ -69,16 +69,14 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public int clickTimes;// TODO 耳机信号次数
 
     // 功能代号
-    static int window_num;
-    static int dialog_result;
-    static final int MUSIC_LIST = 0;// 主界面
-    static final int MIX_LIST = 1;// 歌单列表
-    static final int ADD_LIST = 3;// `添加至`列表
-    static final int MIX_EDIT = 5;// 歌单列表管理歌单
-    static final int MUSIC_EDIT = 6;// 歌曲列表管理歌曲
-    static final int MIX_NEW = 7;// 新建歌单
-    static final int CANCEL = 0;// dialog返回
-    static final int OK = 1;// dialog操作成功
+    static public int window_num;
+    static public int dialog_result;
+    static public final int MUSIC_LIST = 0;// 主界面
+    static public final int MIX_LIST = 1;// 歌单列表
+    static public final int ADD_LIST = 3;// `添加至`列表
+    static public final int MIX_EDIT = 5;// 歌单列表管理歌单
+    static public final int MUSIC_EDIT = 6;// 歌曲列表管理歌曲
+    static public final int MIX_NEW = 7;// 新建歌单
 
     // 核心组件
     static public MediaPlayer player;// 媒体播放器
@@ -111,6 +109,9 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
         // 初始化功能编号
         window_num = MUSIC_LIST;
+        // < 0: 取消
+        // > 0: 操作成功
+        dialog_result = 0;
 
         // 初始化路径字符串
         appPath = getExternalFilesDir("").getAbsolutePath();

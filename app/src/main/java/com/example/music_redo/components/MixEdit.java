@@ -66,5 +66,19 @@ public class MixEdit extends DialogFragment {
 
         textView.setText(MusicList.listManager.mixSelected.size() + " mix selected");
 
+        button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MusicList.dialog_result = -1;
+                dismiss();
+            }
+        });
+
+        button_new.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MusicList.mixNew.show(getFragmentManager(), "new mix");// TODO 编号
+            }
+        });
     }
 }

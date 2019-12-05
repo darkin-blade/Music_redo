@@ -1,4 +1,6 @@
 package com.example.music_redo.components;
 
-public class MixNew {
+import androidx.fragment.app.DialogFragment;
+
+public class MixNew extends DialogFragment {
 }
