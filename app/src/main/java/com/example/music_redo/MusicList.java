@@ -114,6 +114,19 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
         // 初始化数据库
         database = SQLiteDatabase.openOrCreateDatabase(appPath + "/player.db", null);
+        // `歌单列表`table
+        cmd("create table if not exists mix_list (\n" +
+                "  name varchar (32) not null,\n" +
+                "  primary key (name)\n" +
+                ") ;");
+        // `用户数据`table
+        cmd("create table if not exists user_data (\n" +
+                "  cur_mix varchar(32) default \"\",\n" +
+                "  cur_music varchar(128) default \"\",\n" +
+                "  play_mode int default 0,\n" +
+                "  cur_time int default 0,\n" +
+                "  total_time int default 0\n" +
+                ");");
     }
 
     public void initBluetooth() {
@@ -161,10 +174,28 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             public void onClick(View v) {
                 if (window_num == MUSIC_LIST) {
                     // 切换至歌单列表
+                    mainList.listMix();
                     window_num = MIX_LIST;
                 } else {
                     // 切换到当前歌单
-                    window_num = MUSIC_LIST;
+                    if (playList.curMusic.length() > 0) {
+                        mainList.listMusic(playList.curMix);
+                        window_num = MUSIC_LIST;
+                    } else {
+                        infoToast(MusicList.this, "no current mix");
+                    }
+                }
+            }
+        });
+
+        button_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (window_num) {
+                    case MUSIC_LIST:
+                        break;
+                    case MIX_LIST:
+                        break;
                 }
             }
         });

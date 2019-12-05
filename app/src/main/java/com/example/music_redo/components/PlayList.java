@@ -13,8 +13,8 @@ public class PlayList {
 
     // 播放管理
     // 每次加载必须要恢复的数据
-    String curMix;// 当前歌单
-    String curMusic;// 当前歌曲
+    public String curMix;// 当前歌单
+    public String curMusic;// 当前歌曲
     int playMode;// 播放模式
     // 次要数据
     ArrayList<String> curMusicList;// 当前歌单的所有歌曲
@@ -39,63 +39,57 @@ public class PlayList {
     }
 
     public void recover() {// 恢复数据
-        try {
-            Cursor cursor = MusicList.database.query(
-                    "user_data",
-                    new String[] {"cur_mix", "cur_music", "play_mode", "cur_time", "total_time"},
-                    null,
-                    null,
-                    null,
-                    null,
-                    "cur_music");// 没用
+        Cursor cursor = MusicList.database.query(
+                "user_data",
+                new String[] {"cur_mix", "cur_music", "play_mode", "cur_time", "total_time"},
+                null,
+                null,
+                null,
+                null,
+                "cur_music");// 没用
 
-            if (cursor.moveToFirst()) {
-                // 恢复数据
-                curMix = cursor.getString(0);
-                curMusic = cursor.getString(1);
-                playMode = cursor.getInt(2);
-                MusicList.playTime.cur_time = cursor.getInt(3);
-                MusicList.playTime.total_time = cursor.getInt(4);
-                cursor.close();
+        if (cursor.moveToFirst()) {
+            // 恢复数据
+            curMix = cursor.getString(0);
+            curMusic = cursor.getString(1);
+            playMode = cursor.getInt(2);
+            MusicList.playTime.cur_time = cursor.getInt(3);
+            MusicList.playTime.total_time = cursor.getInt(4);
+            cursor.close();
 
-                // 手动加载歌单
-                if (curMix.length() > 0 && curMusic.length() > 0) {// 有效数据
-                    curMusicList.clear();
-                    curMixLen = 0;
+            // 手动加载歌单
+            if (curMix.length() > 0 && curMusic.length() > 0) {// 有效数据
+                curMusicList.clear();
+                curMixLen = 0;
 
-                    cursor = MusicList.database.query(
-                            curMix,// 当前歌单
-                            new String[]{"path", "name", "count"},
-                            null,
-                            null,
-                            null,
-                            null,
-                            "name");
+                cursor = MusicList.database.query(
+                        curMix,// 当前歌单
+                        new String[]{"path", "name", "count"},
+                        null,
+                        null,
+                        null,
+                        null,
+                        "name");
 
-                    if (cursor.moveToFirst()) {// 歌单非空
-                        // 恢复播放数据
-                        do {
-                            String music_name = cursor.getString(0);// 获取歌名
-                            curMusicList.add(music_name);
-                            curMixLen ++;
-                        } while (cursor.moveToNext());
-                        curMusicIndex = curMusicList.indexOf(curMusic);// 获取当前播放的音乐的索引 此步可能会重复 且如果没有播放音乐时该索引可能为负
+                if (cursor.moveToFirst()) {// 歌单非空
+                    // 恢复播放数据
+                    do {
+                        String music_name = cursor.getString(0);// 获取歌名
+                        curMusicList.add(music_name);
+                        curMixLen ++;
+                    } while (cursor.moveToNext());
+                    curMusicIndex = curMusicList.indexOf(curMusic);// 获取当前播放的音乐的索引 此步可能会重复 且如果没有播放音乐时该索引可能为负
 
-                        // TODO 加载歌单
-                        MusicList.mainList.listMusic(curMix);
-                    } else {
-                        ;// TODO 出现异常
-                    }
-                    cursor.close();
+                    // TODO 加载歌单
+                    MusicList.mainList.listMusic(curMix);
+                } else {
+                    ;// TODO 出现异常
                 }
-            } else {
                 cursor.close();
-                MusicList.infoLog("cannot find user data");
             }
-        } catch (SQLException e) {// TODO 容错
-            e.printStackTrace();
-            MusicList.infoLog("cannot find table");
-            return;
+        } else {
+            cursor.close();
+            MusicList.infoLog("cannot find user data");
         }
     }
 
