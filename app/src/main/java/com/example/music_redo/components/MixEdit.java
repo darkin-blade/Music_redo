@@ -18,9 +18,9 @@ import com.example.music_redo.R;
 
 public class MixEdit extends DialogFragment {
     public View myView;
+    Button button_cancel;
     Button button_delete;
     Button button_new;
-    Button button_cancel;
     TextView textView;// 显示选中的歌单数目
 
     @Override
@@ -60,9 +60,9 @@ public class MixEdit extends DialogFragment {
     
     public void initUI() {
         textView = myView.findViewById(R.id.edit_title);
+        button_cancel = myView.findViewById(R.id.button_cancel);
         button_delete = myView.findViewById(R.id.button_delete);
         button_new = myView.findViewById(R.id.button_new);
-        button_cancel = myView.findViewById(R.id.button_cancel);
 
         textView.setText(MusicList.listManager.mixSelected.size() + " mix selected");
 

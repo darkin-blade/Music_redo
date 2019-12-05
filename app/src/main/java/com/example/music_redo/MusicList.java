@@ -291,6 +291,10 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         }
     }
 
+    static int renameMix(String oldName, String newName) {
+        return 0;
+    }
+
     static int addMusic(String mixName, String musicPath) {
         return cmd("insert into " + mixName + " (path, name, count)\n" +
                 "  values\n" +
@@ -361,6 +365,13 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 break;
             case MIX_EDIT:
                 window_num = MIX_LIST;
+                break;
+            case MUSIC_SELECT:// 添加歌曲
+                if (listManager.curMix.equals(playList.curMusic)) {// 更新当前播放列表
+                    playList.loadMix(playList.curMix, playList.curMusic, -1);
+                } else {// TODO 只刷新ui
+                    listManager.listMusic(listManager.curMix);
+                }
                 break;
         }
     }
