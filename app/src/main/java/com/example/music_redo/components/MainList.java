@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 public class MainList {
     Context myContext;
-    View myView;
 
     // 浏览管理
     public String curMix;
@@ -26,9 +25,8 @@ public class MainList {
     ArrayList<String> mixSelected;
     ArrayList<String> musicSelected;
 
-    public MainList(Context context, View view) {
+    public MainList(Context context) {
         myContext = context;
-        myView = view;
     }
 
     public void init() {
