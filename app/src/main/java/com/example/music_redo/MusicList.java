@@ -342,11 +342,17 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     }
 
     @Override
+    public void onPause() {
+        playList.save();
+        super.onPause();
+    }
+
+    @Override
     public void onDismiss(DialogInterface dialog) {
         switch (window_num) {
             case MIX_NEW:// 新建歌单
                 if (dialog_result > 0) {
-                    ;// TODO 更新ui
+                    playList.loadMix(playList.curMix, playList.curMusic, -1);// TODO 更新ui
                 }
                 break;
         }

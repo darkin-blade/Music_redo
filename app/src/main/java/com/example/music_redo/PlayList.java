@@ -35,11 +35,28 @@ public class PlayList {
         recover();
     }
 
-    public void loadMusic(String nextMusic, int mode) {
-        ;
+    public void loadMusic(int mode) {
+        if (mode == 1) {// 下一首
+            curMusicIndex = (curMusicIndex + 1) % curMixLen;
+            curMusic = curMusicList.get(curMusicIndex);
+        } else if (mode == 2) {// 上一首
+            curMusicIndex = (curMusicIndex + curMixLen - 1) % curMixLen;
+            curMusic = curMusicList.get(curMusicIndex);
+        } else if (mode == 0) {// 指定
+            ;
+        } else if (mode == -1) {// 不进行操作
+            return;
+        }
+
+        MusicList.listManager.updateMusic();
+        ;// TODO 播放curMusic
     }
 
     public void loadMix(String nextMix, String nextMusic, int mode) {
+        if (nextMix == null || nextMix.length() <= 0 || nextMusic == null || nextMusic.length() <= 0) {
+            stopMusic();// TODO
+        }
+
         if (nextMix.equals(curMix) && nextMusic.equals(curMusic)) {
             mode = 0;
         }
@@ -68,7 +85,11 @@ public class PlayList {
 
             // TODO 加载歌单
             MusicList.listManager.listMusic(curMix);
-            loadMusic(curMusic, mode);
+            if (mode == -1) {
+                loadMusic(-1);
+            } else {
+                loadMusic(0);
+            }
         } else {
             stopMusic();
         }
@@ -96,42 +117,13 @@ public class PlayList {
             playMode = cursor.getInt(2);
             MusicList.playTime.cur_time = cursor.getInt(3);
             MusicList.playTime.total_time = cursor.getInt(4);
-            cursor.close();
 
-            // 手动加载歌单
-            if (curMix.length() > 0 && curMusic.length() > 0) {// 有效数据
-                curMusicList.clear();
-                curMixLen = 0;
-
-                cursor = MusicList.database.query(
-                        curMix,// 当前歌单
-                        new String[]{"path", "name", "count"},
-                        null,
-                        null,
-                        null,
-                        null,
-                        "name");
-
-                if (cursor.moveToFirst()) {// 歌单非空
-                    // 恢复播放数据
-                    do {
-                        String music_name = cursor.getString(0);// 获取歌名
-                        curMusicList.add(music_name);
-                        curMixLen ++;
-                    } while (cursor.moveToNext());
-                    curMusicIndex = curMusicList.indexOf(curMusic);// 获取当前播放的音乐的索引 此步可能会重复 且如果没有播放音乐时该索引可能为负
-
-                    // TODO 加载歌单
-                    MusicList.listManager.listMusic(curMix);
-                } else {
-                    ;// TODO 出现异常
-                }
-                cursor.close();
-            }
+            // TODO 加载歌单
+            loadMix(curMix, curMusic, -1);
         } else {
-            cursor.close();
             MusicList.infoLog("cannot find user data");
         }
+        cursor.close();
     }
 
     public void save() {// TODO 保存应用数据到数据库
