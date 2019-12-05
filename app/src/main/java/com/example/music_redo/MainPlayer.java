@@ -48,7 +48,6 @@ public class MainPlayer extends AppCompatActivity implements DialogInterface.OnD
 
     // ui功能
     // dialog界面
-    static public MainEdit mainEdit;// 主界面 编辑歌曲
     static public MixEdit mixEdit;// 编辑歌单
     static public MusicEdit musicEdit;// 歌单界面 编辑歌曲
     static public MixNew mixNew;// 新建歌单
@@ -66,11 +65,9 @@ public class MainPlayer extends AppCompatActivity implements DialogInterface.OnD
 
     // 功能代号
     static int window_num;
-    static final int MAIN_PLAYER = 0;// 主界面
+    static final int MUSIC_LIST = 0;// 主界面
     static final int MIX_LIST = 1;// 歌单列表
-    static final int MUSIC_LIST = 2;// 歌曲列表
     static final int ADD_LIST = 3;// `添加至`列表
-    static final int MAIN_EDIT = 4;// 主界面管理歌曲
     static final int MIX_EDIT = 5;// 歌单列表管理歌单
     static final int MUSIC_EDIT = 6;// 歌曲列表管理歌曲
     static final int MIX_NEW = 7;// 新建歌单
@@ -80,9 +77,8 @@ public class MainPlayer extends AppCompatActivity implements DialogInterface.OnD
     public MediaReceiver receiver;// 接收`蓝牙/媒体`信号
     public BluetoothAdapter bluetoothAdapter;// 蓝牙
     // 核心功能
-    static public MainList mainList;
-    static public MixList mixList;
     static public MusicList musicList;
+    static public MixList mixList;
     static public AddList addList;
 
     @Override
@@ -106,7 +102,7 @@ public class MainPlayer extends AppCompatActivity implements DialogInterface.OnD
         }
 
         // 初始化功能编号
-        window_num = MAIN_PLAYER;
+        window_num = MUSIC_LIST;
 
         // 初始化路径字符串
         appPath = getExternalFilesDir("").getAbsolutePath();
@@ -156,9 +152,8 @@ public class MainPlayer extends AppCompatActivity implements DialogInterface.OnD
         itemList = findViewById(R.id.item_list);
 
         // 功能
-        mainList = new MainList();
-        mixList = new MixList();
         musicList = new MusicList();
+        mixList = new MixList();
         addList = new AddList();
     }
 
