@@ -1,4 +1,4 @@
-package com.example.music_redo.components;
+package com.example.music_redo;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -10,22 +10,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.music_redo.MusicList;
-import com.example.music_redo.R;
-
 import java.util.ArrayList;
 
-public class MainList {
+public class ListManager {
     Context myContext;
 
     // 浏览管理
     public String curMix;
 
     // 复选管理
-    ArrayList<String> mixSelected;
-    ArrayList<String> musicSelected;
+    public ArrayList<String> mixSelected;
+    public ArrayList<String> musicSelected;
 
-    public MainList(Context context) {
+    public ListManager(Context context) {
         myContext = context;
     }
 

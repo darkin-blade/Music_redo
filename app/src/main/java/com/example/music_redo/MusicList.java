@@ -24,10 +24,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.music_redo.components.MainList;
-import com.example.music_redo.components.MediaReceiver;
-import com.example.music_redo.components.PlayList;
-import com.example.music_redo.components.PlayTime;
+import com.example.music_redo.components.MixEdit;
+import com.example.music_redo.components.MixNew;
+import com.example.music_redo.components.MusicEdit;
+import com.example.music_redo.components.MusicSelect;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,19 +70,22 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     // 功能代号
     static int window_num;
+    static int dialog_result;
     static final int MUSIC_LIST = 0;// 主界面
     static final int MIX_LIST = 1;// 歌单列表
     static final int ADD_LIST = 3;// `添加至`列表
     static final int MIX_EDIT = 5;// 歌单列表管理歌单
     static final int MUSIC_EDIT = 6;// 歌曲列表管理歌曲
     static final int MIX_NEW = 7;// 新建歌单
+    static final int CANCEL = 0;// dialog返回
+    static final int OK = 1;// dialog操作成功
 
     // 核心组件
     static public MediaPlayer player;// 媒体播放器
     public BluetoothAdapter bluetoothAdapter;// 蓝牙
     // 核心功能
     public MediaReceiver receiver;// 接收`蓝牙/媒体`信号
-    static public MainList mainList;
+    static public ListManager listManager;
     static public PlayList playList;
     static public PlayTime playTime;
 
@@ -151,6 +154,16 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     }
 
     public void initUI() {// 初始化ui,layout和dialog
+        // 功能界面
+        // dialog
+        mixEdit = new MixEdit();
+        mixNew = new MixNew();
+        musicEdit = new MusicEdit();
+        // layout ui
+        musicSelect = new MusicSelect();
+        // TODO 播放模式
+        // TODO 蓝牙管理
+
         // 部件
         // 按钮
         button_play = findViewById(R.id.button_play);
@@ -174,12 +187,12 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             public void onClick(View v) {
                 if (window_num == MUSIC_LIST) {
                     // 切换至歌单列表
-                    mainList.listMix();
+                    listManager.listMix();
                     window_num = MIX_LIST;
                 } else {
                     // 切换到当前歌单
                     if (playList.curMusic.length() > 0) {
-                        mainList.listMusic(playList.curMix);
+                        listManager.listMusic(playList.curMix);
                         window_num = MUSIC_LIST;
                     } else {
                         infoToast(MusicList.this, "no current mix");
@@ -203,12 +216,12 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     public void initData() {
         // TODO 初始化核心功能
-        mainList = new MainList(this);
+        listManager = new ListManager(this);
         playList = new PlayList(this);
         playTime = new PlayTime(this, this);
 
         // TODO 恢复数据
-        mainList.init();
+        listManager.init();
         playList.init();
         playTime.init();
     }
@@ -222,6 +235,61 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             return -1;
         }
         return 0;
+    }
+    
+    static public int deleteMusic(String mixName, String musicPath) {
+        return cmd("delete from " + mixName + "\n" +
+                        "where path = '" + musicPath + "';");
+    }
+    
+    static public int deleteMix(String mixName) {
+        int result = cmd("delete from mix_list where name = '" + mixName + "';");// 从歌单列表删除
+        if (result != 0) {
+            return -1;// 从歌单列表删除歌单失败
+        }
+
+        result = cmd("drop table " + mixName +";");
+        if (result != 0) {
+            return -2;// 删除歌单失败
+        } else {
+            return 0;
+        }
+    }
+    
+    static public int createMix(String mixName) {
+        if (mixName == null || mixName.length() == 0 || mixName.length() >= 32
+                || mixName.equals("mix_list") || mixName.equals("user_data")) {// 歌单名不能为空,歌单名不能为关键字
+            return -1;// 无效歌单名
+        }
+
+        // 插入到歌单列表`mix_list`
+        int result = cmd("insert into mix_list (name)\n" +
+                "  values\n" +
+                "  ('" + mixName + "');");
+
+        if (result != 0) {
+            return -2;// 插入歌单列表失败
+        }
+
+        // 新建歌单`mixName`
+        result = cmd("create table if not exists " + mixName + " (\n" +
+                "  path varchar (128) not null,\n" +
+                "  name varchar (64) not null,\n" +
+                "  count int default 0,\n" +
+                "  primary key (path)" +
+                ");");
+
+        if (result != 0) {
+            return -3;// 创建歌单失败
+        } else {
+            return 0;// 创建歌单成功
+        }
+    }
+
+    static int addMusic(String mixName, String musicPath) {
+        return cmd("insert into " + mixName + " (path, name, count)\n" +
+                "  values\n" +
+                "  ('" + musicPath + "', '" + musicPath.replaceAll(".*/", "") + "', 0);");
     }
 
     static public void infoLog(String log) {

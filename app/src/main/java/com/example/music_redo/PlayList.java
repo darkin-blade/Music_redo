@@ -1,10 +1,7 @@
-package com.example.music_redo.components;
+package com.example.music_redo;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
-
-import com.example.music_redo.MusicList;
 
 import java.util.ArrayList;
 
@@ -81,7 +78,7 @@ public class PlayList {
                     curMusicIndex = curMusicList.indexOf(curMusic);// 获取当前播放的音乐的索引 此步可能会重复 且如果没有播放音乐时该索引可能为负
 
                     // TODO 加载歌单
-                    MusicList.mainList.listMusic(curMix);
+                    MusicList.listManager.listMusic(curMix);
                 } else {
                     ;// TODO 出现异常
                 }

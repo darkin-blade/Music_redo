@@ -1,4 +1,4 @@
-package com.example.music_redo.components;
+package com.example.music_redo;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -8,8 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.view.KeyEvent;
-
-import com.example.music_redo.MusicList;
 
 public class MediaReceiver extends BroadcastReceiver {
     public Context myContext = null;
