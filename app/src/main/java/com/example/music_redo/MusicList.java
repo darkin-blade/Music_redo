@@ -1,5 +1,6 @@
 package com.example.music_redo;
 
+import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -48,6 +49,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public TextView totalTime;// 音乐总时长
     static public TextView curTime;// 音乐已播放时长
     // 列表部分
+    static public TextView mixName;// 当前浏览的歌单名
     static public TextView musicName;// 歌名
     static public ScrollView scrollView;// 滚动界面
     static public LinearLayout itemList;// 列表部分
@@ -185,7 +187,8 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         totalTime = findViewById(R.id.total_time);// 音乐总时长
         curTime = findViewById(R.id.cur_time);// 音乐进度
         // 主体部件
-        musicName = findViewById(R.id.music_name);
+        mixName = findViewById(R.id.mix_name);
+        musicName = findViewById(R.id.cur_music);
         scrollView = findViewById(R.id.layout_scroll);
         itemList = findViewById(R.id.item_list);
 
@@ -217,6 +220,13 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 } else if (window_num == MIX_LIST) {
                     mixEdit.show(getSupportFragmentManager(), "edit mix");
                 }
+            }
+        });
+
+        ((LinearLayout)musicName.getParent()).setOnClickListener(new View.OnClickListener() {// TODO 跳转
+            @Override
+            public void onClick(View v) {
+                infoLog("debug");
             }
         });
     }
