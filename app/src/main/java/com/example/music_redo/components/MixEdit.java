@@ -55,7 +55,7 @@ public class MixEdit extends DialogFragment {
     }
     
     public void initData() {
-        ;
+        MusicList.window_num = MusicList.MIX_EDIT;
     }
     
     public void initUI() {
@@ -77,6 +77,8 @@ public class MixEdit extends DialogFragment {
         button_new.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MusicList.dialog_result = 0;
+                dismiss();
                 MusicList.mixNew.show(getFragmentManager(), "new mix");// TODO 编号
             }
         });

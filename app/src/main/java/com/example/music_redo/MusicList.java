@@ -110,6 +110,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         // 初始化功能编号
         window_num = MUSIC_LIST;
         // < 0: 取消
+        // = 0: 切换(主界面不进行操作)
         // > 0: 操作成功
         dialog_result = 0;
 
@@ -209,6 +210,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     case MUSIC_LIST:
                         break;
                     case MIX_LIST:
+                        mixEdit.show(getSupportFragmentManager(), "mix list");
                         break;
                 }
             }
@@ -341,6 +343,12 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        ;// TODO
+        switch (window_num) {
+            case MIX_NEW:// 新建歌单
+                if (dialog_result > 0) {
+                    ;// TODO 更新ui
+                }
+                break;
+        }
     }
 }
