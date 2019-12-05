@@ -291,11 +291,11 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         }
     }
 
-    static int renameMix(String oldName, String newName) {
+    static public int renameMix(String oldName, String newName) {
         return 0;
     }
 
-    static int addMusic(String mixName, String musicPath) {
+    static public int addMusic(String mixName, String musicPath) {
         return cmd("insert into " + mixName + " (path, name, count)\n" +
                 "  values\n" +
                 "  ('" + musicPath + "', '" + musicPath.replaceAll(".*/", "") + "', 0);");

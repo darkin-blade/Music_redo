@@ -15,8 +15,8 @@
         android:padding="7dp">
 
         <TextView
-            style="@style/tab_2"
-            android:text="New mix:"/>
+            android:id="@+id/edit_title"
+            style="@style/tab_2"/>
 
         <View
             style="@style/line">

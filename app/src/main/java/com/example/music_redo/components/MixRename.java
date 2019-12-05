@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
@@ -16,11 +17,12 @@ import androidx.fragment.app.FragmentManager;
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
 
-public class MixNew extends DialogFragment {
+public class MixRename extends DialogFragment {
     public View myView;
-    Button button_create;
+    Button button_rename;
     Button button_cancel;
     EditText editText;// 新建歌单的歌单名
+    TextView textView;// 标题
 
     @Override
     public void show(FragmentManager fragmentManager, String tag) {
@@ -44,7 +46,7 @@ public class MixNew extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.mix_new, container);
+        myView = inflater.inflate(R.layout.mix_rename, container);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(0x00000000));// 背景透明
 
         initData();
@@ -58,9 +60,12 @@ public class MixNew extends DialogFragment {
     }
 
     public void initUI() {
+        textView = myView.findViewById(R.id.edit_title);
         editText = myView.findViewById(R.id.mix_name);
-        button_create = myView.findViewById(R.id.button_rename);
+        button_rename = myView.findViewById(R.id.button_rename);
         button_cancel = myView.findViewById(R.id.button_cancel);
+
+        textView.setText("Rename " + MusicList.listManager.curMix);
 
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,20 +75,18 @@ public class MixNew extends DialogFragment {
             }
         });
 
-        button_create.setOnClickListener(new View.OnClickListener() {
+        button_rename.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String tmp = editText.getText().toString();
-                int result = MusicList.createMix(tmp);
+                int result = MusicList.renameMix(MusicList.listManager.curMix, tmp);// TODO 重命名歌单
                 switch (result) {
                     case 0:
                         MusicList.infoLog("create mix " + tmp + " succeed");
                         break;
-                    case -1:
-                    case -2:
-                    case -3:
+                    default:
                         MusicList.infoLog("create mix " + tmp + " failed");
-                        MusicList.infoToast(getContext(), "create mix " + tmp + " failed");
+                        MusicList.infoToast(getContext(), "rename mix " + tmp + " failed");
                         break;
                 }
 
