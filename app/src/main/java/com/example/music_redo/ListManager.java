@@ -94,13 +94,13 @@ public class ListManager {
         cursor.close();
     }
 
-    public void updateMix() {
+    public void updateMix() {// 刷新单个歌单信息
         if (curMix.equals(MusicList.playList.curMusic)) {
             listMix();
         }
     }
 
-    public void updateMusic() {
+    public void updateMusic() {// 刷新歌单内歌曲信息
         if (curMix.equals(MusicList.playList.curMusic)) {// 播放正在浏览的歌单
             ;// TODO 播放器ui
             ;// TODO 歌曲高亮

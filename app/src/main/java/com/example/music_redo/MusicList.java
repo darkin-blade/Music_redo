@@ -352,7 +352,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         switch (window_num) {
             case MIX_NEW:// 新建歌单
                 if (dialog_result > 0) {
-                    playList.loadMix(playList.curMix, playList.curMusic, -1);// TODO 更新ui
+                    ;// TODO 更新ui
                 }
                 break;
         }

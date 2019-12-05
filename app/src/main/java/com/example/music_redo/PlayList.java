@@ -3,6 +3,8 @@ package com.example.music_redo;
 import android.content.Context;
 import android.database.Cursor;
 
+import androidx.annotation.MainThread;
+
 import java.util.ArrayList;
 
 public class PlayList {
@@ -45,20 +47,26 @@ public class PlayList {
         } else if (mode == 0) {// 指定
             ;
         } else if (mode == -1) {// 不进行操作
-            return;
+            ;
         }
 
         MusicList.listManager.updateMusic();
+
+        if (mode == -1) {
+            return;
+        }
+
         ;// TODO 播放curMusic
     }
 
     public void loadMix(String nextMix, String nextMusic, int mode) {
         if (nextMix == null || nextMix.length() <= 0 || nextMusic == null || nextMusic.length() <= 0) {
             stopMusic();// TODO
+            return;
         }
 
         if (nextMix.equals(curMix) && nextMusic.equals(curMusic)) {
-            mode = 0;
+            mode = -1;
         }
 
         curMix = nextMix;
@@ -84,7 +92,7 @@ public class PlayList {
             curMusicIndex = curMusicList.indexOf(curMusic);// TODO >= 0
 
             // TODO 加载歌单
-            MusicList.listManager.listMusic(curMix);
+            MusicList.listManager.updateMix();
             if (mode == -1) {
                 loadMusic(-1);
             } else {
