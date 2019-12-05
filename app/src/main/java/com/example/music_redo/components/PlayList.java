@@ -48,13 +48,14 @@ public class PlayList {
                     null,
                     null,
                     "cur_music");// 没用
+
             if (cursor.moveToFirst()) {
                 // 恢复数据
                 curMix = cursor.getString(0);
                 curMusic = cursor.getString(1);
                 playMode = cursor.getInt(2);
-//                MusicList.playTime.cur_time = cursor.getInt(3);
-//                MusicList.playTime.total_time = cursor.getInt(4);
+                MusicList.playTime.cur_time = cursor.getInt(3);
+                MusicList.playTime.total_time = cursor.getInt(4);
                 cursor.close();
 
                 // 手动加载歌单
@@ -72,20 +73,23 @@ public class PlayList {
                             "name");
 
                     if (cursor.moveToFirst()) {// 歌单非空
+                        // 恢复播放数据
                         do {
                             String music_name = cursor.getString(0);// 获取歌名
                             curMusicList.add(music_name);
                             curMixLen ++;
                         } while (cursor.moveToNext());
+                        curMusicIndex = curMusicList.indexOf(curMusic);// 获取当前播放的音乐的索引 此步可能会重复 且如果没有播放音乐时该索引可能为负
 
                         // TODO 加载歌单
-                        curMusicIndex = curMusicList.indexOf(curMusic);// 获取当前播放的音乐的索引 此步可能会重复 且如果没有播放音乐时该索引可能为负
+                        MusicList.mainList.listMusic(curMix);
                     } else {
                         ;// TODO 出现异常
                     }
                     cursor.close();
                 }
             } else {
+                cursor.close();
                 MusicList.infoLog("cannot find user data");
             }
         } catch (SQLException e) {// TODO 容错

@@ -24,7 +24,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.music_redo.components.MainList;
 import com.example.music_redo.components.MediaReceiver;
+import com.example.music_redo.components.PlayList;
+import com.example.music_redo.components.PlayTime;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -76,11 +79,12 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     // 核心组件
     static public MediaPlayer player;// 媒体播放器
-    public MediaReceiver receiver;// 接收`蓝牙/媒体`信号
     public BluetoothAdapter bluetoothAdapter;// 蓝牙
     // 核心功能
-    static public MixList mixList;
-    static public AddList addList;
+    public MediaReceiver receiver;// 接收`蓝牙/媒体`信号
+    static public MainList mainList;
+    static public PlayList playList;
+    static public PlayTime playTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,15 +168,18 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 }
             }
         });
-
-        // 功能
-        mixList = new MixList();
-        addList = new AddList();
     }
 
     public void initData() {
+        // TODO 初始化核心功能
+        mainList = new MainList(this);
+        playList = new PlayList(this);
+        playTime = new PlayTime(this, this);
+
         // TODO 恢复数据
-        ;
+        mainList.init();
+        playList.init();
+        playTime.init();
     }
 
     static public int cmd(String sql) {// 操作数据库
