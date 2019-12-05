@@ -56,7 +56,7 @@ public class MixRename extends DialogFragment {
     }
 
     public void initData() {
-        MusicList.window_num = MusicList.MIX_NEW;
+        MusicList.window_num = MusicList.MIX_RENAME;
     }
 
     public void initUI() {

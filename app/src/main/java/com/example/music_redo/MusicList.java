@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.music_redo.components.MixEdit;
 import com.example.music_redo.components.MixNew;
+import com.example.music_redo.components.MixRename;
 import com.example.music_redo.components.MusicEdit;
 import com.example.music_redo.components.MusicSelect;
 
@@ -56,6 +57,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public MixEdit mixEdit;// 编辑歌单
     static public MusicEdit musicEdit;// 歌单界面 编辑歌曲
     static public MixNew mixNew;// 新建歌单
+    static public MixRename mixRename;// 重命名歌单
     // ui界面
     static public MusicSelect musicSelect;// 文件浏览器
     // TODO 播放模式
@@ -78,6 +80,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public final int MIX_EDIT = 5;// 歌单列表管理歌单
     static public final int MUSIC_EDIT = 6;// 歌曲列表管理歌曲
     static public final int MIX_NEW = 7;// 新建歌单
+    static public final int MIX_RENAME = 8;// 重命名歌单
 
     // 核心组件
     static public MediaPlayer player;// 媒体播放器
@@ -162,6 +165,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         mixEdit = new MixEdit();
         mixNew = new MixNew();
         musicEdit = new MusicEdit();
+        mixRename = new MixRename();
         // layout ui
         musicSelect = new MusicSelect();
         // TODO 播放模式
@@ -373,6 +377,9 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 } else {// TODO 只刷新ui
                     listManager.listMusic(listManager.curMix);
                 }
+                break;
+            case MIX_RENAME:
+                ;// TODO 更新顶部 curMix
                 break;
         }
     }

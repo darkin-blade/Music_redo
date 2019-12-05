@@ -86,5 +86,14 @@ public class MusicEdit extends DialogFragment {
                 dismiss();
             }
         });
+
+        button_rename.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MusicList.dialog_result = 0;
+                dismiss();
+                MusicList.mixRename.show(getFragmentManager(), "rename mix");
+            }
+        });
     }
 }
