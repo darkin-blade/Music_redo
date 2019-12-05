@@ -83,6 +83,7 @@ public class MixNew extends DialogFragment {
                     case -2:
                     case -3:
                         MusicList.infoLog("create mix " + tmp + " failed");
+                        MusicList.infoToast(getContext(), "create mix " + tmp + " failed");
                         break;
                 }
 

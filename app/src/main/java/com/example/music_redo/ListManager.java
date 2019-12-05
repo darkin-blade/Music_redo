@@ -36,6 +36,7 @@ public class ListManager {
         curMix = null;// 置null当前歌单
         musicSelected.clear();// 清空选中歌曲
         MusicList.itemList.removeAllViews();// 清空ui
+        MusicList.window_num = MusicList.MIX_LIST;
 
         Cursor cursor = MusicList.database.query(
                 "mix_list",// 歌单列表
@@ -70,6 +71,7 @@ public class ListManager {
         curMix = null;// 置null当前歌单
         mixSelected.clear();// 清空选中歌曲
         MusicList.itemList.removeAllViews();// 清空ui
+        MusicList.window_num = MusicList.MUSIC_LIST;
 
         Cursor cursor = MusicList.database.query(
                 mixName,// 歌单详情
@@ -94,20 +96,21 @@ public class ListManager {
         cursor.close();
     }
 
-    public void updateMix() {// 刷新单个歌单信息
-        if (curMix.equals(MusicList.playList.curMusic)) {
-            listMix();
-        }
-    }
-
-    public void updateMusic() {// 刷新歌单内歌曲信息
-        if (curMix.equals(MusicList.playList.curMusic)) {// 播放正在浏览的歌单
-            ;// TODO 播放器ui
-            ;// TODO 歌曲高亮
-        } else if (MusicList.window_num == MusicList.MIX_LIST) {// 歌单列表
+    public void updateMix() {// 刷新歌单列表
+        if (MusicList.window_num == MusicList.MIX_LIST) {// 歌单列表
             listMix();
             ;// TODO 高亮mix
         }
+    }
+
+    public void updateMusic() {// 刷新歌曲列表
+        // 刷新歌单内歌曲信息
+        if (curMix.equals(MusicList.playList.curMusic)) {// 播放正在浏览的歌单
+            listMusic(curMix);// 刷新歌单信息
+            ;// TODO 歌曲高亮
+        }
+
+        ;// TODO 播放器ui
     }
 
     // ui参数

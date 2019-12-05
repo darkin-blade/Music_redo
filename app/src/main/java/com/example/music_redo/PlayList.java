@@ -92,7 +92,7 @@ public class PlayList {
             curMusicIndex = curMusicList.indexOf(curMusic);// TODO >= 0
 
             // TODO 加载歌单
-            MusicList.listManager.updateMix();
+            MusicList.listManager.updateMusic();
             if (mode == -1) {
                 loadMusic(-1);
             } else {

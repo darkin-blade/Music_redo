@@ -206,12 +206,11 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         button_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (window_num) {
-                    case MUSIC_LIST:
-                        break;
-                    case MIX_LIST:
-                        mixEdit.show(getSupportFragmentManager(), "mix list");
-                        break;
+                infoLog("edit window_num: " + window_num);
+                if (window_num == MUSIC_LIST) {
+                    ;
+                } else if (window_num == MIX_LIST) {
+                    mixEdit.show(getSupportFragmentManager(), "mix edit");
                 }
             }
         });
@@ -261,7 +260,8 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     
     static public int createMix(String mixName) {
         if (mixName == null || mixName.length() == 0 || mixName.length() >= 32
-                || mixName.equals("mix_list") || mixName.equals("user_data")) {// 歌单名不能为空,歌单名不能为关键字
+                || mixName.equals("mix_list") || mixName.equals("user_data") ||
+                (mixName.charAt(0) >= '0' && mixName.charAt(0) <= '9')) {// 歌单名不能为空,歌单名不能为关键字
             return -1;// 无效歌单名
         }
 
@@ -275,7 +275,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         }
 
         // 新建歌单`mixName`
-        result = cmd("create table if not exists " + mixName + " (\n" +
+        result = cmd("create table if not exists '" + mixName + "' (\n" +
                 "  path varchar (128) not null,\n" +
                 "  name varchar (64) not null,\n" +
                 "  count int default 0,\n" +
@@ -283,6 +283,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 ");");
 
         if (result != 0) {
+            deleteMix(mixName);
             return -3;// 创建歌单失败
         } else {
             return 0;// 创建歌单成功
@@ -352,8 +353,13 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         switch (window_num) {
             case MIX_NEW:// 新建歌单
                 if (dialog_result > 0) {
-                    ;// TODO 更新ui
+                    playList.loadMix(playList.curMix, playList.curMusic, 0);
+                    listManager.updateMix();// TODO 更新ui
                 }
+                window_num = MIX_LIST;
+                break;
+            case MIX_EDIT:
+                window_num = MIX_LIST;
                 break;
         }
     }
