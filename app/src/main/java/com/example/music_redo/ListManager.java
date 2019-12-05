@@ -32,10 +32,6 @@ public class ListManager {
         musicSelected = new ArrayList<String>();
     }
 
-    public void refreshUI() {
-        ;
-    }
-
     public void listMix() {
         curMix = null;// 置null当前歌单
         musicSelected.clear();// 清空选中歌曲
@@ -96,6 +92,22 @@ public class ListManager {
             MusicList.infoToast(myContext, "no music");
         }
         cursor.close();
+    }
+
+    public void updateMix() {
+        if (curMix.equals(MusicList.playList.curMusic)) {
+            listMix();
+        }
+    }
+
+    public void updateMusic() {
+        if (curMix.equals(MusicList.playList.curMusic)) {// 播放正在浏览的歌单
+            ;// TODO 播放器ui
+            ;// TODO 歌曲高亮
+        } else if (MusicList.window_num == MusicList.MIX_LIST) {// 歌单列表
+            listMix();
+            ;// TODO 高亮mix
+        }
     }
 
     // ui参数

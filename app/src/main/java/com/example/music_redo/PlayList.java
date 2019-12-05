@@ -35,6 +35,50 @@ public class PlayList {
         recover();
     }
 
+    public void loadMusic(String nextMusic, int mode) {
+        ;
+    }
+
+    public void loadMix(String nextMix, String nextMusic, int mode) {
+        if (nextMix.equals(curMix) && nextMusic.equals(curMusic)) {
+            mode = 0;
+        }
+
+        curMix = nextMix;
+        curMusic = nextMusic;
+        curMusicList.clear();
+        curMixLen = 0;
+
+        Cursor cursor = MusicList.database.query(
+                curMix,// 当前歌单
+                new String[]{"path", "name", "count"},
+                null,
+                null,
+                null,
+                null,
+                "name");
+
+        if (cursor.moveToFirst()) {// 歌单非空
+            do {
+                String music_name = cursor.getString(0);// 获取歌名
+                curMusicList.add(music_name);
+                curMixLen ++;
+            } while (cursor.moveToNext());
+            curMusicIndex = curMusicList.indexOf(curMusic);// TODO >= 0
+
+            // TODO 加载歌单
+            MusicList.listManager.listMusic(curMix);
+            loadMusic(curMusic, mode);
+        } else {
+            stopMusic();
+        }
+        cursor.close();
+    }
+
+    public void stopMusic() {
+        ;// TODO 出现异常
+    }
+
     public void recover() {// 恢复数据
         Cursor cursor = MusicList.database.query(
                 "user_data",
