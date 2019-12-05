@@ -68,13 +68,13 @@ public class ListManager {
     }
 
     public void listMusic(String mixName) {
-        curMix = null;// 置null当前歌单
+        curMix = mixName;// 置null当前歌单
         mixSelected.clear();// 清空选中歌曲
         MusicList.itemList.removeAllViews();// 清空ui
         MusicList.window_num = MusicList.MUSIC_LIST;
 
         Cursor cursor = MusicList.database.query(
-                mixName,// 歌单详情
+                curMix,// 歌单详情
                 new String[]{"path", "name", "count"},
                 null,
                 null,

@@ -209,9 +209,9 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             public void onClick(View v) {
                 infoLog("edit window_num: " + window_num);
                 if (window_num == MUSIC_LIST) {
-                    ;
+                    musicEdit.show(getSupportFragmentManager(), "edit music");
                 } else if (window_num == MIX_LIST) {
-                    mixEdit.show(getSupportFragmentManager(), "mix edit");
+                    mixEdit.show(getSupportFragmentManager(), "edit mix");
                 }
             }
         });
@@ -367,6 +367,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 window_num = MIX_LIST;
                 break;
             case MUSIC_SELECT:// 添加歌曲
+                window_num = MUSIC_LIST;
                 if (listManager.curMix.equals(playList.curMusic)) {// 更新当前播放列表
                     playList.loadMix(playList.curMix, playList.curMusic, -1);
                 } else {// TODO 只刷新ui
