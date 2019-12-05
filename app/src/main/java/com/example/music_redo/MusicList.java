@@ -74,6 +74,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public final int MUSIC_LIST = 0;// 主界面
     static public final int MIX_LIST = 1;// 歌单列表
     static public final int ADD_LIST = 3;// `添加至`列表
+    static public final int MUSIC_SELECT = 4;// 文件管理器
     static public final int MIX_EDIT = 5;// 歌单列表管理歌单
     static public final int MUSIC_EDIT = 6;// 歌曲列表管理歌曲
     static public final int MIX_NEW = 7;// 新建歌单
@@ -352,11 +353,11 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     public void onDismiss(DialogInterface dialog) {
         switch (window_num) {
             case MIX_NEW:// 新建歌单
+                window_num = MIX_LIST;
                 if (dialog_result > 0) {
                     playList.loadMix(playList.curMix, playList.curMusic, 0);
                     listManager.updateMix();// TODO 更新ui
                 }
-                window_num = MIX_LIST;
                 break;
             case MIX_EDIT:
                 window_num = MIX_LIST;
