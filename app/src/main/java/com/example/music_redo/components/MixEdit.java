@@ -74,6 +74,19 @@ public class MixEdit extends DialogFragment {
             }
         });
 
+        button_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < MusicList.listManager.mixSelected.size(); i ++) {
+                    String tmp = MusicList.listManager.mixSelected.get(i);
+                    int result = MusicList.deleteMix(tmp);
+                }
+                MusicList.listManager.mixSelected.clear();
+                MusicList.dialog_result = 1;
+                dismiss();
+            }
+        });
+
         button_new.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

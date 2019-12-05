@@ -2,6 +2,7 @@ package com.example.music_redo;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 
 import androidx.annotation.MainThread;
 
@@ -60,12 +61,13 @@ public class PlayList {
     }
 
     public void loadMix(String nextMix, String nextMusic, int mode) {
+        MusicList.infoLog("load " + nextMix + " " + nextMusic);
         if (nextMix == null || nextMix.length() <= 0 || nextMusic == null || nextMusic.length() <= 0) {
             stopMusic();// TODO
             return;
         }
 
-        if (nextMix.equals(curMix) && nextMusic.equals(curMusic)) {
+        if (nextMix.equals(curMix) && nextMusic.equals(curMusic)) {// 同一首歌曲
             mode = -1;
         }
 
@@ -74,37 +76,42 @@ public class PlayList {
         curMusicList.clear();
         curMixLen = 0;
 
-        Cursor cursor = MusicList.database.query(
-                curMix,// 当前歌单
-                new String[]{"path", "name", "count"},
-                null,
-                null,
-                null,
-                null,
-                "name");
+        try {
+            Cursor cursor = MusicList.database.query(
+                    curMix,// 当前歌单
+                    new String[]{"path", "name", "count"},
+                    null,
+                    null,
+                    null,
+                    null,
+                    "name");
 
-        if (cursor.moveToFirst()) {// 歌单非空
-            do {
-                String music_name = cursor.getString(0);// 获取歌名
-                curMusicList.add(music_name);
-                curMixLen ++;
-            } while (cursor.moveToNext());
-            curMusicIndex = curMusicList.indexOf(curMusic);// TODO >= 0
+            if (cursor.moveToFirst()) {// 歌单非空
+                do {
+                    String music_name = cursor.getString(0);// 获取歌名
+                    curMusicList.add(music_name);
+                    curMixLen ++;
+                } while (cursor.moveToNext());
+                curMusicIndex = curMusicList.indexOf(curMusic);// TODO >= 0
 
-            // TODO 加载歌单
-            MusicList.listManager.updateMusic();
-            if (mode == -1) {
-                loadMusic(-1);
+                // TODO 加载歌单
+                MusicList.listManager.updateMusic();
+                if (mode == -1) {
+                    loadMusic(-1);
+                } else {
+                    loadMusic(0);
+                }
             } else {
-                loadMusic(0);
+                stopMusic();
             }
-        } else {
-            stopMusic();
+            cursor.close();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            stopMusic();// TODO table 不存在
         }
-        cursor.close();
     }
 
-    public void stopMusic() {
+    public void stopMusic() {// TODO 需要分情况
         ;// TODO 出现异常
     }
 

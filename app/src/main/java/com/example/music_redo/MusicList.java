@@ -383,23 +383,40 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             case MIX_NEW:// 新建歌单
                 window_num = MIX_LIST;
                 if (dialog_result > 0) {
-                    playList.loadMix(playList.curMix, playList.curMusic, 0);
+//                    playList.loadMix(playList.curMix, playList.curMusic, 0);
                     listManager.updateMix();// TODO 更新ui
                 }
                 break;
             case MIX_EDIT:
                 window_num = MIX_LIST;
+                if (dialog_result > 0) {
+                    playList.loadMix(playList.curMix, playList.curMusic, -1);// TODO 刷新ui
+                    listManager.updateMix();
+                }
                 break;
             case MUSIC_SELECT:// 添加歌曲
                 window_num = MUSIC_LIST;
-                if (listManager.curMix.equals(playList.curMusic)) {// 更新当前播放列表
-                    playList.loadMix(playList.curMix, playList.curMusic, -1);
-                } else {// TODO 只刷新ui
+                if (listManager.curMix.equals(playList.curMusic)) {
+                    playList.loadMix(playList.curMix, playList.curMusic, -1);// 更新当前播放列表
+                } else {// TODO 当前浏览的mix不是正在播放的mix
                     listManager.listMusic(listManager.curMix);
+                }
+                break;
+            case MUSIC_EDIT:
+                window_num = MUSIC_LIST;
+                if (dialog_result > 0) {
+                    if (listManager.curMix.equals(playList.curMusic)) {
+                        playList.loadMix(playList.curMix, playList.curMusic, -1);// 更新当前播放列表
+                    } else {// TODO 当前浏览的mix不是正在播放的mix
+                        listManager.listMusic(listManager.curMix);
+                    }
                 }
                 break;
             case MIX_RENAME:
                 window_num = MUSIC_LIST;// TODO 更新顶部 curMix
+                if (dialog_result > 0) {
+                    ;// TODO 刷新ui
+                }
                 break;
         }
     }
