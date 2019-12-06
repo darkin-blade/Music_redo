@@ -98,7 +98,7 @@ public class PlayTime {
                         cur_time = player.getCurrentPosition();
                         setTime();
                         setBar();
-                        Thread.sleep(1000);// 每一秒更新一次
+                        Thread.sleep(1000);// 每一秒更新一次 TODO 注意该语句的位置,防止触发OnComplete
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -109,9 +109,11 @@ public class PlayTime {
     }
 
     public void pause() {
-        player.pause();
-        MusicList.button_play.setBackgroundResource(R.drawable.player_play);
-        musicPlay.interrupt();// TODO
+        if (player.isPlaying() == true) {
+            player.pause();
+            MusicList.button_play.setBackgroundResource(R.drawable.player_play);
+            musicPlay.interrupt();// TODO
+        }
     }
 
     public void reset() {

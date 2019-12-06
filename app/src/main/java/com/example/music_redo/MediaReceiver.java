@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.view.KeyEvent;
 
+import static com.example.music_redo.MusicList.playTime;
+import static com.example.music_redo.MusicList.player;
+
 public class MediaReceiver extends BroadcastReceiver {
     public Context myContext = null;
 
@@ -59,6 +62,7 @@ public class MediaReceiver extends BroadcastReceiver {
                 case BluetoothDevice.ACTION_ACL_CONNECTED:// 蓝牙连接设备
                     break;
                 case BluetoothDevice.ACTION_ACL_DISCONNECTED:// 蓝牙断开设备
+                    playTime.pause();
                     break;
 
                 // 接收蓝牙/媒体按键信号
@@ -76,13 +80,17 @@ public class MediaReceiver extends BroadcastReceiver {
                     switch (keycode) {
                         case KeyEvent.KEYCODE_MEDIA_NEXT:// TODO 下一首 87
                             MusicList.infoLog("next");
+                            playTime.next();
                             break;
                         case KeyEvent.KEYCODE_HEADSETHOOK:// 播放/暂停 79
-                            // TODO 切歌
                             break;
                         case KeyEvent.KEYCODE_MEDIA_PLAY:// 播放 126
                         case KeyEvent.KEYCODE_MEDIA_PAUSE:// 暂停 127
-                            // TODO 无差别对待 播放和暂停
+                            if (player.isPlaying()) {
+                                playTime.pause();
+                            } else {
+                                playTime.play(0);
+                            }
                             break;
                     }
                     break;
