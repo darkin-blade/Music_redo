@@ -42,6 +42,14 @@ public class PlayList {
     }
 
     public void loadMusic(int mode) {
+        /**
+         * mode:
+         * -1: 指定加载
+         * 0: 指定播放
+         * 1: 下一首
+         * 2: 上一首
+         */
+        // TODO 播放模式
         if (mode == 1) {// 下一首
             curMusicIndex = (curMusicIndex + 1) % curMixLen;
             curMusic = curMusicList.get(curMusicIndex);
@@ -50,14 +58,20 @@ public class PlayList {
             curMusic = curMusicList.get(curMusicIndex);
         }
 
-        ;// TODO 加载歌曲时长
+        // TODO 加载歌曲时长
 
         if (mode != -1) {
-            ;// TODO 播放歌曲
+            // TODO 播放歌曲
         }
     }
 
     public int loadMix(String nextMix, String nextMusic, int mode) {
+        /**
+         * mode:
+         * 0: 加载歌单,加载歌曲,播放
+         * 1: 加载歌单,加载歌曲
+         * 2: 加载歌单
+         */
         MusicList.infoLog("load " + nextMix + " " + nextMusic);
 
         if (nextMix == null) {
