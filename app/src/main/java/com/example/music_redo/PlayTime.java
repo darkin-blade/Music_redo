@@ -47,7 +47,6 @@ public class PlayTime {
         if (mode >= 1) {
             // 加载
             try {
-                MusicList.infoLog("load " + playList.curMusic);
                 player.reset();
                 player.setDataSource(playList.curMusic);
                 player.prepare();
@@ -86,9 +85,11 @@ public class PlayTime {
             }
             setTime();
             setBar();
+            if (mode == 1) {
+                getBar();// 控制进度条
+            }
 
             if (mode <= 2) {
-                getBar();// TODO
                 return;
             }
         }
@@ -159,23 +160,14 @@ public class PlayTime {
     }
 
     public void setBar() {// 更新进度条
-        try {
-            final int curProgress = cur_time * 100 / total_time;
+        final int curProgress = cur_time * 100 / total_time;
 
-            myActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    MusicList.seekBar.setProgress(curProgress);
-                }
-            });
-        } catch (ArithmeticException e) {
-            myActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    MusicList.seekBar.setProgress(0);
-                }
-            });
-        }
+        myActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                MusicList.seekBar.setProgress(curProgress);
+            }
+        });
     }
 
     public void setTime() {// 更新时间

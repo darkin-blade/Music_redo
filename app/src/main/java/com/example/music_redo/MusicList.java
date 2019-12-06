@@ -282,15 +282,15 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     }
 
     public void initData() {
-        // TODO 初始化核心功能
+        // 初始化核心功能
         listManager = new ListManager(this);
         playList = new PlayList(this, this);
         playTime = new PlayTime(this, this);
 
-        // TODO 恢复数据
+        // 注意初始化顺序
+        playTime.init();
         listManager.init();
         playList.init();
-        playTime.init();
     }
 
     static public int cmd(String sql) {// 操作数据库
