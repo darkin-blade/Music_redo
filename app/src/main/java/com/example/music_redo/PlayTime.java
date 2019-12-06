@@ -42,6 +42,7 @@ public class PlayTime {
         if (mode >= 1) {
             // 加载
             try {
+                player.reset();
                 player.setDataSource(playList.curMusic);
                 player.prepare();
                 total_time = player.getDuration();
