@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
-import androidx.annotation.MainThread;
-
 import java.util.ArrayList;
 
 public class PlayList {
@@ -45,38 +43,29 @@ public class PlayList {
         } else if (mode == 2) {// 上一首
             curMusicIndex = (curMusicIndex + curMixLen - 1) % curMixLen;
             curMusic = curMusicList.get(curMusicIndex);
-        } else if (mode == 0) {// 指定
-            ;
-        } else if (mode == -1) {// 不进行操作
-            ;
         }
 
-        MusicList.listManager.updateMusic();
+        ;// TODO 加载歌曲时长
 
-        if (mode == -1) {
-            return;
+        if (mode != -1) {
+            ;// TODO 播放歌曲
         }
-
-        ;// TODO 播放curMusic
     }
 
     public void loadMix(String nextMix, String nextMusic, int mode) {
         MusicList.infoLog("load " + nextMix + " " + nextMusic);
-        if (nextMix == null || nextMix.length() <= 0 || nextMusic == null || nextMusic.length() <= 0) {
-            stopMusic();// TODO
-            return;
-        }
 
-        if (nextMix.equals(curMix) && nextMusic.equals(curMusic)) {// 同一首歌曲
-            mode = -1;
+        if (mode == 0 && nextMix.equals(curMix) && nextMusic.equals(curMusic)) {// TODO null
+            return;
         }
 
         curMix = nextMix;
         curMusic = nextMusic;
-        curMusicList.clear();
+        curMusicIndex = -1;
         curMixLen = 0;
+        curMusicList.clear();
 
-        try {
+        try {// 加载歌单
             Cursor cursor = MusicList.database.query(
                     curMix,// 当前歌单
                     new String[]{"path", "name", "count"},
@@ -88,31 +77,49 @@ public class PlayList {
 
             if (cursor.moveToFirst()) {// 歌单非空
                 do {
-                    String music_name = cursor.getString(0);// 获取歌名
+                    String music_name = cursor.getString(0);// 获取歌曲路径
                     curMusicList.add(music_name);
                     curMixLen ++;
                 } while (cursor.moveToNext());
-                curMusicIndex = curMusicList.indexOf(curMusic);// TODO >= 0
+                curMusicIndex = curMusicList.indexOf(curMusic);
 
-                // TODO 加载歌单
-                MusicList.listManager.updateMusic();
-                if (mode == -1) {
-                    loadMusic(-1);
+                if (curMusicIndex < 0) {
+                    stopMusic(1);
                 } else {
-                    loadMusic(0);
+                    if (mode == 0) {
+                        loadMusic(0);
+                        return;
+                    } else if (mode == 1) {
+                        loadMusic(-1);
+                        return;
+                    } else if (mode == 2) {
+                        return;
+                    }
                 }
             } else {
-                stopMusic();
+                stopMusic(1);// 暂停歌曲
             }
             cursor.close();
         } catch (SQLiteException e) {
             e.printStackTrace();
-            stopMusic();// TODO table 不存在
+            stopMusic(0);// 歌单异常
         }
     }
 
-    public void stopMusic() {// TODO 需要分情况
-        ;// TODO 出现异常
+    public void stopMusic(int mode) {
+        if (mode == 0) {// 完全停止播放
+            curMix = null;
+            curMusic = null;
+            curMusicIndex = -1;
+            curMixLen = 0;
+            curMusicList.clear();
+        } else {// 停止当前歌曲
+            curMusic = null;
+            curMusicIndex = -1;
+        }
+
+        MusicList.musicName.setText("no music");
+        ;// TODO 重置player
     }
 
     public void recover() {// 恢复数据
@@ -134,7 +141,6 @@ public class PlayList {
             MusicList.playTime.total_time = cursor.getInt(4);
 
             // TODO 加载歌单
-            loadMix(curMix, curMusic, -1);
         } else {
             MusicList.infoLog("cannot find user data");
         }
@@ -157,6 +163,17 @@ public class PlayList {
 
         if (result == 0) {
             MusicList.infoLog("save user data succeed");
+        }
+    }
+
+    public void highlightMusic() {
+        MusicList.musicName.setText(curMix + "    " + curMusic.replaceAll(".*/", ""));
+        if (MusicList.window_num == MusicList.MIX_LIST) {
+            ;// TODO 高亮mix
+            ;// TODO 增加监听
+        } else if (MusicList.window_num == MusicList.MUSIC_LIST) {
+            ;// TODO 高亮music
+            ;// TODO 增加监听
         }
     }
 }
