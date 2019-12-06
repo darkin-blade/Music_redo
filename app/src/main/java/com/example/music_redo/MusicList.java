@@ -115,7 +115,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
         // 初始化功能编号
         window_num = MUSIC_LIST;
-        dialog_result = null;
+        dialog_result = "";
 
         // 初始化路径字符串
         appPath = getExternalFilesDir("").getAbsolutePath();
@@ -252,12 +252,12 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         }
         return 0;
     }
-    
+
     static public int deleteMusic(String mixName, String musicPath) {
         return cmd("delete from " + mixName + "\n" +
-                        "where path = '" + musicPath + "';");
+                "where path = '" + musicPath + "';");
     }
-    
+
     static public int deleteMix(String mixName) {
         int result = cmd("delete from mix_list where name = '" + mixName + "';");// 从歌单列表删除
         if (result != 0) {
@@ -271,7 +271,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             return 0;
         }
     }
-    
+
     static public int createMix(String mixName) {
         if (mixName == null || mixName.length() == 0 || mixName.length() >= 32
                 || mixName.equals("mix_list") || mixName.equals("user_data") ||
@@ -381,42 +381,61 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         switch (window_num) {
             case MIX_NEW:// 新建歌单
                 window_num = MIX_LIST;
-                if (dialog_result > 0) {
-//                    playList.loadMix(playList.curMix, playList.curMusic, 0);
-                    listManager.updateMix();// TODO 更新ui
+                if (dialog_result.equals("new")) {// 新建歌单
+                    listManager.listMix();
+                    playList.highlightMusic();
                 }
                 break;
             case MIX_EDIT:
                 window_num = MIX_LIST;
-                if (dialog_result > 0) {
-                    playList.loadMix(playList.curMix, playList.curMusic, -1);// TODO 刷新ui
-                    listManager.updateMix();
+                if (dialog_result.equals("delete")) {// 删除歌单
+                    listManager.listMix();
+                    if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 尝试引发错误
+                        playList.highlightMusic();
+                    }
                 }
                 break;
-            case MUSIC_SELECT:// 添加歌曲
+            case MUSIC_SELECT:
                 window_num = MUSIC_LIST;
-                if (listManager.curMix.equals(playList.curMusic)) {
-                    playList.loadMix(playList.curMix, playList.curMusic, -1);// 更新当前播放列表
-                } else {// TODO 当前浏览的mix不是正在播放的mix
-                    listManager.listMusic(listManager.curMix);
+                if (dialog_result.equals("add")) {// 添加歌曲
+                    if (playList.curMix.equals(listManager.curMix)) {
+                        listManager.listMusic(listManager.curMix);
+                    }
+                    if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 更新当前播放列表
+                        playList.highlightMusic();
+                    }
                 }
                 break;
             case MUSIC_EDIT:
                 window_num = MUSIC_LIST;
-                if (dialog_result > 0) {
-                    if (listManager.curMix.equals(playList.curMusic)) {
-                        playList.loadMix(playList.curMix, playList.curMusic, -1);// 更新当前播放列表
-                    } else {// TODO 当前浏览的mix不是正在播放的mix
+                if (dialog_result.equals("delete")) {// 删除歌曲
+                    if (playList.curMix.equals(listManager.curMix)) {
                         listManager.listMusic(listManager.curMix);
+                    }
+                    if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 更新当前播放列表
+                        playList.highlightMusic();
                     }
                 }
                 break;
             case MIX_RENAME:
-                window_num = MUSIC_LIST;// TODO 更新顶部 curMix
-                if (dialog_result > 0) {
-                    ;// TODO 刷新ui
+                window_num = MUSIC_LIST;
+                if (dialog_result.equals("rename")) {// 重命名歌单
+                    if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 只刷新mix
+                        playList.highlightMusic();
+                    }
+                    mixName.setText(listManager.curMix);
                 }
                 break;
+            case ADD_LIST:// TODO
+                window_num = MUSIC_LIST;
+                if (dialog_result.equals("add to")) {// 转移歌曲
+                    if (playList.curMix.equals(listManager.curMix)) {
+                        listManager.listMusic(listManager.curMix);
+                    }
+                    if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 更新当前播放列表
+                        playList.highlightMusic();
+                    }
+                }
         }
     }
 }

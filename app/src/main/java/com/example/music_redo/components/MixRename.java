@@ -90,8 +90,12 @@ public class MixRename extends DialogFragment {
                         break;
                 }
 
-                // 刷新ui
-                MusicList.dialog_result = "rename";
+                // TODO 如果修改的是当前mix
+                if (MusicList.listManager.curMix.equals(MusicList.playList.curMix)) {
+                    MusicList.listManager.curMix = tmp;
+                    MusicList.playList.curMix = tmp;
+                    MusicList.dialog_result = "rename";
+                }
                 dismiss();
             }
         });

@@ -192,8 +192,9 @@ public class ListManager {
             item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MusicList.playList.loadMix(curMix, item_detail[2], 0);// TODO 加载专辑曲目并播放歌曲
-                    MusicList.playList.highlightMusic();
+                    if (MusicList.playList.loadMix(curMix, item_detail[2], 0) == 0) {// TODO 加载专辑曲目并播放歌曲
+                        MusicList.playList.highlightMusic();
+                    }
                 }
             });
 

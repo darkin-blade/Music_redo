@@ -73,7 +73,7 @@ public class MusicEdit extends DialogFragment {
         button_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MusicList.dialog_result = null;
+                MusicList.dialog_result = "";
                 dismiss();
                 MusicList.musicSelect.show(getFragmentManager(), "add music");
             }
@@ -103,7 +103,7 @@ public class MusicEdit extends DialogFragment {
         button_rename.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MusicList.dialog_result = null;
+                MusicList.dialog_result = "";
                 dismiss();
                 MusicList.mixRename.show(getFragmentManager(), "rename mix");
             }

@@ -90,7 +90,7 @@ public class MixEdit extends DialogFragment {
         button_new.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MusicList.dialog_result = null;
+                MusicList.dialog_result = "";
                 dismiss();
                 MusicList.mixNew.show(getFragmentManager(), "new mix");// TODO 编号
             }

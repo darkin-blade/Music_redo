@@ -52,11 +52,11 @@ public class PlayList {
         }
     }
 
-    public void loadMix(String nextMix, String nextMusic, int mode) {
+    public int loadMix(String nextMix, String nextMusic, int mode) {
         MusicList.infoLog("load " + nextMix + " " + nextMusic);
 
         if (mode == 0 && nextMix.equals(curMix) && nextMusic.equals(curMusic)) {// TODO null
-            return;
+            return 0;
         }
 
         curMix = nextMix;
@@ -81,28 +81,29 @@ public class PlayList {
                     curMusicList.add(music_name);
                     curMixLen ++;
                 } while (cursor.moveToNext());
+                cursor.close();
                 curMusicIndex = curMusicList.indexOf(curMusic);
 
                 if (curMusicIndex < 0) {
                     stopMusic(1);
+                    return 1;
                 } else {
                     if (mode == 0) {
                         loadMusic(0);
-                        return;
                     } else if (mode == 1) {
                         loadMusic(-1);
-                        return;
                     } else if (mode == 2) {
-                        return;
                     }
+                    return 0;
                 }
             } else {
                 stopMusic(1);// 暂停歌曲
+                return 1;
             }
-            cursor.close();
         } catch (SQLiteException e) {
             e.printStackTrace();
             stopMusic(0);// 歌单异常
+            return -1;
         }
     }
 
@@ -119,6 +120,7 @@ public class PlayList {
         }
 
         MusicList.musicName.setText("no music");
+        highlightMusic();
         ;// TODO 重置player
     }
 
@@ -141,9 +143,11 @@ public class PlayList {
             MusicList.playTime.total_time = cursor.getInt(4);
 
             // 加载歌单
-            loadMix(curMix, curMusic, 1);
-            highlightMusic();
+            if (loadMix(curMix, curMusic, 1) == 0) {
+                highlightMusic();
+            }
             MusicList.mixName.setText(curMix);
+
             // TODO 恢复进度
         } else {
             MusicList.infoLog("cannot find user data");
