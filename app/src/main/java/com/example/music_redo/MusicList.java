@@ -164,7 +164,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             @Override
             public void onCompletion(MediaPlayer mp) {
                 infoLog("complete");// TODO
-                playList.loadMusic(1);// 下一首
+                playTime.next();// 下一首
             }
         });
     }

@@ -42,6 +42,7 @@ public class PlayTime {
         if (mode >= 1) {
             // 加载
             try {
+                MusicList.infoLog("load " + playList.curMusic);
                 player.reset();
                 player.setDataSource(playList.curMusic);
                 player.prepare();
@@ -94,11 +95,10 @@ public class PlayTime {
                             break;// TODO interrupt
                         }
 
-                        // 每一秒更新一次
-                        Thread.sleep(1000);
                         cur_time = player.getCurrentPosition();
                         setTime();
                         setBar();
+                        Thread.sleep(1000);// 每一秒更新一次
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
