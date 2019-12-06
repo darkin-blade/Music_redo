@@ -72,6 +72,7 @@ public class PlayList {
          * 1: 加载歌单,加载歌曲
          * 2: 加载歌单
          */
+        // TODO 累计播放时间
         MusicList.infoLog("load " + nextMix + " " + nextMusic);
 
         if (nextMix == null) {
@@ -151,7 +152,7 @@ public class PlayList {
         }
 
         highlightMusic();
-        ;// TODO 重置player
+        MusicList.playTime.reset();// TODO 重置player
     }
 
     public void recover() {// 恢复数据

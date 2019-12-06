@@ -191,6 +191,33 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         scrollView = findViewById(R.id.layout_scroll);
         itemList = findViewById(R.id.item_list);
 
+        button_play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (player.isPlaying() == true) {
+                    playTime.pause();
+                } else {
+                    playTime.play(0);
+                }
+            }
+        });
+
+        button_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 下一首
+                playTime.next();
+            }
+        });
+
+        button_prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 上一首
+                playTime.prev();
+            }
+        });
+
         button_mix.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,6 +248,23 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 } else if (window_num == MIX_LIST) {
                     mixEdit.show(getSupportFragmentManager(), "edit mix");
                 }
+            }
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                ;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                ;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                playTime.getBar();
             }
         });
 
