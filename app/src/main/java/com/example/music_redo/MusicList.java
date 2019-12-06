@@ -428,6 +428,11 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
     public void onDismiss(DialogInterface dialog) {
         switch (window_num) {
             case MIX_NEW:
