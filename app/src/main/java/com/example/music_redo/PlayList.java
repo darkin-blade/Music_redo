@@ -163,8 +163,7 @@ public class PlayList {
             if (loadMix(curMix, curMusic, 1) == 0) {
                 highlightMusic();
             }
-            MusicList.mixName.setText(curMix);
-
+            MusicList.listManager.showMix(curMix);
             // TODO 恢复进度
         } else {
             MusicList.infoLog("cannot find user data");

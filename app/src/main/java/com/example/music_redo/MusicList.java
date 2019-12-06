@@ -184,7 +184,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         totalTime = findViewById(R.id.total_time);// 音乐总时长
         curTime = findViewById(R.id.cur_time);// 音乐进度
         // 主体部件
-        mixName = findViewById(R.id.mix_name);
+        mixName = findViewById(R.id.cur_mix);
         musicName = findViewById(R.id.cur_music);
         scrollView = findViewById(R.id.layout_scroll);
         itemList = findViewById(R.id.item_list);
@@ -197,7 +197,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     window_num = MIX_LIST;
                     listManager.listMix();
                     MusicList.playList.highlightMusic();
-                    MusicList.mixName.setText("mix list");// TODO 歌单名
+                    MusicList.listManager.showMix("");// TODO 歌单名
                 } else {
                     // 切换到当前歌单
                     if (playList.curMusic.length() > 0) {
@@ -416,7 +416,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 只刷新mix
                         playList.highlightMusic();
                     }
-                    mixName.setText(listManager.curMix);
+                    listManager.showMix(listManager.curMix);
                 }
                 break;
             case ADD_LIST:// TODO

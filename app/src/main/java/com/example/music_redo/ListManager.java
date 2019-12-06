@@ -96,6 +96,14 @@ public class ListManager {
         cursor.close();
     }
 
+    public void showMix(String mixName) {
+        if (mixName == null || mixName.length() <= 0) {
+            MusicList.mixName.setText("mix list");
+        } else {
+            MusicList.mixName.setText(mixName);
+        }
+    }
+
     // ui参数
     public static final int box_width = 60;
     public static final int item_height = 130;
@@ -171,7 +179,7 @@ public class ListManager {
                 public void onClick(View v) {
                     listMusic(item_detail[0]);// 点击查看对应歌单详情
                     MusicList.playList.highlightMusic();
-                    MusicList.mixName.setText(curMix);
+                    MusicList.listManager.showMix(curMix);
                 }
             });
 
