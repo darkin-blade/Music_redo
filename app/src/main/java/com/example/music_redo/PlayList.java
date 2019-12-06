@@ -136,7 +136,6 @@ public class PlayList {
             curMusicIndex = -1;
         }
 
-        MusicList.musicName.setText("no music");
         highlightMusic();
         ;// TODO 重置player
     }
@@ -160,10 +159,12 @@ public class PlayList {
             MusicList.playTime.total_time = cursor.getInt(4);
 
             // 加载歌单
+            MusicList.listManager.listMusic(curMix);
             if (loadMix(curMix, curMusic, 1) == 0) {
                 highlightMusic();
             }
             MusicList.listManager.showMix(curMix);
+
             // TODO 恢复进度
         } else {
             MusicList.infoLog("cannot find user data");
@@ -191,7 +192,13 @@ public class PlayList {
     }
 
     public void highlightMusic() {
-        MusicList.musicName.setText(curMix + "    " + curMusic.replaceAll(".*/", ""));
+        String tmp = curMusic.replaceAll(".*/", "");
+        if (tmp.length() <= 0) {
+            tmp = "no music";
+        } else {
+            tmp = curMix + "    " + tmp;
+        }
+        MusicList.musicName.setText(tmp);
 
         // ui界面
         LinearLayout layout = MusicList.itemList;

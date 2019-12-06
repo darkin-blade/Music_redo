@@ -68,6 +68,11 @@ public class ListManager {
     }
 
     public void listMusic(String mixName) {
+        if (mixName == null || mixName.length() <= 0) {
+            MusicList.infoLog("list invalid mix");
+            return;// TODO
+        }
+
         curMix = mixName;// 置null当前歌单
         mixSelected.clear();// 清空选中歌曲
         MusicList.itemList.removeAllViews();// 清空ui
