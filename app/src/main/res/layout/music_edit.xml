@@ -38,7 +38,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="2dp"/>
             <Button
-                android:id="@+id/button_add_to"
+                android:id="@+id/button_move"
                 android:text="Add to"
                 style="@style/button_2"
                 android:layout_marginLeft="2dp"

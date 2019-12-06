@@ -19,9 +19,9 @@ import com.example.music_redo.R;
 public class MusicEdit extends DialogFragment {
     public View myView;
     Button button_add;
-    Button button_add_to;
     Button button_cancel;
     Button button_delete;
+    Button button_move;
     Button button_rename;
     TextView textView;// 显示选中的歌曲数目
 
@@ -63,9 +63,9 @@ public class MusicEdit extends DialogFragment {
     public void initUI() {
         textView = myView.findViewById(R.id.edit_title);
         button_add = myView.findViewById(R.id.button_add);
-        button_add_to = myView.findViewById(R.id.button_add_to);
         button_cancel = myView.findViewById(R.id.button_cancel);
         button_delete = myView.findViewById(R.id.button_delete);
+        button_move = myView.findViewById(R.id.button_move);
         button_rename = myView.findViewById(R.id.button_rename);
 
         textView.setText(MusicList.listManager.musicSelected.size() + " music selected");
@@ -97,6 +97,15 @@ public class MusicEdit extends DialogFragment {
                 MusicList.listManager.musicSelected.clear();
                 MusicList.dialog_result = "delete";
                 dismiss();
+            }
+        });
+
+        button_move.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MusicList.dialog_result = "";
+                dismiss();
+                MusicList.musicMove.show(getFragmentManager(), "move music");
             }
         });
 

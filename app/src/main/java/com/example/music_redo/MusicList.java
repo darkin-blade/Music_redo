@@ -1,6 +1,5 @@
 package com.example.music_redo;
 
-import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -29,6 +28,7 @@ import com.example.music_redo.components.MixEdit;
 import com.example.music_redo.components.MixNew;
 import com.example.music_redo.components.MixRename;
 import com.example.music_redo.components.MusicEdit;
+import com.example.music_redo.components.MusicMove;
 import com.example.music_redo.components.MusicSelect;
 
 import java.util.regex.Matcher;
@@ -62,6 +62,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public MixRename mixRename;// 重命名歌单
     // ui界面
     static public MusicSelect musicSelect;// 文件浏览器
+    static public MusicMove musicMove;// 歌曲`添加至`歌单
     // TODO 播放模式
     // TODO 蓝牙管理
 
@@ -77,7 +78,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public String dialog_result;
     static public final int MUSIC_LIST = 0;// 主界面
     static public final int MIX_LIST = 1;// 歌单列表
-    static public final int ADD_LIST = 3;// `添加至`列表
+    static public final int MUSIC_MOVE = 3;// `添加至`列表
     static public final int MUSIC_SELECT = 4;// 文件管理器
     static public final int MIX_EDIT = 5;// 歌单列表管理歌单
     static public final int MUSIC_EDIT = 6;// 歌曲列表管理歌曲
@@ -166,6 +167,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         musicEdit = new MusicEdit();
         mixRename = new MixRename();
         // layout ui
+        musicMove = new MusicMove();
         musicSelect = new MusicSelect();
         // TODO 播放模式
         // TODO 蓝牙管理
@@ -416,7 +418,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     listManager.showMix(listManager.curMix);
                 }
                 break;
-            case ADD_LIST:// TODO
+            case MUSIC_MOVE:// TODO
                 window_num = MUSIC_LIST;
                 if (dialog_result.equals("add to")) {// 转移歌曲
                     if (playList.curMix.equals(listManager.curMix)) {// 播放正在浏览的歌单 TODO 此情况不可能
