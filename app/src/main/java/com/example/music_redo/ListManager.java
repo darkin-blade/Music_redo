@@ -27,13 +27,13 @@ public class ListManager {
     }
 
     public void init() {
-        curMix = null;
+        curMix = "";
         mixSelected = new ArrayList<String>();
         musicSelected = new ArrayList<String>();
     }
 
     public void listMix() {
-        curMix = null;// 置null当前歌单
+        curMix = "";// 置null当前歌单
         musicSelected.clear();// 清空选中歌曲
         MusicList.itemList.removeAllViews();// 清空ui
         MusicList.window_num = MusicList.MIX_LIST;

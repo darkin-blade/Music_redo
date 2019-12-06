@@ -60,6 +60,14 @@ public class PlayList {
     public int loadMix(String nextMix, String nextMusic, int mode) {
         MusicList.infoLog("load " + nextMix + " " + nextMusic);
 
+        if (nextMix == null) {
+            stopMusic(0);
+            return -1;
+        } else if (nextMusic == null) {
+            stopMusic(1);
+            return 1;
+        }
+
         if (mode == 0 && nextMix.equals(curMix) && nextMusic.equals(curMusic)) {// TODO null
             return 0;
         }
@@ -109,18 +117,22 @@ public class PlayList {
             e.printStackTrace();
             stopMusic(0);// 歌单异常
             return -1;
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            stopMusic(0);// 歌单异常
+            return -1;
         }
     }
 
     public void stopMusic(int mode) {
         if (mode == 0) {// 完全停止播放
-            curMix = null;
-            curMusic = null;
+            curMix = "";
+            curMusic = "";
             curMusicIndex = -1;
             curMixLen = 0;
             curMusicList.clear();
         } else {// 停止当前歌曲
-            curMusic = null;
+            curMusic = "";
             curMusicIndex = -1;
         }
 
