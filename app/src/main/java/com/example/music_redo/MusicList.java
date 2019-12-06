@@ -284,7 +284,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     public void initData() {
         // TODO 初始化核心功能
         listManager = new ListManager(this);
-        playList = new PlayList(this);
+        playList = new PlayList(this, this);
         playTime = new PlayTime(this, this);
 
         // TODO 恢复数据

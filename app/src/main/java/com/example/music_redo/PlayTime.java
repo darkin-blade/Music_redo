@@ -51,8 +51,13 @@ public class PlayTime {
                 // 设置时长ui
                 SimpleDateFormat format = new SimpleDateFormat("mm:ss");
                 Date tmp = new Date(total_time);
-                String formatTime = format.format(tmp);
-                MusicList.totalTime.setText(formatTime);
+                final String formatTime = format.format(tmp);
+                myActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MusicList.totalTime.setText(formatTime);
+                    }
+                });
             } catch (IOException e) {// TODO prepare failed
                 e.printStackTrace();
 

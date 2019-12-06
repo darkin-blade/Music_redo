@@ -1,5 +1,6 @@
 package com.example.music_redo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 public class PlayList {
     Context myContext;
+    Activity myActivity;
 
     // 播放管理
     // 每次加载必须要恢复的数据
@@ -30,8 +32,9 @@ public class PlayList {
     static public final int AVERAGE = 3;// 平均
     static public final int POLARIZATION = 4;// 两极分化
 
-    public PlayList(Context context) {
+    public PlayList(Context context, Activity activity) {
         myContext = context;
+        myActivity = activity;
     }
 
     public void init() {
@@ -214,7 +217,13 @@ public class PlayList {
         } else {
             tmp = curMix + "    " + tmp;
         }
-        MusicList.musicName.setText(tmp);
+        final String finalTmp = tmp;
+        myActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                MusicList.musicName.setText(finalTmp);
+            }
+        });
 
         // ui界面
         LinearLayout layout = MusicList.itemList;
