@@ -157,9 +157,7 @@ public class MusicMove extends DialogFragment {
                 // TODO 添加到该歌单
                 for (int i = 0; i < MusicList.listManager.musicSelected.size(); i ++) {
                     String tmp = MusicList.listManager.musicSelected.get(i);
-                    MusicList.cmd("insert into " + item_name + " (path, name, count)\n" +
-                            "  values\n" +
-                            "  ('" + tmp + "', '" + tmp.replaceAll(".*/", "") + "', 0);");
+                    MusicList.addMusic(item_name, tmp);
                 }
                 MusicList.dialog_result = "add to";
                 dismiss();// TODO

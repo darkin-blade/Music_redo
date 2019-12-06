@@ -39,6 +39,11 @@ public class PlayTime {
          * 2: 加载,置零
          * 3: 加载,置零,播放
          */
+        // 中断正在播放的线程
+        if (musicPlay != null && musicPlay.isAlive()) {
+            musicPlay.interrupt();
+        }
+
         if (mode >= 1) {
             // 加载
             try {
@@ -83,6 +88,7 @@ public class PlayTime {
             setBar();
 
             if (mode <= 2) {
+                getBar();// TODO
                 return;
             }
         }
@@ -103,9 +109,14 @@ public class PlayTime {
                         cur_time = player.getCurrentPosition();
                         setTime();
                         setBar();
+
+                        // 统计时间
+                        duration ++;
+                        MusicList.infoLog("duration: " + duration);
                         Thread.sleep(1000);// 每一秒更新一次 TODO 注意该语句的位置,防止触发OnComplete
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        break;
                     }
                 }
             }
