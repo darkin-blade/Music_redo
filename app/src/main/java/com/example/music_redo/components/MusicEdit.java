@@ -73,7 +73,7 @@ public class MusicEdit extends DialogFragment {
         button_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MusicList.dialog_result = 0;
+                MusicList.dialog_result = null;
                 dismiss();
                 MusicList.musicSelect.show(getFragmentManager(), "add music");
             }
@@ -82,7 +82,7 @@ public class MusicEdit extends DialogFragment {
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MusicList.dialog_result = -1;
+                MusicList.dialog_result = "cancel";
                 dismiss();
             }
         });
@@ -95,7 +95,7 @@ public class MusicEdit extends DialogFragment {
                     int result = MusicList.deleteMusic(MusicList.listManager.curMix, tmp);
                 }
                 MusicList.listManager.musicSelected.clear();
-                MusicList.dialog_result = 1;
+                MusicList.dialog_result = "delete";
                 dismiss();
             }
         });
@@ -103,7 +103,7 @@ public class MusicEdit extends DialogFragment {
         button_rename.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MusicList.dialog_result = 0;
+                MusicList.dialog_result = null;
                 dismiss();
                 MusicList.mixRename.show(getFragmentManager(), "rename mix");
             }

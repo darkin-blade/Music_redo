@@ -69,7 +69,7 @@ public class MixEdit extends DialogFragment {
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MusicList.dialog_result = -1;
+                MusicList.dialog_result = "cancel";
                 dismiss();
             }
         });
@@ -82,7 +82,7 @@ public class MixEdit extends DialogFragment {
                     int result = MusicList.deleteMix(tmp);
                 }
                 MusicList.listManager.mixSelected.clear();
-                MusicList.dialog_result = 1;
+                MusicList.dialog_result = "delete";
                 dismiss();
             }
         });
@@ -90,7 +90,7 @@ public class MixEdit extends DialogFragment {
         button_new.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MusicList.dialog_result = 0;
+                MusicList.dialog_result = null;
                 dismiss();
                 MusicList.mixNew.show(getFragmentManager(), "new mix");// TODO 编号
             }

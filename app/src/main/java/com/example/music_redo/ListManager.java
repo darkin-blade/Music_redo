@@ -170,6 +170,8 @@ public class ListManager {
                 @Override
                 public void onClick(View v) {
                     listMusic(item_detail[0]);// 点击查看对应歌单详情
+                    MusicList.playList.highlightMusic();
+                    MusicList.mixName.setText(curMix);
                 }
             });
 
@@ -187,11 +189,11 @@ public class ListManager {
                 }
             });
         } else if (mode == 1) {// 当前为歌曲列表
-            // TODO 播放该专辑
             item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     MusicList.playList.loadMix(curMix, item_detail[2], 0);// TODO 加载专辑曲目并播放歌曲
+                    MusicList.playList.highlightMusic();
                 }
             });
 

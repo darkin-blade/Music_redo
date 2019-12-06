@@ -74,7 +74,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     // 功能代号
     static public int window_num;
-    static public int dialog_result;
+    static public String dialog_result;
     static public final int MUSIC_LIST = 0;// 主界面
     static public final int MIX_LIST = 1;// 歌单列表
     static public final int ADD_LIST = 3;// `添加至`列表
@@ -115,10 +115,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
         // 初始化功能编号
         window_num = MUSIC_LIST;
-        // < 0: 取消
-        // = 0: 切换(主界面不进行操作)
-        // > 0: 操作成功
-        dialog_result = 0;
+        dialog_result = null;
 
         // 初始化路径字符串
         appPath = getExternalFilesDir("").getAbsolutePath();
@@ -197,8 +194,10 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             public void onClick(View v) {
                 if (window_num == MUSIC_LIST) {
                     // 切换至歌单列表
-                    listManager.listMix();
                     window_num = MIX_LIST;
+                    listManager.listMix();
+                    MusicList.playList.highlightMusic();
+                    MusicList.mixName.setText("mix list");// TODO 歌单名
                 } else {
                     // 切换到当前歌单
                     if (playList.curMusic.length() > 0) {

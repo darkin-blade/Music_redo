@@ -140,7 +140,11 @@ public class PlayList {
             MusicList.playTime.cur_time = cursor.getInt(3);
             MusicList.playTime.total_time = cursor.getInt(4);
 
-            // TODO 加载歌单
+            // 加载歌单
+            loadMix(curMix, curMusic, 1);
+            highlightMusic();
+            MusicList.mixName.setText(curMix);
+            // TODO 恢复进度
         } else {
             MusicList.infoLog("cannot find user data");
         }

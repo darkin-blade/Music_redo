@@ -64,7 +64,7 @@ public class MusicSelect extends FileManager {
             @Override
             public void onClick(View v) {
                 musicList.clear();// 清空
-                MusicList.dialog_result = -1;
+                MusicList.dialog_result = "cancel";
                 dismiss();
             }
         });
@@ -80,7 +80,7 @@ public class MusicSelect extends FileManager {
                             "  ('" + musicList.get(i) + "', '" + musicList.get(i).replaceAll(".*/", "")  + "', 0);");
                 }
                 musicList.clear();// 清空
-                MusicList.dialog_result = 1;
+                MusicList.dialog_result = "add";
                 dismiss();
             }
         });

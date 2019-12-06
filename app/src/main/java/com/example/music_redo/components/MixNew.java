@@ -65,7 +65,7 @@ public class MixNew extends DialogFragment {
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MusicList.dialog_result = -1;
+                MusicList.dialog_result = "cancel";
                 dismiss();
             }
         });
@@ -88,7 +88,7 @@ public class MixNew extends DialogFragment {
                 }
 
                 // 刷新ui
-                MusicList.dialog_result = 1;
+                MusicList.dialog_result = "new";
                 dismiss();
             }
         });
