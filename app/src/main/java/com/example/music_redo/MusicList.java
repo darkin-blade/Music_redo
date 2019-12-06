@@ -371,8 +371,9 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     @Override
     public void onDismiss(DialogInterface dialog) {
+        infoLog(window_num + ": " + dialog_result);
         switch (window_num) {
-            case MIX_NEW:// 新建歌单
+            case MIX_NEW:
                 window_num = MIX_LIST;
                 if (dialog_result.equals("new")) {// 新建歌单
                     listManager.listMix();
@@ -391,9 +392,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             case MUSIC_SELECT:
                 window_num = MUSIC_LIST;
                 if (dialog_result.equals("add")) {// 添加歌曲
-                    if (playList.curMix.equals(listManager.curMix)) {
-                        listManager.listMusic(listManager.curMix);
-                    }
+                    listManager.listMusic(listManager.curMix);// 无条件刷新列表
                     if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 更新当前播放列表
                         playList.highlightMusic();
                     }
@@ -402,9 +401,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             case MUSIC_EDIT:
                 window_num = MUSIC_LIST;
                 if (dialog_result.equals("delete")) {// 删除歌曲
-                    if (playList.curMix.equals(listManager.curMix)) {
-                        listManager.listMusic(listManager.curMix);
-                    }
+                    listManager.listMusic(listManager.curMix);// 无条件刷新列表
                     if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 更新当前播放列表
                         playList.highlightMusic();
                     }
@@ -422,7 +419,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             case ADD_LIST:// TODO
                 window_num = MUSIC_LIST;
                 if (dialog_result.equals("add to")) {// 转移歌曲
-                    if (playList.curMix.equals(listManager.curMix)) {
+                    if (playList.curMix.equals(listManager.curMix)) {// 播放正在浏览的歌单 TODO 此情况不可能
                         listManager.listMusic(listManager.curMix);
                     }
                     if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 更新当前播放列表
