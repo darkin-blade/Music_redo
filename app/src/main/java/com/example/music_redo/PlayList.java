@@ -58,10 +58,11 @@ public class PlayList {
             curMusic = curMusicList.get(curMusicIndex);
         }
 
-        // TODO 加载歌曲时长
-
+        // 加载歌曲
         if (mode != -1) {
-            // TODO 播放歌曲
+            MusicList.playTime.play(3);
+        } else {
+            MusicList.playTime.play(1);// 不进行置零
         }
     }
 

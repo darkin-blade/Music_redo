@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.example.music_redo.MusicList.playList;
-import static com.example.music_redo.MusicList.playTime;
 import static com.example.music_redo.MusicList.player;
 
 public class PlayTime {
@@ -43,7 +42,7 @@ public class PlayTime {
         if (mode >= 1) {
             // 加载
             try {
-                player.setDataSource(MusicList.playList.curMusic);
+                player.setDataSource(playList.curMusic);
                 player.prepare();
                 total_time = player.getDuration();
 
@@ -52,13 +51,20 @@ public class PlayTime {
                 Date tmp = new Date(total_time);
                 String formatTime = format.format(tmp);
                 MusicList.totalTime.setText(formatTime);
-            } catch (IOException e) {
+            } catch (IOException e) {// TODO prepare failed
                 e.printStackTrace();
-                MusicList.playList.stopMusic(1);
+
+                // 歌曲无法播放
+                MusicList.deleteMusic(playList.curMix, playList.curMusic);
+                playList.loadMix(playList.curMix, playList.curMusic, 2);// TODO 只刷新歌单
+                if (MusicList.window_num != MusicList.MIX_LIST) {// TODO 如果不是歌单列表
+                    MusicList.listManager.listMusic(playList.curMix);
+                }
+                playList.stopMusic(1);
                 return;
             } catch (IllegalStateException e) {
                 e.printStackTrace();
-                MusicList.playList.stopMusic(1);
+                playList.stopMusic(1);
                 return;
             }
 
@@ -134,14 +140,23 @@ public class PlayTime {
     }
 
     public void setBar() {// 更新进度条
-        final int curProgress = cur_time * 100 / total_time;
+        try {
+            final int curProgress = cur_time * 100 / total_time;
 
-        myActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                MusicList.seekBar.setProgress(curProgress);
-            }
-        });
+            myActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    MusicList.seekBar.setProgress(curProgress);
+                }
+            });
+        } catch (ArithmeticException e) {
+            myActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    MusicList.seekBar.setProgress(0);
+                }
+            });
+        }
     }
 
     public void setTime() {// 更新时间

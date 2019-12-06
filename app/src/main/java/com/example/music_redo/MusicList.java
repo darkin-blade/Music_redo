@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -156,7 +157,16 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     }
 
     public void initPlayer() {
-        ;
+        player = new MediaPlayer();
+        player.setLooping(false);
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);// 设置为音频
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {// 播放完毕回调函数
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                infoLog("complete");// TODO
+                playList.loadMusic(1);// 下一首
+            }
+        });
     }
 
     public void initUI() {// 初始化ui,layout和dialog
