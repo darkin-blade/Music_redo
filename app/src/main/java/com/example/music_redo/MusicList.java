@@ -221,13 +221,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 }
             }
         });
-
-        ((LinearLayout)musicName.getParent()).setOnClickListener(new View.OnClickListener() {// TODO 跳转
-            @Override
-            public void onClick(View v) {
-                infoLog("debug");
-            }
-        });
     }
 
     public void initData() {

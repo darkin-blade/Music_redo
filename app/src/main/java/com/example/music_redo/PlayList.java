@@ -3,6 +3,11 @@ package com.example.music_redo;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Color;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -176,12 +181,69 @@ public class PlayList {
 
     public void highlightMusic() {
         MusicList.musicName.setText(curMix + "    " + curMusic.replaceAll(".*/", ""));
+
+        // ui界面
+        LinearLayout layout = MusicList.itemList;
+        LinearLayout dest = null;
+        int childCount = layout.getChildCount();
         if (MusicList.window_num == MusicList.MIX_LIST) {
-            ;// TODO 高亮mix
-            ;// TODO 增加监听
+            // TODO 高亮mix
+            for (int i = 0; i < childCount; i ++) {
+                LinearLayout item = (LinearLayout) layout.getChildAt(i);
+                RelativeLayout contain = (RelativeLayout) item.getChildAt(0);
+                LinearLayout detail = (LinearLayout) contain.getChildAt(1);
+                TextView name = (TextView) detail.getChildAt(0);
+                TextView count = (TextView) detail.getChildAt(1);
+                if (MusicList.playList.curMix.equals(name.getText().toString())) {// 正在播放该歌单
+                    dest = item;
+                    name.setTextColor(Color.rgb(230, 100, 60));
+                    count.setTextColor(Color.rgb(230, 100, 60));
+                } else {
+                    name.setTextColor(Color.rgb(0, 0, 0));
+                    count.setTextColor(Color.rgb(0, 0, 0));
+                }
+            }
+
+            // TODO 增加监听
+            if (dest != null) {
+                final LinearLayout finalDest = dest;
+                ((LinearLayout) MusicList.musicName.getParent()).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MusicList.scrollView.scrollTo(0, finalDest.getTop());
+                    }
+                });
+            }
         } else if (MusicList.window_num == MusicList.MUSIC_LIST) {
-            ;// TODO 高亮music
-            ;// TODO 增加监听
+            if (MusicList.playList.curMix.equals(MusicList.listManager.curMix)) {
+                // TODO 高亮music
+                for (int i = 0; i < childCount; i ++) {
+                    LinearLayout item = (LinearLayout) layout.getChildAt(i);
+                    RelativeLayout contain = (RelativeLayout) item.getChildAt(0);
+                    LinearLayout detail = (LinearLayout) contain.getChildAt(1);
+                    TextView name = (TextView) detail.getChildAt(0);
+                    TextView count = (TextView) detail.getChildAt(1);
+                    if (MusicList.playList.curMusicIndex == i) {// 正在播放该歌单
+                        dest = item;
+                        name.setTextColor(Color.rgb(230, 100, 60));
+                        count.setTextColor(Color.rgb(230, 100, 60));
+                    } else {
+                        name.setTextColor(Color.rgb(0, 0, 0));
+                        count.setTextColor(Color.rgb(0, 0, 0));
+                    }
+                }
+
+                // TODO 增加监听
+                if (dest != null) {
+                    final LinearLayout finalDest = dest;
+                    ((LinearLayout) MusicList.musicName.getParent()).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            MusicList.scrollView.scrollTo(0, finalDest.getTop());
+                        }
+                    });
+                }
+            }
         }
     }
 }
