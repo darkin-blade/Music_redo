@@ -103,7 +103,7 @@ public class ListManager {
 
     public void showMix(String mixName) {
         if (mixName == null || mixName.length() <= 0) {
-            MusicList.mixName.setText("mix list");
+            MusicList.mixName.setText("no mix");
         } else {
             MusicList.mixName.setText(mixName);
         }

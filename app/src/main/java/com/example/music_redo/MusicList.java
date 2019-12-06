@@ -199,7 +199,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     window_num = MIX_LIST;
                     listManager.listMix();
                     MusicList.playList.highlightMusic();
-                    MusicList.listManager.showMix("");// TODO 歌单名
+                    MusicList.listManager.showMix("mix_list");
                 } else {
                     // 切换到当前歌单
                     if (playList.curMusic.length() > 0) {
@@ -223,6 +223,8 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 }
             }
         });
+
+        musicName.setSelected(true);// 跑马灯
     }
 
     public void initData() {
@@ -373,7 +375,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        infoLog(window_num + ": " + dialog_result);
         switch (window_num) {
             case MIX_NEW:
                 window_num = MIX_LIST;
