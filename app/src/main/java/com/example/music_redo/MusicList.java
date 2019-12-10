@@ -25,6 +25,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.music_redo.components.BluetoothList;
 import com.example.music_redo.components.MixEdit;
 import com.example.music_redo.components.MixNew;
 import com.example.music_redo.components.MixRename;
@@ -64,12 +65,12 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     // ui界面
     static public MusicSelect musicSelect;// 文件浏览器
     static public MusicMove musicMove;// 歌曲`添加至`歌单
+    static public SQLiteDatabase database;
     // TODO 播放模式
-    // TODO 蓝牙管理
+    static public BluetoothList bluetoothList;// TODO 蓝牙管理
 
     // 公共变量
     static public String appPath;
-    static public SQLiteDatabase database;
     // TODO media信号处理
     static public Long myTime = System.currentTimeMillis();// 微秒时间
     static public int clickTimes;// TODO 耳机信号次数
@@ -85,6 +86,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public final int MUSIC_EDIT = 6;// 歌曲列表管理歌曲
     static public final int MIX_NEW = 7;// 新建歌单
     static public final int MIX_RENAME = 8;// 重命名歌单
+    static public final int BLUETOOTH_LIST = 9;// TODO 蓝牙管理
 
     // 核心组件
     static public MediaPlayer player;// 媒体播放器
@@ -180,7 +182,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         musicMove = new MusicMove();
         musicSelect = new MusicSelect();
         // TODO 播放模式
-        // TODO 蓝牙管理
+        bluetoothList = new BluetoothList();// TODO 蓝牙管理
 
         // 部件
         // 按钮
@@ -246,6 +248,14 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                         infoToast(MusicList.this, "no current mix");
                     }
                 }
+            }
+        });
+
+        button_bluetooth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 打开蓝牙管理器
+                bluetoothList.show(getSupportFragmentManager(), "bluetooth");
             }
         });
 
@@ -488,6 +498,11 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                         playList.highlightMusic();
                     }
                 }
+                break;
+            case BLUETOOTH_LIST:
+                window_num = bluetoothList.window_num;
+                infoLog("window num: " + window_num);
+                break;
         }
     }
 }
