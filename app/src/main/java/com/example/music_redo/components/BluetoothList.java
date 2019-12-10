@@ -44,8 +44,9 @@ public class BluetoothList extends DialogFragment {
 
     @Override
     public void onDismiss(final DialogInterface dialog) {
+        // TODO 处理泄漏
         getActivity().unregisterReceiver(receiver);
-        receiver.unregisterReceiver(getContext());// TODO 泄漏
+//        receiver.unregisterReceiver(getContext());
 
         super.onDismiss(dialog);
         Activity activity = getActivity();

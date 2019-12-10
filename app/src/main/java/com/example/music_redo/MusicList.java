@@ -439,6 +439,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     @Override
     public void onDestroy() {
+        unregisterReceiver(receiver);// 解决泄漏问题
         super.onDestroy();
     }
 
