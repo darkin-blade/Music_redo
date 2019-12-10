@@ -142,7 +142,6 @@ public class BluetoothList extends DialogFragment {
             detail_margin_left = 10;
 
     public void create_item(final String item_name, final String item_detail) {// mode: 0:歌单 1:歌曲
-        LinearLayout layout = myView.findViewById(R.id.mix_list);
         // 每一项 LL
         LinearLayout.LayoutParams itemParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, item_height);
         // 文字区 LL
