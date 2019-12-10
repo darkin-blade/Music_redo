@@ -94,21 +94,9 @@
                     android:text="Scan"
                     style="@style/button_2"
                     android:layout_marginLeft="4dp"
-                    android:layout_marginRight="2dp"/>
-                <Button
-                    android:id="@+id/button_3"
-                    android:text="TODO"
-                    style="@style/button_5"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"/>
-                <Button
-                    android:id="@+id/button_4"
-                    android:text="TODO"
-                    style="@style/button_1"
-                    android:layout_marginLeft="2dp"
                     android:layout_marginRight="4dp"/>
                 <Button
-                    android:id="@+id/button_5"
+                    android:id="@+id/button_3"
                     android:text="Pause"
                     style="@style/button_7"/>
 

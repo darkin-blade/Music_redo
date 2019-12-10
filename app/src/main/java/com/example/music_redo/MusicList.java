@@ -86,7 +86,8 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public final int MUSIC_EDIT = 6;// 歌曲列表管理歌曲
     static public final int MIX_NEW = 7;// 新建歌单
     static public final int MIX_RENAME = 8;// 重命名歌单
-    static public final int BLUETOOTH_LIST = 9;// TODO 蓝牙管理
+    static public final int BLUETOOTH_LIST = 9;// 蓝牙管理
+    static public final int BLUETOOTH_EDIT = 10;// `蓝牙设备控制`窗口
 
     // 核心组件
     static public MediaPlayer player;// 媒体播放器
@@ -502,7 +503,9 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 break;
             case BLUETOOTH_LIST:// 蓝牙管理器
                 window_num = bluetoothList.window_num;
-                infoLog("window num: " + window_num);
+                break;
+            case  BLUETOOTH_EDIT:// `修改蓝牙设备`窗口
+                window_num = BLUETOOTH_LIST;
                 break;
         }
     }

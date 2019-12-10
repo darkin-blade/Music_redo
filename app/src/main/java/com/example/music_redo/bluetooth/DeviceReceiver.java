@@ -28,8 +28,7 @@ public class DeviceReceiver extends BroadcastReceiver {
         if (action != null) {
 //            MusicList.infoLog("action: " + action);// TODO debug
             switch (action) {
-                // 找到新的蓝牙设备
-                case BluetoothDevice.ACTION_FOUND:
+                case BluetoothDevice.ACTION_FOUND:// 找到新的蓝牙设备
                     final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     if (device.getName() != null) {
                         // TODO 设备去重
@@ -49,6 +48,9 @@ public class DeviceReceiver extends BroadcastReceiver {
                 case BluetoothAdapter.ACTION_DISCOVERY_FINISHED:// 扫描完毕
                     MusicList.bluetoothList.listDevice();// 列举设备
                     MusicList.infoLog("discovery finished");
+                    break;
+                case BluetoothDevice.ACTION_PAIRING_REQUEST:
+                    MusicList.infoLog("pairing request");
                     break;
             }
         }

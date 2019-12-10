@@ -36,10 +36,9 @@ public class BluetoothList extends DialogFragment {
     Button button_1;
     Button button_2;
     Button button_3;
-    Button button_4;
-    Button button_5;
 
     DeviceReceiver receiver;
+    BluetoothEdit bluetoothEdit;
 
     static public ArrayList<BluetoothDevice> devices;// 蓝牙设备列表
     static public ArrayList<String> addresses;// 蓝牙设备地址列表
@@ -86,6 +85,8 @@ public class BluetoothList extends DialogFragment {
     public void initData() {
         window_num = MusicList.window_num;// 保存之前的窗口号
         MusicList.window_num = MusicList.BLUETOOTH_LIST;// 修改窗口编号
+
+        bluetoothEdit = new BluetoothEdit();
         receiver = new DeviceReceiver(getActivity());
         devices = new ArrayList<BluetoothDevice>();
         addresses = new ArrayList<>();
@@ -93,6 +94,7 @@ public class BluetoothList extends DialogFragment {
         // 注册receiver
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND);// 搜索设备
+        intentFilter.addAction(BluetoothDevice.ACTION_PAIRING_REQUEST);// TODO
         intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);// 搜索完毕
         getActivity().registerReceiver(receiver, intentFilter);// 注册广播 TODO 有报错
         receiver.registerReceiver(getContext());
@@ -102,8 +104,6 @@ public class BluetoothList extends DialogFragment {
         button_1 = myView.findViewById(R.id.button_1);
         button_2 = myView.findViewById(R.id.button_2);
         button_3 = myView.findViewById(R.id.button_3);
-        button_4 = myView.findViewById(R.id.button_4);
-        button_5 = myView.findViewById(R.id.button_5);
         layout = myView.findViewById(R.id.main_list);
         layout.removeAllViews();
 
@@ -122,7 +122,7 @@ public class BluetoothList extends DialogFragment {
             }
         });
 
-        button_5.setOnClickListener(new View.OnClickListener() {
+        button_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {// 取消搜索
                 if (bluetoothAdapter.isDiscovering()) {
@@ -198,17 +198,7 @@ public class BluetoothList extends DialogFragment {
             @Override
             public void onClick(View v) {
                 // TODO 蓝牙配对
-                try {
-                    Method createBond = device.getClass().getMethod("createBond");
-                    Boolean result = (Boolean) createBond.invoke(device);
-                    MusicList.infoLog("link result: " + result);
-                } catch (NoSuchMethodException e) {// getMethod
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {// invoke
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {// invoke
-                    e.printStackTrace();
-                }
+                bluetoothEdit.show(getFragmentManager(), "edit bluetooth", device);
             }
         });
     }
