@@ -22,10 +22,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import static com.example.music_redo.MusicList.bluetoothAdapter;
 
@@ -38,6 +35,7 @@ public class BluetoothList extends DialogFragment {
     Button button_1;
     Button button_2;
     Button button_3;
+    Button button_4;
 
     DeviceReceiver receiver;
     BluetoothEdit bluetoothEdit;
@@ -112,6 +110,7 @@ public class BluetoothList extends DialogFragment {
         button_1 = myView.findViewById(R.id.button_1);
         button_2 = myView.findViewById(R.id.button_2);
         button_3 = myView.findViewById(R.id.button_3);
+        button_4 = myView.findViewById(R.id.button_4);
         layout = myView.findViewById(R.id.main_list);
         layout.removeAllViews();
 
@@ -132,6 +131,13 @@ public class BluetoothList extends DialogFragment {
 
         button_3.setOnClickListener(new View.OnClickListener() {
             @Override
+            public void onClick(View v) {
+                listPaired();
+            }
+        });
+
+        button_4.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {// 取消搜索
                 if (bluetoothAdapter.isDiscovering()) {
                     bluetoothAdapter.cancelDiscovery();
@@ -146,6 +152,26 @@ public class BluetoothList extends DialogFragment {
         if (bluetoothAdapter.isEnabled() == false) {
             bluetoothAdapter.enable();
         }
+        if (bluetoothAdapter.isDiscovering() == true) {
+            bluetoothAdapter.cancelDiscovery();// 强制暂停
+        }
+
+        // 清空之前的数据
+        devices.clear();
+        addresses.clear();
+
+        // TODO 开始扫描
+        bluetoothAdapter.startDiscovery();
+        MusicList.infoToast(getContext(), "start scanning");
+
+    }
+
+    public void listPaired() {
+        // 清空
+        layout.removeAllViews();
+        if (bluetoothAdapter.isEnabled() == false) {
+            bluetoothAdapter.enable();
+        }
 
         // 清空之前的数据
         devices.clear();
@@ -154,14 +180,8 @@ public class BluetoothList extends DialogFragment {
         devices.addAll(bluetoothAdapter.getBondedDevices());
         for (int i = 0; i < devices.size(); i ++) {
             BluetoothDevice tmp = devices.get(i);
-            addresses.add(tmp.getAddress());
             create_item(tmp.getName(), tmp.getAddress(), tmp, 1);
         }
-
-        // TODO 开始扫描
-        bluetoothAdapter.startDiscovery();
-        MusicList.infoToast(getContext(), "start scanning");
-
     }
 
     public void listDevice() {
@@ -224,7 +244,7 @@ public class BluetoothList extends DialogFragment {
             @Override
             public void onClick(View v) {
                 // TODO 蓝牙配对
-                bluetoothEdit.show(getFragmentManager(), "edit bluetooth", device);
+                bluetoothEdit.show(getFragmentManager(), "edit bluetooth", device, item);
             }
         });
     }

@@ -2,10 +2,7 @@ package com.example.music_redo.bluetooth;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCallback;
-import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
@@ -21,16 +19,14 @@ import androidx.fragment.app.FragmentManager;
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-import static com.example.music_redo.MusicList.bluetoothAdapter;
-
 public class BluetoothEdit extends DialogFragment {
     View myView;
 
+    LinearLayout item;
     TextView textView;
     Button button_1;
     Button button_2;
@@ -41,8 +37,9 @@ public class BluetoothEdit extends DialogFragment {
     BluetoothSocket socket;
     UUID uuid;// TODO 设备唯一识别号
 
-    public void show(FragmentManager fragmentManager, String tag, BluetoothDevice device) {
+    public void show(FragmentManager fragmentManager, String tag, BluetoothDevice device, LinearLayout item) {
         this.device = device;
+        this.item = item;
         super.show(fragmentManager, tag);
     }
 
@@ -87,7 +84,7 @@ public class BluetoothEdit extends DialogFragment {
 
         button_1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {// 取消
                 MusicList.dialog_result = "";
                 dismiss();
             }
@@ -95,19 +92,10 @@ public class BluetoothEdit extends DialogFragment {
 
         button_2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                connectDevice();
-
-                MusicList.dialog_result = "";
-                dismiss();
-            }
-        });
-
-        button_3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO 与蓝牙设备进行配对
-                pairDevice();
+            public void onClick(View v) {// 配对
+                if (pairDevice() == true) {
+                    ((LinearLayout) item.getParent()).removeView(item);
+                }
 
                 MusicList.dialog_result = "";
                 dismiss();
@@ -116,13 +104,18 @@ public class BluetoothEdit extends DialogFragment {
 
         button_4.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                unpairDevice();
+            public void onClick(View v) {// 取消配对
+                if (unpairDevice() == true) {
+                    ((LinearLayout) item.getParent()).removeView(item);
+                }
+
+                MusicList.dialog_result = "";
+                dismiss();
             }
         });
     }
 
-    public Boolean connectDevice() {
+    public Boolean pairDevice() {
         // 连接设备
         Boolean result = false;
         try {
@@ -137,15 +130,6 @@ public class BluetoothEdit extends DialogFragment {
         } catch (InvocationTargetException e) {// invoke
             e.printStackTrace();
         }
-
-        return result;
-    }
-
-    public Boolean pairDevice() {
-        // 蓝牙配对
-        Boolean result = false;
-
-
 
         return result;
     }

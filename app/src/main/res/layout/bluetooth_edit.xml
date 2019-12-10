@@ -39,7 +39,7 @@
                 android:layout_marginRight="2dp"/>
             <Button
                 android:id="@+id/button_3"
-                android:text="Pair"
+                android:text="TODO"
                 style="@style/button_5"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="4dp"/>

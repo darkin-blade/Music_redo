@@ -18,6 +18,9 @@
     <style name="button_2" parent="button_1">
         <item name="android:background">@drawable/button_2</item>
     </style>
+    <style name="button_3" parent="button_1">
+        <item name="android:background">@drawable/button_3</item>
+    </style>
     <style name="button_5" parent="button_1">
         <item name="android:background">@drawable/button_5</item>
     </style>
