@@ -2,7 +2,6 @@ package com.example.music_redo.bluetooth;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import com.example.music_redo.R;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.UUID;
 
 public class BluetoothEdit extends DialogFragment {
     View myView;
@@ -34,8 +32,6 @@ public class BluetoothEdit extends DialogFragment {
     Button button_4;
 
     BluetoothDevice device;
-    BluetoothSocket socket;
-    UUID uuid;// TODO 设备唯一识别号
 
     public void show(FragmentManager fragmentManager, String tag, BluetoothDevice device, LinearLayout item) {
         this.device = device;

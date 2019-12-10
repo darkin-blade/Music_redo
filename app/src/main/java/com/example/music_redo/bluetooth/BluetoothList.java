@@ -175,6 +175,9 @@ public class BluetoothList extends DialogFragment {
         if (bluetoothAdapter.isEnabled() == false) {
             bluetoothAdapter.enable();
         }
+        if (bluetoothAdapter.isDiscovering() == true) {
+            bluetoothAdapter.cancelDiscovery();// 强制暂停
+        }
 
         // 清空之前的数据
         devices.clear();
