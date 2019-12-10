@@ -21,6 +21,8 @@ import androidx.fragment.app.FragmentManager;
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import static com.example.music_redo.MusicList.bluetoothAdapter;
@@ -141,7 +143,8 @@ public class BluetoothList extends DialogFragment {
     public void listDevice() {
         layout.removeAllViews();
         for (int i = 0; i < devices.size(); i ++) {
-            create_item(devices.get(i).getName(), devices.get(i).getAddress());
+            BluetoothDevice tmp = devices.get(i);
+            create_item(tmp.getName(), tmp.getAddress(), tmp);
         }
     }
 
@@ -150,7 +153,7 @@ public class BluetoothList extends DialogFragment {
             item_height = 130,
             detail_margin_left = 10;
 
-    public void create_item(final String item_name, final String item_detail) {// mode: 0:歌单 1:歌曲
+    public void create_item(final String item_name, final String item_detail, final BluetoothDevice device) {// mode: 0:歌单 1:歌曲
         // 每一项 LL
         LinearLayout.LayoutParams itemParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, item_height);
         // 文字区 LL
@@ -191,7 +194,18 @@ public class BluetoothList extends DialogFragment {
         item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO 操作
+                // TODO 蓝牙配对
+                try {
+                    Method createBond = device.getClass().getMethod("createBond");
+                    int result = (int) createBond.invoke(device);
+                    MusicList.infoLog("link result: " + result);
+                } catch (NoSuchMethodException e) {// getMethod
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {// invoke
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {// invoke
+                    e.printStackTrace();
+                }
             }
         });
     }
