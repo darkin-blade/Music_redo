@@ -126,7 +126,6 @@ public class BluetoothList extends DialogFragment {
 
     public void scanDevice() {
         // 清空
-        layout.removeAllViews();
         if (bluetoothAdapter.isEnabled() == false) {
             bluetoothAdapter.enable();
         }
@@ -140,6 +139,7 @@ public class BluetoothList extends DialogFragment {
     }
 
     public void listDevice() {
+        layout.removeAllViews();
         for (int i = 0; i < devices.size(); i ++) {
             create_item(devices.get(i).getName(), devices.get(i).getAddress());
         }

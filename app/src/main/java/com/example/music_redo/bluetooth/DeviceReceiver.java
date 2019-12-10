@@ -19,16 +19,19 @@ public class DeviceReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (action != null) {
-            MusicList.infoLog("action: " + action);// TODO debug
+//            MusicList.infoLog("action: " + action);// TODO debug
             switch (action) {
-                // TODO 找到新的蓝牙设备
+                // 找到新的蓝牙设备
                 case BluetoothDevice.ACTION_FOUND:
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    if (device.getName() != null && addresses.indexOf(device.getAddress()) < 0) {// TODO 不能够重复
-                        devices.add(device);// 添加设备
-                        addresses.add(device.getAddress());
+                    if (device.getName() != null) {
+                        // TODO 设备去重
+                        if (addresses.indexOf(device.getAddress()) < 0) {
+                            devices.add(device);// 添加设备
+                            addresses.add(device.getAddress());
+                        }
+                        MusicList.infoLog("device [" + device.getName() + "], address [" + device.getAddress() + "]");
                     }
-                    MusicList.infoLog("device [" + device.getName() + "], address [" + device.getAddress() + "]");
                     break;
                 case BluetoothAdapter.ACTION_DISCOVERY_FINISHED:// 扫描完毕
                     MusicList.bluetoothList.listDevice();// 列举设备
