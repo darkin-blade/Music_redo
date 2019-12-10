@@ -90,7 +90,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     // 核心组件
     static public MediaPlayer player;// 媒体播放器
-    public BluetoothAdapter bluetoothAdapter;// 蓝牙
+    static public BluetoothAdapter bluetoothAdapter;// 蓝牙
     // 核心功能
     public MediaReceiver receiver;// 接收`蓝牙/媒体`信号
     static public ListManager listManager;
@@ -150,6 +150,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);// 监视蓝牙设备与APP连接的状态
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);// TODO 搜索设备
         intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);// 监听有线耳机的插拔
         intentFilter.addAction(Intent.ACTION_MEDIA_BUTTON);// TODO 重复?
 
@@ -488,7 +489,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     listManager.showMix(listManager.curMix);
                 }
                 break;
-            case MUSIC_MOVE:// TODO
+            case MUSIC_MOVE:
                 window_num = MUSIC_LIST;
                 if (dialog_result.equals("add to")) {// 转移歌曲
                     if (playList.curMix.equals(listManager.curMix)) {// 播放正在浏览的歌单 TODO 此情况不可能
@@ -499,7 +500,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     }
                 }
                 break;
-            case BLUETOOTH_LIST:
+            case BLUETOOTH_LIST:// 蓝牙管理器
                 window_num = bluetoothList.window_num;
                 infoLog("window num: " + window_num);
                 break;

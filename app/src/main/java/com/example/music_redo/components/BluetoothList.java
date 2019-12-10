@@ -18,6 +18,8 @@ import androidx.fragment.app.FragmentManager;
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
 
+import static com.example.music_redo.MusicList.bluetoothAdapter;
+
 public class BluetoothList extends DialogFragment {
     public View myView;
 
@@ -57,7 +59,6 @@ public class BluetoothList extends DialogFragment {
 
         initData();
         initUI();
-        listMix();
 
         return myView;
     }
@@ -74,6 +75,7 @@ public class BluetoothList extends DialogFragment {
         button_4 = myView.findViewById(R.id.button_4);
         button_5 = myView.findViewById(R.id.button_5);
         layout = myView.findViewById(R.id.main_list);
+        layout.removeAllViews();
 
         button_1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,43 +84,24 @@ public class BluetoothList extends DialogFragment {
                 dismiss();
             }
         });
+
+        button_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listDevice();
+            }
+        });
     }
 
-    public void listMix() {
+    public void listDevice() {
         // 清空
         layout.removeAllViews();
-
-        // 列举所有歌单
-//        Cursor cursor = MusicList.database.query(
-//                "mix_list",// 歌单列表
-//                new String[]{"name"},
-//                null,
-//                null,
-//                null,
-//                null,
-//                "name");
-//
-//        if (cursor.moveToFirst()) {// TODO 判断非空
-//            do {
-//                String mix_name = cursor.getString(0);// 获取歌单名
-//                Cursor cursor_count = MusicList.database.query(
-//                        mix_name,// 歌单详情
-//                        new String[]{"path", "name", "count"},
-//                        null,
-//                        null,
-//                        null,
-//                        null,
-//                        "name");// 统计歌单内歌曲数目
-//                create_item(mix_name, "total: " + cursor_count.getCount(), 0);// TODO 列举歌单
-//            } while (cursor.moveToNext());
-//        } else {
-//            MusicList.infoToast(getContext(), "no mix");
-//        }
-//        cursor.close();
+        bluetoothAdapter.startDiscovery();// TODO 开始扫描
+        MusicList.infoToast(getContext(), "start scanning");
 
     }
 
-    // TODO 列举歌单的参数
+    // TODO 列举item的参数
     public static final int
             item_height = 130,
             detail_margin_left = 10;
@@ -165,13 +148,7 @@ public class BluetoothList extends DialogFragment {
         item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO 添加到该歌单
-                for (int i = 0; i < MusicList.listManager.musicSelected.size(); i ++) {
-                    String tmp = MusicList.listManager.musicSelected.get(i);
-                    MusicList.addMusic(item_name, tmp);
-                }
-                MusicList.dialog_result = "add to";
-                dismiss();// TODO
+                // TODO 操作
             }
         });
     }

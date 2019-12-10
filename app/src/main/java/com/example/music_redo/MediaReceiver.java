@@ -38,6 +38,12 @@ public class MediaReceiver extends BroadcastReceiver {
                     }
                     break;
 
+                // TODO 找到新的蓝牙设备
+                case BluetoothDevice.ACTION_FOUND:
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    MusicList.infoLog("device [" + device.getName() + "], address [" + device.getAddress() + "]");
+                    break;
+
                 // 蓝牙连接状态改变
                 // TODO 感觉没用
                 case BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED:
