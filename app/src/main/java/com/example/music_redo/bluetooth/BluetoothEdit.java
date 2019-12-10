@@ -2,7 +2,10 @@ package com.example.music_redo.bluetooth;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -71,9 +74,6 @@ public class BluetoothEdit extends DialogFragment {
 
     public void initData() {
         MusicList.window_num = MusicList.BLUETOOTH_EDIT;
-
-        uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-        MusicList.infoLog("uuid: " + uuid);
     }
 
     public void initUI() {
@@ -107,25 +107,7 @@ public class BluetoothEdit extends DialogFragment {
             @Override
             public void onClick(View v) {
                 // TODO 与蓝牙设备进行配对
-                try {
-                    socket = device.createInsecureRfcommSocketToServiceRecord(uuid);// TODO
-                } catch (IOException e) {// createInsecureRfcommSocketToServiceRecord
-                    e.printStackTrace();
-                }
-
-                if (bluetoothAdapter.isDiscovering()) {// TODO 强制暂停
-                    bluetoothAdapter.cancelDiscovery();
-                }
-
-                connectDevice();
-
-                try {
-                    socket.connect();// TODO
-                } catch (IOException e) {// connect
-                    e.printStackTrace();
-                }
-
-                // TODO close
+                pairDevice();
 
                 MusicList.dialog_result = "";
                 dismiss();
@@ -135,9 +117,11 @@ public class BluetoothEdit extends DialogFragment {
 
     public Boolean connectDevice() {
         // 连接设备
+        Boolean result = false;
         try {
             Method createBond = device.getClass().getMethod("createBond");
-            Boolean result = (Boolean) createBond.invoke(device);
+            createBond.setAccessible(true);
+            result = (Boolean) createBond.invoke(device);
             MusicList.infoLog("link result: " + result);
         } catch (NoSuchMethodException e) {// getMethod
             e.printStackTrace();
@@ -147,6 +131,15 @@ public class BluetoothEdit extends DialogFragment {
             e.printStackTrace();
         }
 
-        return false;
+        return result;
+    }
+
+    public Boolean pairDevice() {
+        // 蓝牙配对
+        Boolean result = false;
+
+
+
+        return result;
     }
 }

@@ -52,7 +52,11 @@ public class BluetoothList extends DialogFragment {
     @Override
     public void onDismiss(final DialogInterface dialog) {
         // TODO 处理泄漏
-        getActivity().unregisterReceiver(receiver);
+        MusicList.infoLog("ondismiss");
+        Activity tmp = getActivity();
+        if (tmp != null) {
+            tmp.unregisterReceiver(receiver);
+        }
 
         // 停止扫描
         if (bluetoothAdapter.isDiscovering()) {
@@ -77,6 +81,7 @@ public class BluetoothList extends DialogFragment {
         myView = inflater.inflate(R.layout.bluetooth_list, container);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(0x00000000));// 背景透明
 
+        MusicList.infoLog("oncreate view");
         initData();
         initUI();
 
@@ -141,9 +146,11 @@ public class BluetoothList extends DialogFragment {
             bluetoothAdapter.enable();
         }
 
-        // TODO 开始扫描
-        devices.clear();// 清空之前的数据
+        // 清空之前的数据
+        devices.clear();
         addresses.clear();
+
+        // TODO 开始扫描
         bluetoothAdapter.startDiscovery();
         MusicList.infoToast(getContext(), "start scanning");
 
