@@ -11,6 +11,7 @@ import android.media.AudioManager;
 import com.example.music_redo.MediaReceiver;
 import com.example.music_redo.MusicList;
 
+import static com.example.music_redo.bluetooth.BluetoothList.addresses;
 import static com.example.music_redo.bluetooth.BluetoothList.devices;
 
 public class DeviceReceiver extends BroadcastReceiver {
@@ -23,8 +24,9 @@ public class DeviceReceiver extends BroadcastReceiver {
                 // TODO 找到新的蓝牙设备
                 case BluetoothDevice.ACTION_FOUND:
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    if (device.getName() != null) {
+                    if (device.getName() != null && addresses.indexOf(device.getAddress()) < 0) {// TODO 不能够重复
                         devices.add(device);// 添加设备
+                        addresses.add(device.getAddress());
                     }
                     MusicList.infoLog("device [" + device.getName() + "], address [" + device.getAddress() + "]");
                     break;

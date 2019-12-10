@@ -39,8 +39,8 @@ public class BluetoothList extends DialogFragment {
 
     DeviceReceiver receiver;
 
-    // 蓝牙设备列表
-    static public ArrayList<BluetoothDevice> devices;
+    static public ArrayList<BluetoothDevice> devices;// 蓝牙设备列表
+    static public ArrayList<String> addresses;// 蓝牙设备地址列表
 
     @Override
     public void show(FragmentManager fragmentManager, String tag) {
@@ -51,7 +51,6 @@ public class BluetoothList extends DialogFragment {
     public void onDismiss(final DialogInterface dialog) {
         // TODO 处理泄漏
         getActivity().unregisterReceiver(receiver);
-//        receiver.unregisterReceiver(getContext());
 
         super.onDismiss(dialog);
         Activity activity = getActivity();
@@ -82,6 +81,7 @@ public class BluetoothList extends DialogFragment {
         MusicList.window_num = MusicList.BLUETOOTH_LIST;// 修改窗口编号
         receiver = new DeviceReceiver();
         devices = new ArrayList<BluetoothDevice>();
+        addresses = new ArrayList<>();
 
         // 注册receiver
         IntentFilter intentFilter = new IntentFilter();
@@ -114,6 +114,14 @@ public class BluetoothList extends DialogFragment {
                 scanDevice();
             }
         });
+
+        button_5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {// 取消搜索
+                bluetoothAdapter.cancelDiscovery();
+                MusicList.infoLog("cancel discovery");
+            }
+        });
     }
 
     public void scanDevice() {
@@ -125,6 +133,7 @@ public class BluetoothList extends DialogFragment {
 
         // TODO 开始扫描
         devices.clear();// 清空之前的数据
+        addresses.clear();
         bluetoothAdapter.startDiscovery();
         MusicList.infoToast(getContext(), "start scanning");
 

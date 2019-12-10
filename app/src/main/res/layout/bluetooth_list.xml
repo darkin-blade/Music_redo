@@ -109,7 +109,7 @@
                     android:layout_marginRight="4dp"/>
                 <Button
                     android:id="@+id/button_5"
-                    android:text="TODO"
+                    android:text="Pause"
                     style="@style/button_7"/>
 
             </LinearLayout>
