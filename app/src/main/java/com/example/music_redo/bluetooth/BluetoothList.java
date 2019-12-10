@@ -24,6 +24,7 @@ import com.example.music_redo.R;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static com.example.music_redo.MusicList.bluetoothAdapter;
 
@@ -93,6 +94,7 @@ public class BluetoothList extends DialogFragment {
 
         // 注册receiver
         IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);// TODO 和配对有关
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND);// 搜索设备
         intentFilter.addAction(BluetoothDevice.ACTION_PAIRING_REQUEST);// TODO
         intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);// 搜索完毕

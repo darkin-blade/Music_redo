@@ -2,6 +2,7 @@ package com.example.music_redo.bluetooth;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,18 +18,25 @@ import androidx.fragment.app.FragmentManager;
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.UUID;
+
+import static com.example.music_redo.MusicList.bluetoothAdapter;
 
 public class BluetoothEdit extends DialogFragment {
     View myView;
-    BluetoothDevice device;
 
     TextView textView;
     Button button_1;
     Button button_2;
     Button button_3;
     Button button_4;
+
+    BluetoothDevice device;
+    BluetoothSocket socket;
+    UUID uuid;// TODO 设备唯一识别号
 
     public void show(FragmentManager fragmentManager, String tag, BluetoothDevice device) {
         this.device = device;
@@ -52,7 +60,7 @@ public class BluetoothEdit extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.mix_edit, container);
+        myView = inflater.inflate(R.layout.bluetooth_edit, container);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(0x00000000));// 背景透明
 
         initData();
@@ -63,6 +71,9 @@ public class BluetoothEdit extends DialogFragment {
 
     public void initData() {
         MusicList.window_num = MusicList.BLUETOOTH_EDIT;
+
+        uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+        MusicList.infoLog("uuid: " + uuid);
     }
 
     public void initUI() {
@@ -85,18 +96,8 @@ public class BluetoothEdit extends DialogFragment {
         button_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 连接设备
-                try {
-                    Method createBond = device.getClass().getMethod("createBond");
-                    Boolean result = (Boolean) createBond.invoke(device);
-                    MusicList.infoLog("link result: " + result);
-                } catch (NoSuchMethodException e) {// getMethod
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {// invoke
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {// invoke
-                    e.printStackTrace();
-                }
+                connectDevice();
+
                 MusicList.dialog_result = "";
                 dismiss();
             }
@@ -106,9 +107,46 @@ public class BluetoothEdit extends DialogFragment {
             @Override
             public void onClick(View v) {
                 // TODO 与蓝牙设备进行配对
+                try {
+                    socket = device.createInsecureRfcommSocketToServiceRecord(uuid);// TODO
+                } catch (IOException e) {// createInsecureRfcommSocketToServiceRecord
+                    e.printStackTrace();
+                }
+
+                if (bluetoothAdapter.isDiscovering()) {// TODO 强制暂停
+                    bluetoothAdapter.cancelDiscovery();
+                }
+
+                connectDevice();
+
+                try {
+                    socket.connect();// TODO
+                } catch (IOException e) {// connect
+                    e.printStackTrace();
+                }
+
+                // TODO close
+
                 MusicList.dialog_result = "";
                 dismiss();
             }
         });
+    }
+
+    public Boolean connectDevice() {
+        // 连接设备
+        try {
+            Method createBond = device.getClass().getMethod("createBond");
+            Boolean result = (Boolean) createBond.invoke(device);
+            MusicList.infoLog("link result: " + result);
+        } catch (NoSuchMethodException e) {// getMethod
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {// invoke
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {// invoke
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }

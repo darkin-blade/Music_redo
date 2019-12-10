@@ -52,6 +52,20 @@ public class DeviceReceiver extends BroadcastReceiver {
                 case BluetoothDevice.ACTION_PAIRING_REQUEST:
                     MusicList.infoLog("pairing request");
                     break;
+                case BluetoothDevice.ACTION_BOND_STATE_CHANGED:// TODO 和配对有关
+                    BluetoothDevice tmp = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    switch (tmp.getBondState()) {
+                        case BluetoothDevice.BOND_BONDED:
+                            MusicList.infoLog("bond bonded");
+                            break;
+                        case BluetoothDevice.BOND_BONDING:
+                            MusicList.infoLog("bond bonding");
+                            break;
+                        case BluetoothDevice.BOND_NONE:
+                            MusicList.infoLog("bond none");
+                            break;
+                    }
+                    break;
             }
         }
     }
