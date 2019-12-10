@@ -3,6 +3,7 @@ package com.example.music_redo.bluetooth;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.MainThread;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -27,7 +29,9 @@ import java.util.ArrayList;
 import static com.example.music_redo.MusicList.bluetoothAdapter;
 
 public class BluetoothList extends DialogFragment {
-    public View myView;
+    View myView;
+    Activity myActivity;
+    Context myContext;
 
     public int window_num;
 
@@ -51,11 +55,7 @@ public class BluetoothList extends DialogFragment {
     @Override
     public void onDismiss(final DialogInterface dialog) {
         // TODO 处理泄漏
-        MusicList.infoLog("ondismiss");
-        Activity tmp = getActivity();
-        if (tmp != null) {
-            tmp.unregisterReceiver(receiver);
-        }
+        myActivity.unregisterReceiver(receiver);
 
         // 停止扫描
         if (bluetoothAdapter.isDiscovering()) {
@@ -80,7 +80,6 @@ public class BluetoothList extends DialogFragment {
         myView = inflater.inflate(R.layout.bluetooth_list, container);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(0x00000000));// 背景透明
 
-        MusicList.infoLog("oncreate view");
         initData();
         initUI();
 
@@ -88,6 +87,10 @@ public class BluetoothList extends DialogFragment {
     }
 
     public void initData() {
+        MusicList.infoLog("init data");
+        myActivity = getActivity();
+        myContext = getContext();
+
         window_num = MusicList.window_num;// 保存之前的窗口号
         MusicList.window_num = MusicList.BLUETOOTH_LIST;// 修改窗口编号
 
@@ -102,7 +105,7 @@ public class BluetoothList extends DialogFragment {
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND);// 搜索设备
         intentFilter.addAction(BluetoothDevice.ACTION_PAIRING_REQUEST);// TODO
         intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);// 搜索完毕
-        getActivity().registerReceiver(receiver, intentFilter);// 注册广播 TODO 有报错
+        myActivity.registerReceiver(receiver, intentFilter);// 注册广播 TODO 泄漏
         receiver.registerReceiver(getContext());
     }
 
@@ -184,16 +187,18 @@ public class BluetoothList extends DialogFragment {
         }
     }
 
-    public void listDevice() {
-        MusicList.infoToast(getContext(), "scan finished");
-    }
-
     // TODO 列举item的参数
     public static final int
             item_height = 130,
             detail_margin_left = 10;
 
     public void create_item(final String item_name, final String item_detail, final BluetoothDevice device, int mode) {// mode: 0:未配对 1:已配对
+        // TODO 解决一些智障蓝牙设备的连接问题
+        if (getContext() == null) {
+            MusicList.infoLog("is null: " + (myContext == null));
+            return;
+        }
+
         // 每一项 LL
         LinearLayout.LayoutParams itemParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, item_height);
         // 文字区 LL
