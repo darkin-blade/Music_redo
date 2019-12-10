@@ -27,7 +27,7 @@ public class MediaReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {// 接收信号
         String action = intent.getAction();
         if (action != null) {
-            MusicList.infoLog("action: " + action);// TODO debug
+            MusicList.infoLog("media action: " + action);// TODO debug
             switch (action) {
                 // 有线耳机状态改变
                 case Intent.ACTION_HEADSET_PLUG:

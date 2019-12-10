@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -150,6 +151,13 @@ public class BluetoothList extends DialogFragment {
         devices.clear();
         addresses.clear();
 
+        devices.addAll(bluetoothAdapter.getBondedDevices());
+        for (int i = 0; i < devices.size(); i ++) {
+            BluetoothDevice tmp = devices.get(i);
+            addresses.add(tmp.getAddress());
+            create_item(tmp.getName(), tmp.getAddress(), tmp, 1);
+        }
+
         // TODO 开始扫描
         bluetoothAdapter.startDiscovery();
         MusicList.infoToast(getContext(), "start scanning");
@@ -165,7 +173,7 @@ public class BluetoothList extends DialogFragment {
             item_height = 130,
             detail_margin_left = 10;
 
-    public void create_item(final String item_name, final String item_detail, final BluetoothDevice device) {// mode: 0:歌单 1:歌曲
+    public void create_item(final String item_name, final String item_detail, final BluetoothDevice device, int mode) {// mode: 0:未配对 1:已配对
         // 每一项 LL
         LinearLayout.LayoutParams itemParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, item_height);
         // 文字区 LL
@@ -196,6 +204,15 @@ public class BluetoothList extends DialogFragment {
         number.setGravity(Gravity.CENTER);
         number.setText(item_detail);
         number.setLayoutParams(numberParam);
+
+        // 区别已配对设备
+        if (mode == 0) {// 未配对
+            name.setTextColor(Color.rgb(0, 0, 0));
+            number.setTextColor(Color.rgb(0, 0, 0));
+        } else {// 已配对
+            name.setTextColor(Color.rgb(230, 100, 60));
+            number.setTextColor(Color.rgb(230, 100, 60));
+        }
 
         // 合并ui
         detail.addView(name);

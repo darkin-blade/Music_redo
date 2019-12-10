@@ -113,6 +113,13 @@ public class BluetoothEdit extends DialogFragment {
                 dismiss();
             }
         });
+
+        button_4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unpairDevice();
+            }
+        });
     }
 
     public Boolean connectDevice() {
@@ -139,6 +146,25 @@ public class BluetoothEdit extends DialogFragment {
         Boolean result = false;
 
 
+
+        return result;
+    }
+
+    public Boolean unpairDevice() {
+        // 连接设备
+        Boolean result = false;
+        try {
+            Method removeBond = device.getClass().getMethod("removeBond");
+            removeBond.setAccessible(true);
+            result = (Boolean) removeBond.invoke(device);
+            MusicList.infoLog("unlink result: " + result);
+        } catch (NoSuchMethodException e) {// getMethod
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {// invoke
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {// invoke
+            e.printStackTrace();
+        }
 
         return result;
     }

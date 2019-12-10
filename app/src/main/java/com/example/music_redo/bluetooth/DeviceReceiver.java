@@ -26,7 +26,7 @@ public class DeviceReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (action != null) {
-//            MusicList.infoLog("action: " + action);// TODO debug
+            MusicList.infoLog("action: " + action);// TODO debug
             switch (action) {
                 case BluetoothDevice.ACTION_FOUND:// 找到新的蓝牙设备
                     final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
@@ -38,7 +38,7 @@ public class DeviceReceiver extends BroadcastReceiver {
                             myActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    MusicList.bluetoothList.create_item(device.getName(), device.getAddress(), device);
+                                    MusicList.bluetoothList.create_item(device.getName(), device.getAddress(), device, 0);
                                 }
                             });
                         }
