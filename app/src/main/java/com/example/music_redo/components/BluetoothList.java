@@ -35,6 +35,8 @@ public class BluetoothList extends DialogFragment {
     Button button_5;
     LinearLayout layout;
 
+    DeviceReceiver receiver;
+
     @Override
     public void show(FragmentManager fragmentManager, String tag) {
         super.show(fragmentManager, tag);
@@ -42,6 +44,9 @@ public class BluetoothList extends DialogFragment {
 
     @Override
     public void onDismiss(final DialogInterface dialog) {
+        getActivity().unregisterReceiver(receiver);
+        receiver.unregisterReceiver(getContext());// TODO 泄漏
+
         super.onDismiss(dialog);
         Activity activity = getActivity();
         if (activity instanceof DialogInterface.OnDismissListener) {
@@ -69,7 +74,7 @@ public class BluetoothList extends DialogFragment {
     public void initData() {
         window_num = MusicList.window_num;// 保存之前的窗口号
         MusicList.window_num = MusicList.BLUETOOTH_LIST;// 修改窗口编号
-        DeviceReceiver receiver = new DeviceReceiver();
+        receiver = new DeviceReceiver();
 
         // 注册receiver
         IntentFilter intentFilter = new IntentFilter();
