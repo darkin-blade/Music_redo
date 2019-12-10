@@ -1,5 +1,6 @@
 package com.example.music_redo.bluetooth;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -15,6 +16,12 @@ import static com.example.music_redo.bluetooth.BluetoothList.addresses;
 import static com.example.music_redo.bluetooth.BluetoothList.devices;
 
 public class DeviceReceiver extends BroadcastReceiver {
+    Activity myActivity;
+
+    public DeviceReceiver(Activity activity) {
+        myActivity = activity;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
@@ -23,12 +30,18 @@ public class DeviceReceiver extends BroadcastReceiver {
             switch (action) {
                 // 找到新的蓝牙设备
                 case BluetoothDevice.ACTION_FOUND:
-                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     if (device.getName() != null) {
                         // TODO 设备去重
                         if (addresses.indexOf(device.getAddress()) < 0) {
                             devices.add(device);// 添加设备
                             addresses.add(device.getAddress());
+                            myActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MusicList.bluetoothList.create_item(device.getName(), device.getAddress(), device);
+                                }
+                            });
                         }
                         MusicList.infoLog("device [" + device.getName() + "], address [" + device.getAddress() + "]");
                     }

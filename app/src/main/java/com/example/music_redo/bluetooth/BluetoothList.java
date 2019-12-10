@@ -54,6 +54,11 @@ public class BluetoothList extends DialogFragment {
         // TODO 处理泄漏
         getActivity().unregisterReceiver(receiver);
 
+        // 停止扫描
+        if (bluetoothAdapter.isDiscovering()) {
+            bluetoothAdapter.cancelDiscovery();
+        }
+
         super.onDismiss(dialog);
         Activity activity = getActivity();
         if (activity instanceof DialogInterface.OnDismissListener) {
@@ -81,7 +86,7 @@ public class BluetoothList extends DialogFragment {
     public void initData() {
         window_num = MusicList.window_num;// 保存之前的窗口号
         MusicList.window_num = MusicList.BLUETOOTH_LIST;// 修改窗口编号
-        receiver = new DeviceReceiver();
+        receiver = new DeviceReceiver(getActivity());
         devices = new ArrayList<BluetoothDevice>();
         addresses = new ArrayList<>();
 
@@ -120,14 +125,16 @@ public class BluetoothList extends DialogFragment {
         button_5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {// 取消搜索
-                bluetoothAdapter.cancelDiscovery();
-                MusicList.infoLog("cancel discovery");
+                if (bluetoothAdapter.isDiscovering()) {
+                    bluetoothAdapter.cancelDiscovery();
+                }
             }
         });
     }
 
     public void scanDevice() {
         // 清空
+        layout.removeAllViews();
         if (bluetoothAdapter.isEnabled() == false) {
             bluetoothAdapter.enable();
         }
@@ -141,11 +148,7 @@ public class BluetoothList extends DialogFragment {
     }
 
     public void listDevice() {
-        layout.removeAllViews();
-        for (int i = 0; i < devices.size(); i ++) {
-            BluetoothDevice tmp = devices.get(i);
-            create_item(tmp.getName(), tmp.getAddress(), tmp);
-        }
+        MusicList.infoToast(getContext(), "scan finished");
     }
 
     // TODO 列举item的参数
@@ -197,7 +200,7 @@ public class BluetoothList extends DialogFragment {
                 // TODO 蓝牙配对
                 try {
                     Method createBond = device.getClass().getMethod("createBond");
-                    int result = (int) createBond.invoke(device);
+                    Boolean result = (Boolean) createBond.invoke(device);
                     MusicList.infoLog("link result: " + result);
                 } catch (NoSuchMethodException e) {// getMethod
                     e.printStackTrace();
