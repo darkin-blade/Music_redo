@@ -11,8 +11,8 @@ import static com.example.music_redo.MusicList.playList;
 import static com.example.music_redo.MusicList.player;
 
 public class PlayTime {
-    public Context myContext = null;
-    public Activity myActivity = null;
+    public Context myContext;
+    public Activity myActivity ;
 
     // 时间管理
     public int total_time;
