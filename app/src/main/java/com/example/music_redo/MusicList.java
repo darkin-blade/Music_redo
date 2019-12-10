@@ -150,7 +150,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);// 监视蓝牙设备与APP连接的状态
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
-        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);// TODO 搜索设备
         intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);// 监听有线耳机的插拔
         intentFilter.addAction(Intent.ACTION_MEDIA_BUTTON);// TODO 重复?
 

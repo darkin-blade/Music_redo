@@ -1,7 +1,10 @@
 package com.example.music_redo.components;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -66,6 +69,14 @@ public class BluetoothList extends DialogFragment {
     public void initData() {
         window_num = MusicList.window_num;// 保存之前的窗口号
         MusicList.window_num = MusicList.BLUETOOTH_LIST;// 修改窗口编号
+        DeviceReceiver receiver = new DeviceReceiver();
+
+        // 注册receiver
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);// 搜索设备
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);// 搜索完毕
+        getActivity().registerReceiver(receiver, intentFilter);// 注册广播 TODO 有报错
+        receiver.registerReceiver(getContext());
     }
 
     public void initUI() {// TODO 初始化按钮
@@ -96,6 +107,9 @@ public class BluetoothList extends DialogFragment {
     public void listDevice() {
         // 清空
         layout.removeAllViews();
+        if (bluetoothAdapter.isEnabled() == false) {
+            bluetoothAdapter.enable();
+        }
         bluetoothAdapter.startDiscovery();// TODO 开始扫描
         MusicList.infoToast(getContext(), "start scanning");
 
