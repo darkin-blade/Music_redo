@@ -1,4 +1,4 @@
-package com.example.music_redo.components;
+package com.example.music_redo.mix;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
@@ -16,12 +16,11 @@ import androidx.fragment.app.FragmentManager;
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
 
-public class MixEdit extends DialogFragment {
+public class MixNew extends DialogFragment {
     public View myView;
+    Button button_create;
     Button button_cancel;
-    Button button_delete;
-    Button button_new;
-    TextView textView;// 显示选中的歌单数目
+    EditText editText;// 新建歌单的歌单名
 
     @Override
     public void show(FragmentManager fragmentManager, String tag) {
@@ -45,7 +44,7 @@ public class MixEdit extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.mix_edit, container);
+        myView = inflater.inflate(R.layout.mix_new, container);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(0x00000000));// 背景透明
 
         initData();
@@ -53,18 +52,15 @@ public class MixEdit extends DialogFragment {
 
         return myView;
     }
-    
-    public void initData() {
-        MusicList.window_num = MusicList.MIX_EDIT;
-    }
-    
-    public void initUI() {
-        textView = myView.findViewById(R.id.edit_title);
-        button_cancel = myView.findViewById(R.id.button_cancel);
-        button_delete = myView.findViewById(R.id.button_delete);
-        button_new = myView.findViewById(R.id.button_new);
 
-        textView.setText(MusicList.listManager.mixSelected.size() + " mix selected");
+    public void initData() {
+        MusicList.window_num = MusicList.MIX_NEW;
+    }
+
+    public void initUI() {
+        editText = myView.findViewById(R.id.mix_name);
+        button_create = myView.findViewById(R.id.button_rename);
+        button_cancel = myView.findViewById(R.id.button_cancel);
 
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,25 +70,26 @@ public class MixEdit extends DialogFragment {
             }
         });
 
-        button_delete.setOnClickListener(new View.OnClickListener() {
+        button_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0; i < MusicList.listManager.mixSelected.size(); i ++) {
-                    String tmp = MusicList.listManager.mixSelected.get(i);
-                    int result = MusicList.deleteMix(tmp);
+                String tmp = editText.getText().toString();
+                int result = MusicList.createMix(tmp);
+                switch (result) {
+                    case 0:
+                        MusicList.infoLog("create mix " + tmp + " succeed");
+                        break;
+                    case -1:
+                    case -2:
+                    case -3:
+                        MusicList.infoLog("create mix " + tmp + " failed");
+                        MusicList.infoToast(getContext(), "create mix " + tmp + " failed");
+                        break;
                 }
-                MusicList.listManager.mixSelected.clear();
-                MusicList.dialog_result = "delete";
-                dismiss();
-            }
-        });
 
-        button_new.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MusicList.dialog_result = "";
+                // 刷新ui
+                MusicList.dialog_result = "new";
                 dismiss();
-                MusicList.mixNew.show(getFragmentManager(), "new mix");// TODO 编号
             }
         });
     }

@@ -25,13 +25,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.music_redo.components.BluetoothList;
-import com.example.music_redo.components.MixEdit;
-import com.example.music_redo.components.MixNew;
-import com.example.music_redo.components.MixRename;
-import com.example.music_redo.components.MusicEdit;
-import com.example.music_redo.components.MusicMove;
-import com.example.music_redo.components.MusicSelect;
+import com.example.music_redo.bluetooth.BluetoothList;
+import com.example.music_redo.mix.MixEdit;
+import com.example.music_redo.mix.MixNew;
+import com.example.music_redo.mix.MixRename;
+import com.example.music_redo.mix.MusicEdit;
+import com.example.music_redo.mix.MusicMove;
+import com.example.music_redo.mix.MusicSelect;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

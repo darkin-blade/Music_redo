@@ -47,16 +47,16 @@
                         android:orientation="horizontal">
                         <TextView
                             android:layout_height="match_parent"
-                            android:layout_weight="2"
+                            android:layout_weight="1"
                             android:layout_width="0dp"
-                            android:text="歌单名"
+                            android:text="设备名"
                             android:gravity="center">
                         </TextView>
                         <TextView
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:layout_width="0dp"
-                            android:text="歌曲数"
+                            android:text="设备地址"
                             android:gravity="center">
                         </TextView>
                     </LinearLayout>

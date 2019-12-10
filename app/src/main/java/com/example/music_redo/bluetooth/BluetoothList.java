@@ -1,8 +1,10 @@
-package com.example.music_redo.components;
+package com.example.music_redo.bluetooth;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
-import android.database.Cursor;
+import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -19,10 +21,26 @@ import androidx.fragment.app.FragmentManager;
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
 
-public class MusicMove extends DialogFragment {
+import java.util.ArrayList;
+
+import static com.example.music_redo.MusicList.bluetoothAdapter;
+
+public class BluetoothList extends DialogFragment {
     public View myView;
 
-    public Button button_cancel;
+    public int window_num;
+
+    public LinearLayout layout;
+    Button button_1;
+    Button button_2;
+    Button button_3;
+    Button button_4;
+    Button button_5;
+
+    DeviceReceiver receiver;
+
+    // 蓝牙设备列表
+    static public ArrayList<BluetoothDevice> devices;
 
     @Override
     public void show(FragmentManager fragmentManager, String tag) {
@@ -31,6 +49,10 @@ public class MusicMove extends DialogFragment {
 
     @Override
     public void onDismiss(final DialogInterface dialog) {
+        // TODO 处理泄漏
+        getActivity().unregisterReceiver(receiver);
+//        receiver.unregisterReceiver(getContext());
+
         super.onDismiss(dialog);
         Activity activity = getActivity();
         if (activity instanceof DialogInterface.OnDismissListener) {
@@ -46,80 +68,87 @@ public class MusicMove extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.music_move, container);
+        myView = inflater.inflate(R.layout.bluetooth_list, container);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(0x00000000));// 背景透明
 
         initData();
-        initButton();
-        listMix();
+        initUI();
 
         return myView;
     }
 
     public void initData() {
-        MusicList.window_num = MusicList.MUSIC_MOVE;// 修改窗口编号
+        window_num = MusicList.window_num;// 保存之前的窗口号
+        MusicList.window_num = MusicList.BLUETOOTH_LIST;// 修改窗口编号
+        receiver = new DeviceReceiver();
+        devices = new ArrayList<BluetoothDevice>();
+
+        // 注册receiver
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);// 搜索设备
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);// 搜索完毕
+        getActivity().registerReceiver(receiver, intentFilter);// 注册广播 TODO 有报错
+        receiver.registerReceiver(getContext());
     }
 
-    public void initButton() {// TODO 初始化按钮
-        button_cancel = myView.findViewById(R.id.button_cancel);
+    public void initUI() {// TODO 初始化按钮
+        button_1 = myView.findViewById(R.id.button_1);
+        button_2 = myView.findViewById(R.id.button_2);
+        button_3 = myView.findViewById(R.id.button_3);
+        button_4 = myView.findViewById(R.id.button_4);
+        button_5 = myView.findViewById(R.id.button_5);
+        layout = myView.findViewById(R.id.main_list);
+        layout.removeAllViews();
 
-        button_cancel.setOnClickListener(new View.OnClickListener() {
+        button_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MusicList.dialog_result = "";
                 dismiss();
             }
         });
+
+        button_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scanDevice();
+            }
+        });
     }
 
-    public void listMix() {
+    public void scanDevice() {
         // 清空
-        LinearLayout layout = myView.findViewById(R.id.mix_list);
         layout.removeAllViews();
-
-        // 列举所有歌单
-        Cursor cursor = MusicList.database.query(
-                "mix_list",// 歌单列表
-                new String[]{"name"},
-                null,
-                null,
-                null,
-                null,
-                "name");
-
-        if (cursor.moveToFirst()) {// TODO 判断非空
-            do {
-                String mix_name = cursor.getString(0);// 获取歌单名
-                Cursor cursor_count = MusicList.database.query(
-                        mix_name,// 歌单详情
-                        new String[]{"path", "name", "count"},
-                        null,
-                        null,
-                        null,
-                        null,
-                        "name");// 统计歌单内歌曲数目
-                create_item(mix_name, "total: " + cursor_count.getCount(), 0);// TODO 列举歌单
-            } while (cursor.moveToNext());
-        } else {
-            MusicList.infoToast(getContext(), "no mix");
+        if (bluetoothAdapter.isEnabled() == false) {
+            bluetoothAdapter.enable();
         }
-        cursor.close();
+
+        // TODO 开始扫描
+        devices.clear();// 清空之前的数据
+        bluetoothAdapter.startDiscovery();
+        MusicList.infoToast(getContext(), "start scanning");
 
     }
 
-    // TODO 列举歌单的参数
+    public void listDevice() {
+        for (int i = 0; i < devices.size(); i ++) {
+            create_item(devices.get(i).getName(), devices.get(i).getAddress());
+        }
+    }
+
+    // TODO 列举item的参数
     public static final int
             item_height = 130,
             detail_margin_left = 10;
 
-    public void create_item(final String item_name, final String item_detail, int mode) {// mode: 0:歌单 1:歌曲
+    public void create_item(final String item_name, final String item_detail) {// mode: 0:歌单 1:歌曲
         LinearLayout layout = myView.findViewById(R.id.mix_list);
         // 每一项 LL
         LinearLayout.LayoutParams itemParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, item_height);
         // 文字区 LL
         LinearLayout.LayoutParams detailParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         // 歌单名
-        LinearLayout.LayoutParams nameParam = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,2);
+        LinearLayout.LayoutParams nameParam = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,1);
         // 歌曲数目
         LinearLayout.LayoutParams numberParam = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);;
 
@@ -154,13 +183,7 @@ public class MusicMove extends DialogFragment {
         item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO 添加到该歌单
-                for (int i = 0; i < MusicList.listManager.musicSelected.size(); i ++) {
-                    String tmp = MusicList.listManager.musicSelected.get(i);
-                    MusicList.addMusic(item_name, tmp);
-                }
-                MusicList.dialog_result = "add to";
-                dismiss();// TODO
+                // TODO 操作
             }
         });
     }

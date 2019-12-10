@@ -1,4 +1,4 @@
-package com.example.music_redo.components;
+package com.example.music_redo.mix;
 
 import android.app.Activity;
 import android.content.DialogInterface;

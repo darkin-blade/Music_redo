@@ -1,4 +1,4 @@
-package com.example.music_redo.components;
+package com.example.music_redo.mix;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;

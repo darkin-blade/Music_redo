@@ -1,4 +1,4 @@
-package com.example.music_redo.components;
+package com.example.music_redo.mix;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
@@ -17,12 +16,12 @@ import androidx.fragment.app.FragmentManager;
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
 
-public class MixRename extends DialogFragment {
+public class MixEdit extends DialogFragment {
     public View myView;
-    Button button_rename;
     Button button_cancel;
-    EditText editText;// 新建歌单的歌单名
-    TextView textView;// 标题
+    Button button_delete;
+    Button button_new;
+    TextView textView;// 显示选中的歌单数目
 
     @Override
     public void show(FragmentManager fragmentManager, String tag) {
@@ -46,7 +45,7 @@ public class MixRename extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.mix_rename, container);
+        myView = inflater.inflate(R.layout.mix_edit, container);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(0x00000000));// 背景透明
 
         initData();
@@ -54,18 +53,18 @@ public class MixRename extends DialogFragment {
 
         return myView;
     }
-
+    
     public void initData() {
-        MusicList.window_num = MusicList.MIX_RENAME;
+        MusicList.window_num = MusicList.MIX_EDIT;
     }
-
+    
     public void initUI() {
         textView = myView.findViewById(R.id.edit_title);
-        editText = myView.findViewById(R.id.mix_name);
-        button_rename = myView.findViewById(R.id.button_rename);
         button_cancel = myView.findViewById(R.id.button_cancel);
+        button_delete = myView.findViewById(R.id.button_delete);
+        button_new = myView.findViewById(R.id.button_new);
 
-        textView.setText("Rename " + MusicList.listManager.curMix);
+        textView.setText(MusicList.listManager.mixSelected.size() + " mix selected");
 
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,28 +74,25 @@ public class MixRename extends DialogFragment {
             }
         });
 
-        button_rename.setOnClickListener(new View.OnClickListener() {
+        button_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String tmp = editText.getText().toString();
-                int result = MusicList.renameMix(MusicList.listManager.curMix, tmp);// TODO 重命名歌单
-                switch (result) {
-                    case 0:
-                        MusicList.infoLog("rename mix " + tmp + " succeed");
-                        break;
-                    default:
-                        MusicList.infoLog("rename mix " + tmp + " failed");
-                        MusicList.infoToast(getContext(), "rename mix " + tmp + " failed");
-                        break;
+                for (int i = 0; i < MusicList.listManager.mixSelected.size(); i ++) {
+                    String tmp = MusicList.listManager.mixSelected.get(i);
+                    int result = MusicList.deleteMix(tmp);
                 }
-
-                // TODO 如果修改的是当前mix
-                if (MusicList.listManager.curMix.equals(MusicList.playList.curMix)) {
-                    MusicList.listManager.curMix = tmp;
-                    MusicList.playList.curMix = tmp;
-                    MusicList.dialog_result = "rename";
-                }
+                MusicList.listManager.mixSelected.clear();
+                MusicList.dialog_result = "delete";
                 dismiss();
+            }
+        });
+
+        button_new.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MusicList.dialog_result = "";
+                dismiss();
+                MusicList.mixNew.show(getFragmentManager(), "new mix");// TODO 编号
             }
         });
     }
