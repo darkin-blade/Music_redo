@@ -2,7 +2,6 @@ package com.example.music_redo.components;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -29,6 +28,7 @@ public class BluetoothList extends DialogFragment {
     Button button_3;
     Button button_4;
     Button button_5;
+    LinearLayout layout;
 
     @Override
     public void show(FragmentManager fragmentManager, String tag) {
@@ -56,7 +56,7 @@ public class BluetoothList extends DialogFragment {
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(0x00000000));// 背景透明
 
         initData();
-        initButton();
+        initUI();
         listMix();
 
         return myView;
@@ -67,12 +67,13 @@ public class BluetoothList extends DialogFragment {
         MusicList.window_num = MusicList.BLUETOOTH_LIST;// 修改窗口编号
     }
 
-    public void initButton() {// TODO 初始化按钮
+    public void initUI() {// TODO 初始化按钮
         button_1 = myView.findViewById(R.id.button_1);
         button_2 = myView.findViewById(R.id.button_2);
         button_3 = myView.findViewById(R.id.button_3);
         button_4 = myView.findViewById(R.id.button_4);
         button_5 = myView.findViewById(R.id.button_5);
+        layout = myView.findViewById(R.id.main_list);
 
         button_1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +86,6 @@ public class BluetoothList extends DialogFragment {
 
     public void listMix() {
         // 清空
-        LinearLayout layout = myView.findViewById(R.id.mix_list);
         layout.removeAllViews();
 
         // 列举所有歌单
