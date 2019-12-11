@@ -31,7 +31,6 @@ public class PlayNotification extends Service {
     public void onCreate() {
         super.onCreate();
         initData();
-        initView();
     }
 
     @Nullable
@@ -46,6 +45,13 @@ public class PlayNotification extends Service {
             remoteViews = null;
         }
         remoteViews = new RemoteViews(this.getPackageName(), R.layout.play_notification);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        initView();
+        startForeground(100, builder.build());
+        return START_STICKY;// TODO 防止被杀
     }
 
     public void initView() {
@@ -65,6 +71,6 @@ public class PlayNotification extends Service {
                     .setAutoCancel(false)// TODO
                     .setOngoing(true);// TODO
         }
-
     }
+
 }
