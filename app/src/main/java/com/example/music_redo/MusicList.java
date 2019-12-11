@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -312,7 +313,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         listManager.init();
         playList.init();
 
-        // TODO ui部件初始化
+        // TODO 初始化ui部件
         playNotification.initData();
     }
 
@@ -454,6 +455,15 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     public void onDestroy() {
         unregisterReceiver(receiver);// 解决泄漏问题
         super.onDestroy();
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        // TODO 通知栏部件
+        Uri uri = intent.getData();
+
     }
 
     @Override
