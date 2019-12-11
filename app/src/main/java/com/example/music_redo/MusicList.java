@@ -32,6 +32,7 @@ import com.example.music_redo.mix.MixRename;
 import com.example.music_redo.mix.MusicEdit;
 import com.example.music_redo.mix.MusicMove;
 import com.example.music_redo.mix.MusicSelect;
+import com.example.music_redo.widget.PlayNotification;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,7 +68,11 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public MusicMove musicMove;// 歌曲`添加至`歌单
     static public SQLiteDatabase database;
     // TODO 播放模式
-    static public BluetoothList bluetoothList;// TODO 蓝牙管理
+    static public BluetoothList bluetoothList;// 蓝牙管理
+    // 其它部件
+    // TODO 锁屏
+    // TODO 桌面部件
+    static public PlayNotification playNotification;// TODO 通知栏部件
 
     // 公共变量
     static public String appPath;
@@ -183,7 +188,11 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         musicMove = new MusicMove();
         musicSelect = new MusicSelect();
         // TODO 播放模式
-        bluetoothList = new BluetoothList();// TODO 蓝牙管理
+        bluetoothList = new BluetoothList();// 蓝牙管理
+        // 其余部件
+        playNotification = new PlayNotification(getPackageName(), this, this);// TODO 通知栏部件
+        // TODO 锁屏部件
+        // TODO 桌面部件
 
         // 部件
         // 按钮
@@ -302,6 +311,9 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         playTime.init();
         listManager.init();
         playList.init();
+
+        // TODO ui部件初始化
+        playNotification.initData();
     }
 
     static public int cmd(String sql) {// 操作数据库
