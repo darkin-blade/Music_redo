@@ -20,8 +20,6 @@ public class PlayNotification extends Service {
 //    Activity myActivity;
 //    Context myContext;
 
-    String packageName;
-
     NotificationCompat.Builder builder;
     NotificationChannel channel;
     NotificationManager manager;

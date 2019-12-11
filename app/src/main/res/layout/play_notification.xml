@@ -16,12 +16,18 @@
             android:orientation="horizontal">
 
             <TextView
-                style="@style/tab_1"
+                android:layout_height="35dp"
                 android:layout_width="0dp"
                 android:layout_weight="2"
-                android:textColor="@color/color_5"
-                android:text="no music"
 
+                android:background="@color/grey"
+                android:textColor="@color/color_5"
+
+                android:gravity="center"
+                android:textSize="16dp"
+                android:text="no music aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbb"
+
+                android:singleLine="true"
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit ="marquee_forever"
                 android:focusable="true"
@@ -29,27 +35,25 @@
             </TextView>
         </LinearLayout>
 
-        <View
-            style="@style/line">
-        </View>
+<!--        <View-->
+<!--            style="@style/line">-->
+<!--        </View>-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="12dp"
-            android:gravity="center">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:padding="12dp"-->
+<!--            android:gravity="center">-->
 
-            <View
-                style="@style/tool_3"/>
-            <View
-                style="@style/tool_1"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
-            <View
-                style="@style/tool_2"/>
-
-
-        </LinearLayout>
+<!--            <View-->
+<!--                style="@style/tool_3"/>-->
+<!--            <View-->
+<!--                style="@style/tool_1"-->
+<!--                android:layout_marginLeft="10dp"-->
+<!--                android:layout_marginRight="10dp"/>-->
+<!--            <View-->
+<!--                style="@style/tool_2"/>-->
+<!--        </LinearLayout>-->
 
     </LinearLayout>
 
