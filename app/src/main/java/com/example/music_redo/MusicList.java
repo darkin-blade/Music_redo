@@ -73,7 +73,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     // 其它部件
     // TODO 锁屏
     // TODO 桌面部件
-    static public PlayNotification playNotification;// TODO 通知栏部件
+    // TODO 通知栏部件
 
     // 公共变量
     static public String appPath;
@@ -191,7 +191,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         // TODO 播放模式
         bluetoothList = new BluetoothList();// 蓝牙管理
         // 其余部件
-        playNotification = new PlayNotification(getPackageName(), this, this);// TODO 通知栏部件
+        ;// TODO 通知栏部件
         // TODO 锁屏部件
         // TODO 桌面部件
 
@@ -314,7 +314,8 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         playList.init();
 
         // TODO 初始化ui部件
-        playNotification.initData();
+        Intent intent = new Intent(this, PlayNotification.class);
+        startService(intent);
     }
 
     static public int cmd(String sql) {// 操作数据库

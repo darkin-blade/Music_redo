@@ -1,37 +1,48 @@
 package com.example.music_redo.widget;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.Service;
 import android.content.Context;
-import android.os.Bundle;
+import android.content.Intent;
+import android.os.IBinder;
 import android.widget.RemoteViews;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
 
-public class PlayNotification extends AppCompatActivity {
-    Activity myActivity;
-    Context myContext;
+public class PlayNotification extends Service {
+//    Activity myActivity;
+//    Context myContext;
 
     String packageName;
 
+    RemoteViews remoteViews;
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO setContentView
+    public void onCreate() {
+        super.onCreate();
+        initData();
+        initView();
     }
 
-    public PlayNotification(String packageName, Activity activity, Context context) {
-        this.packageName = packageName;
-        myActivity = activity;
-        myContext = context;
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     public void initData() {
+        if (remoteViews == null) {// TODO
+            remoteViews.removeAllViews(R.layout.play_notification);
+            remoteViews = null;
+        }
+        remoteViews = new RemoteViews(this.getPackageName(), R.layout.play_notification);
+    }
+
+    public void initView() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             new Thread(new Runnable() {
                 @Override

@@ -16,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MusicList">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +29,8 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON"></action>
             </intent-filter>
         </receiver>
+
+        <service android:name=".widget.PlayNotification"></service>
     </application>
 
 </manifest>
