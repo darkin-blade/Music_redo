@@ -41,7 +41,8 @@ public class PlayNotification extends AppCompatActivity {
                     NotificationManager manager = (NotificationManager) myActivity.getSystemService(Context.NOTIFICATION_SERVICE);
 
                     builder.setSmallIcon(R.drawable.ic_launcher_background);
-//                    builder.setContent(remoteViews);
+                    builder.setCustomContentView(remoteViews);
+                    builder.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
 
                     manager.notify(1, builder.build());// TODO id
                 }
