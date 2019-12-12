@@ -30,7 +30,6 @@ public class PlayNotification extends Service {
     static final int MODE_NEXT = 2;
     static final int MODE_PREV = 3;
     static final int MODE_CLOSE = 4;
-    static final int MODE_OPEN = 5;
 
     @Override
     public void onCreate() {
@@ -118,7 +117,7 @@ public class PlayNotification extends Service {
         initNext();
         initPrev();
         initClose();
-//        initOpen();
+        initOpen();
     }
 
     public void close() {
@@ -136,7 +135,9 @@ public class PlayNotification extends Service {
         Intent intent = new Intent(this, PlayNotification.class);
         intent.putExtra("mode", MODE_PLAY);
         intent.putExtra("fromNotification", true);
-        remoteViews.setOnClickPendingIntent(R.id.button_play, PendingIntent.getActivity(this, 1, intent, 0));
+        PendingIntent pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
 
         builder.setContent(remoteViews);
         startForeground(100, builder.build());
@@ -153,7 +154,9 @@ public class PlayNotification extends Service {
         Intent intent = new Intent(this, PlayNotification.class);
         intent.putExtra("mode", MODE_PAUSE);
         intent.putExtra("fromNotification", true);
-        remoteViews.setOnClickPendingIntent(R.id.button_play, PendingIntent.getActivity(this, 2, intent, 0));
+        PendingIntent pendingIntent = PendingIntent.getService(this, 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
 
         builder.setContent(remoteViews);
         startForeground(100, builder.build());
@@ -187,9 +190,9 @@ public class PlayNotification extends Service {
     }
 
     public void initOpen() {// 切换到应用程序
-        Intent intent = new Intent(this, PlayNotification.class);
-        remoteViews.setOnClickPendingIntent(R.id.play_notification, PendingIntent.getActivity(this, 6, intent, 0));
-//        remoteViews.setOnClickPendingIntent(R.id.play_notification, null);
+        Intent intent = new Intent(this, MusicList.class);
+        remoteViews.setOnClickPendingIntent(R.id.button_open, PendingIntent.getActivity(this, 6, intent, 0));
+        remoteViews.setOnClickPendingIntent(R.id.play_notification, null);
     }
 
 }

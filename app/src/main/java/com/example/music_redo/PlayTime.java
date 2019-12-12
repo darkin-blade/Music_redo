@@ -108,7 +108,6 @@ public class PlayTime {
 //        MusicList.button_play.setBackgroundResource(R.drawable.player_pause);
         MusicList.button_play.setBackgroundDrawable(myContext.getResources().getDrawable(R.drawable.player_pause));
 
-
         callNotification(MODE_PLAY);
 
         musicPlay = new Thread(new Runnable() {
@@ -169,7 +168,7 @@ public class PlayTime {
     public void callNotification(int mode) {
         Intent intent;
         switch (mode) {
-            case MODE_PLAY:// TODO bugbugbug
+            default:
                 intent = new Intent(myContext, PlayNotification.class);
                 intent.putExtra("mode", mode);
                 myActivity.startService(intent);
