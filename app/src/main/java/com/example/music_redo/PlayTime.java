@@ -110,7 +110,7 @@ public class PlayTime {
         MusicList.button_play.setBackgroundDrawable(myContext.getResources().getDrawable(R.drawable.player_pause));
 
 
-        initNotification(MODE_START);
+        callNotification(MODE_START);
 
         musicPlay = new Thread(new Runnable() {
             @Override
@@ -139,29 +139,13 @@ public class PlayTime {
         musicPlay.start();
     }
 
-    public void initNotification(int mode) {
-        Intent intent;
-        switch (mode) {
-            case MODE_START:// 内部启动
-                // TODO 初始化ui部件
-                intent = new Intent(myContext, PlayNotification.class);
-                intent.putExtra("mode", MODE_START);
-                myActivity.startService(intent);
-                break;
-            default:// TODO 发送intent
-                intent = new Intent(myContext, PlayNotification.class);
-                intent.putExtra("mode", mode);
-                myActivity.startService(intent);
-                break;
-        }
-    }
-
     public void pause() {
         if (player.isPlaying() == true) {
             player.pause();
 //            MusicList.button_play.setBackgroundResource(R.drawable.player_play);
             MusicList.button_play.setBackgroundDrawable(myContext.getResources().getDrawable(R.drawable.player_play));
             musicPlay.interrupt();// TODO
+            callNotification(MODE_PAUSE);
         }
     }
 
@@ -179,6 +163,17 @@ public class PlayTime {
     public void prev() {
         playList.loadMusic(2);
         playList.highlightMusic();
+    }
+
+    public void callNotification(int mode) {
+        Intent intent;
+        switch (mode) {
+            default:// TODO 发送intent
+                intent = new Intent(myContext, PlayNotification.class);
+                intent.putExtra("mode", mode);
+                myActivity.startService(intent);
+                break;
+        }
     }
 
     public void getBar() {// 从进度条更新播放进度
