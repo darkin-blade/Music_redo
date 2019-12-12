@@ -1,6 +1,7 @@
 package com.example.music_redo.widget;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -69,6 +71,7 @@ public class PlayNotification extends Service {
                     .setAutoCancel(false)// TODO
                     .setOngoing(true);// TODO
         }
+
     }
 
 }
