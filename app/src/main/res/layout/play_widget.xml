@@ -2,7 +2,6 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/play_notification"
     android:layout_width="250dp"
     android:layout_height="70dp"
     android:orientation="horizontal"
@@ -30,9 +29,28 @@
             </TextView>
         </LinearLayout>
 
-        <ImageView
-            style="@style/line">
-        </ImageView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/theme_black"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="23"
+                android:background="@color/color_5">
+            </ImageView>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="77">
+            </ImageView>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
