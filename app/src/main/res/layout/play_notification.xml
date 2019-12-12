@@ -46,12 +46,14 @@
             android:gravity="center">
 
             <Button
+                android:id="@+id/button_open"
                 style="@style/button_8"
                 android:layout_marginRight="40dp"
                 android:text="open">
             </Button>
 
             <ImageView
+                android:id="@id/button_prev"
                 style="@style/tool_3"/>
             <ImageView
                 android:id="@+id/button_play"
@@ -59,9 +61,11 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"/>
             <ImageView
+                android:id="@id/button_next"
                 style="@style/tool_2"/>
 
             <Button
+                android:id="@+id/button_close"
                 style="@style/button_8"
                 android:layout_marginLeft="40dp"
                 android:text="close">

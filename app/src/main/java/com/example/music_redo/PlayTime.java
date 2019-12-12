@@ -28,7 +28,6 @@ public class PlayTime {
     static final int MODE_PAUSE = 1;
     static final int MODE_NEXT = 2;
     static final int MODE_PREV = 3;
-    static final int MODE_PLAY= 3;
 
     public PlayTime(Context context, Activity activity) {
         myContext = context;
@@ -158,17 +157,19 @@ public class PlayTime {
     public void next() {
         playList.loadMusic(1);
         playList.highlightMusic();
+        callNotification(MODE_NEXT);
     }
 
     public void prev() {
         playList.loadMusic(2);
         playList.highlightMusic();
+        callNotification(MODE_PREV);
     }
 
     public void callNotification(int mode) {
         Intent intent;
         switch (mode) {
-            default:// TODO 发送intent
+            default:// TODO
                 intent = new Intent(myContext, PlayNotification.class);
                 intent.putExtra("mode", mode);
                 myActivity.startService(intent);
