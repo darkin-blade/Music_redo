@@ -29,28 +29,16 @@
             </TextView>
         </LinearLayout>
 
-        <LinearLayout
+        <ProgressBar
+            android:id="@+id/music_bar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@color/theme_black"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="23"
-                android:background="@color/color_5">
-            </ImageView>
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="77">
-            </ImageView>
-
-        </LinearLayout>
+            android:max="100"
+            android:progress="50">
+        </ProgressBar>
 
         <LinearLayout
             android:layout_width="match_parent"

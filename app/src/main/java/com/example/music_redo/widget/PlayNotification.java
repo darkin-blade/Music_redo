@@ -30,6 +30,8 @@ public class PlayNotification extends Service {
     static final int MODE_UPDATE = 4;// 更新进度条
     static final int MODE_CLOSE = 5;
 
+    int isShown;// 是否显示在状态栏
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -43,6 +45,8 @@ public class PlayNotification extends Service {
     }
 
     public void initData() {
+        isShown = 0;
+
         if (remoteViews != null) {// TODO
             remoteViews.removeAllViews(R.layout.play_notification);
             remoteViews = null;
@@ -129,10 +133,15 @@ public class PlayNotification extends Service {
 //        }
         // 避免震动
         stopForeground(true);
+        isShown = 0;
     }
 
     public void update() {
-        remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, true);
+        if (isShown == 1) {
+            remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, false);
+            builder.setContent(remoteViews);
+            startForeground(100, builder.build());
+        }
     }
 
     public void initPlay() {
@@ -150,6 +159,10 @@ public class PlayNotification extends Service {
     }
 
     public void initPause() {
+        if (isShown == 0) {
+            isShown = 1;
+        }
+
         remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_pause);
         if (MusicList.playList.curMusic.length() <= 0 || MusicList.playList.curMix.length() <= 0) {
             remoteViews.setTextViewText(R.id.cur_music, "no music");
