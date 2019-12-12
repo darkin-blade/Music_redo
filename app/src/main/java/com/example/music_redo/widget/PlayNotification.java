@@ -60,7 +60,6 @@ public class PlayNotification extends Service {
 
         int cmd_mode = intent.getIntExtra("mode", -1);
         boolean from_notification = intent.getBooleanExtra("fromNotification", false);
-        MusicList.infoLog("mode: " + cmd_mode);
         switch (cmd_mode) {
             case MODE_PLAY:// 从内部启动
                 if (from_notification == true) {
