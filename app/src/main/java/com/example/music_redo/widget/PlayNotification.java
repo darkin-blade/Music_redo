@@ -123,6 +123,9 @@ public class PlayNotification extends Service {
                     .setOngoing(true);// TODO
         }
 
+//        Intent intent = new Intent(this, PlayNotification.class);
+//        remoteViews.setOnClickPendingIntent(R.id.play_notification, PendingIntent.getActivity(this, 0, intent, 0));
+
         initNext();
         initPrev();
         initClose();
@@ -131,29 +134,30 @@ public class PlayNotification extends Service {
 
     public void initPlay() {
         remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_play);
-        builder.setContent(remoteViews);
 
         Intent intent = new Intent(this, PlayNotification.class);
         intent.putExtra("mode", MODE_PLAY);
         intent.putExtra("fromNotification", true);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-        remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.button_play, PendingIntent.getActivity(this, 0, intent, 0));
 
+        builder.setContent(remoteViews);
         startForeground(100, builder.build());
     }
 
     public void initPause() {
         remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_pause);
-        builder.setContent(remoteViews);
+        if (MusicList.playList.curMusic.length() <= 0 || MusicList.playList.curMix.length() <= 0) {
+            remoteViews.setTextViewText(R.id.cur_music, "no music");
+        } else {
+            remoteViews.setTextViewText(R.id.cur_music, MusicList.playList.curMix + "    " + MusicList.playList.curMusic.replaceAll(".*/", ""));
+        }
 
         Intent intent = new Intent(this, PlayNotification.class);
         intent.putExtra("mode", MODE_PAUSE);
         intent.putExtra("fromNotification", true);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-        remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.button_play, PendingIntent.getActivity(this, 0, intent, 0));
 
+        builder.setContent(remoteViews);
         startForeground(100, builder.build());
     }
 
@@ -161,27 +165,21 @@ public class PlayNotification extends Service {
         Intent intent = new Intent(this, PlayNotification.class);
         intent.putExtra("mode", MODE_NEXT);
         intent.putExtra("fromNotification", true);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-        remoteViews.setOnClickPendingIntent(R.id.button_next, pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.button_next, PendingIntent.getActivity(this, 0, intent, 0));
     }
 
     public void initPrev() {
         Intent intent = new Intent(this, PlayNotification.class);
         intent.putExtra("mode", MODE_PREV);
         intent.putExtra("fromNotification", true);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-        remoteViews.setOnClickPendingIntent(R.id.button_prev, pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.button_prev, PendingIntent.getActivity(this, 0, intent, 0));
     }
 
     public void initClose() {
         Intent intent = new Intent(this, PlayNotification.class);
         intent.putExtra("mode", MODE_CLOSE);
         intent.putExtra("fromNotification", true);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-        remoteViews.setOnClickPendingIntent(R.id.button_close, pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.button_close, PendingIntent.getActivity(this, 0, intent, 0));
     }
 
     public void initOpen() {
