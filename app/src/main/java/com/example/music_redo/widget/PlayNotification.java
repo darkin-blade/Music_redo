@@ -123,9 +123,6 @@ public class PlayNotification extends Service {
                     .setOngoing(true);// TODO
         }
 
-//        Intent intent = new Intent(this, PlayNotification.class);
-//        remoteViews.setOnClickPendingIntent(R.id.play_notification, PendingIntent.getActivity(this, 0, intent, 0));
-
         initNext();
         initPrev();
         initClose();
@@ -165,25 +162,32 @@ public class PlayNotification extends Service {
         Intent intent = new Intent(this, PlayNotification.class);
         intent.putExtra("mode", MODE_NEXT);
         intent.putExtra("fromNotification", true);
-        remoteViews.setOnClickPendingIntent(R.id.button_next, PendingIntent.getActivity(this, 0, intent, 0));
+        PendingIntent pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.button_next, pendingIntent);
     }
 
     public void initPrev() {
         Intent intent = new Intent(this, PlayNotification.class);
         intent.putExtra("mode", MODE_PREV);
         intent.putExtra("fromNotification", true);
-        remoteViews.setOnClickPendingIntent(R.id.button_prev, PendingIntent.getActivity(this, 0, intent, 0));
+        PendingIntent pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.button_prev, pendingIntent);
     }
 
     public void initClose() {
         Intent intent = new Intent(this, PlayNotification.class);
         intent.putExtra("mode", MODE_CLOSE);
         intent.putExtra("fromNotification", true);
-        remoteViews.setOnClickPendingIntent(R.id.button_close, PendingIntent.getActivity(this, 0, intent, 0));
+        PendingIntent pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.button_close, pendingIntent);
     }
 
-    public void initOpen() {
-        // TODO
+    public void initOpen() {// 切换到应用程序
+        Intent intent = new Intent(this, PlayNotification.class);
+        remoteViews.setOnClickPendingIntent(R.id.button_open, PendingIntent.getActivity(this, 0, intent, 0));
     }
 
 }
