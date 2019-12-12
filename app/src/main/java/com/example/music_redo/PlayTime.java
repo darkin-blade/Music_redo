@@ -61,6 +61,7 @@ public class PlayTime {
                 player.setDataSource(playList.curMusic);
                 player.prepare();
                 total_time = player.getDuration();
+                MusicList.seekBar.setMax(total_time);
 
                 // 设置时长ui
                 SimpleDateFormat format = new SimpleDateFormat("mm:ss");
@@ -188,12 +189,10 @@ public class PlayTime {
     }
 
     public void setBar() {// 更新进度条
-        final int curProgress = cur_time * 100 / total_time;
-
         myActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                MusicList.seekBar.setProgress(curProgress);
+                MusicList.seekBar.setProgress(cur_time);
             }
         });
         callNotification(MODE_UPDATE);// 更新状态栏进度条
