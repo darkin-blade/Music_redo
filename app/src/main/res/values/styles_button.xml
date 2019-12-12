@@ -45,19 +45,19 @@
         <item name="android:gravity">center</item>
         <item name="android:lines">1</item>
 
-        <item name="android:background">@drawable/player_play</item>
+<!--        <item name="android:src">@drawable/player_play</item>-->
     </style>
     <style name="tool_2" parent="tool_1">
-        <item name="android:background">@drawable/player_next</item>
+        <item name="android:src">@drawable/player_next</item>
     </style>
     <style name="tool_3" parent="tool_1">
-        <item name="android:background">@drawable/player_prev</item>
+        <item name="android:src">@drawable/player_prev</item>
     </style>
     <style name="tool_4" parent="tool_1">
-        <item name="android:background">@drawable/player_bluetooth</item>
+        <item name="android:src">@drawable/player_bluetooth</item>
     </style>
     <style name="tool_5" parent="tool_1">
-        <item name="android:background">@drawable/player_list</item>
+        <item name="android:src">@drawable/player_list</item>
     </style>
 
     <!-- 主界面按钮 -->

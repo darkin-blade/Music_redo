@@ -117,21 +117,21 @@
                     android:text="edit">
                 </Button>
 
-                <View
+                <ImageView
                     android:id="@+id/button_bluetooth"
                     style="@style/tool_4"/>
-                <View
+                <ImageView
                     android:id="@+id/button_prev"
                     style="@style/tool_3"/>
-                <View
+                <ImageView
                     android:id="@+id/button_play"
                     style="@style/tool_1"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"/>
-                <View
+                <ImageView
                     android:id="@+id/button_next"
                     style="@style/tool_2"/>
-                <View
+                <ImageView
                     android:id="@+id/button_mix"
                     style="@style/tool_5"/>
 

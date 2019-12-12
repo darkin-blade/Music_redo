@@ -215,6 +215,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         scrollView = findViewById(R.id.layout_scroll);
         itemList = findViewById(R.id.item_list);
 
+        button_play.setBackgroundDrawable(getResources().getDrawable(R.drawable.player_play));// TODO 启动时为暂停
         button_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
