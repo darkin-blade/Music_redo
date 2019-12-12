@@ -2,6 +2,9 @@ package com.example.music_redo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+
+import com.example.music_redo.widget.PlayNotification;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -19,6 +22,13 @@ public class PlayTime {
     public int cur_time;
     public int duration;// 播放时间累计
     static public Thread musicPlay;
+
+    // 用于部件交互
+    static final int MODE_START = 0;
+    static final int MODE_PAUSE = 1;
+    static final int MODE_NEXT = 2;
+    static final int MODE_PREV = 3;
+    static final int MODE_PLAY= 3;
 
     public PlayTime(Context context, Activity activity) {
         myContext = context;
@@ -98,6 +108,8 @@ public class PlayTime {
         player.start();
         MusicList.button_play.setBackgroundResource(R.drawable.player_pause);
 
+        initNotification(MODE_START);
+
         musicPlay = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -123,6 +135,23 @@ public class PlayTime {
             }
         });
         musicPlay.start();
+    }
+
+    public void initNotification(int mode) {
+        Intent intent;
+        switch (mode) {
+            case MODE_START:// 内部启动
+                // TODO 初始化ui部件
+                intent = new Intent(myContext, PlayNotification.class);
+                intent.putExtra("mode", MODE_START);
+                myActivity.startService(intent);
+                break;
+            default:// TODO 发送intent
+                intent = new Intent(myContext, PlayNotification.class);
+                intent.putExtra("mode", mode);
+                myActivity.startService(intent);
+                break;
+        }
     }
 
     public void pause() {

@@ -54,6 +54,7 @@
             <ImageView
                 style="@style/tool_3"/>
             <ImageView
+                android:id="@+id/button_play"
                 style="@style/tool_1"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"/>

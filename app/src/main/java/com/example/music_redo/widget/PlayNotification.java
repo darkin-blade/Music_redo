@@ -27,6 +27,13 @@ public class PlayNotification extends Service {
     NotificationManager manager;
     RemoteViews remoteViews;
 
+    // 用于部件交互
+    static final int MODE_START = 0;
+    static final int MODE_PAUSE = 1;
+    static final int MODE_NEXT = 2;
+    static final int MODE_PREV = 3;
+    static final int MODE_PLAY= 3;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -50,7 +57,17 @@ public class PlayNotification extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         initView();
-        startForeground(100, builder.build());
+
+        MusicList.infoLog("notification on start command");
+        int cmd_mode = intent.getIntExtra("mode", -1);
+        switch (cmd_mode) {
+            case MODE_START:// 初次启动
+                remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_pause);
+                builder.setContent(remoteViews);
+                startForeground(100, builder.build());
+                break;
+        }
+
         return START_STICKY;// TODO 防止被杀
     }
 
