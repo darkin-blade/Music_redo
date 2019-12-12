@@ -169,7 +169,7 @@ public class PlayTime {
     public void callNotification(int mode) {
         Intent intent;
         switch (mode) {
-            default:// TODO
+            case MODE_START:// TODO bugbugbug
                 intent = new Intent(myContext, PlayNotification.class);
                 intent.putExtra("mode", mode);
                 myActivity.startService(intent);

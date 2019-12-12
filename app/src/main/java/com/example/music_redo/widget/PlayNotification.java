@@ -68,65 +68,62 @@ public class PlayNotification extends Service {
                 initPause();
                 break;
             case MODE_PAUSE:
-                if (from_notification == true) {// 从通知栏暂停
-                    MusicList.playTime.pause();
-                }
-                initPlay();// 更改为播放
                 break;
             case MODE_PLAY:
-                if (from_notification == true) {// 从通知栏播放
-                    MusicList.playTime.play(0);
-                }
-                initPause();// 更改为暂停
                 break;
             case MODE_NEXT:
-                initPause();
-                MusicList.infoLog("notification next");
-                if (from_notification == true) {
-                    MusicList.playTime.next();
-                }
                 break;
             case  MODE_PREV:
-                initPause();
-                if (from_notification == true) {
-                    MusicList.playTime.prev();
-                }
                 break;
             case MODE_CLOSE:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    manager.deleteNotificationChannel("default");
-                    channel = null;
-                } else {
-                    stopForeground(true);
-                }
+                close();
                 break;
         }
 
         return START_STICKY;// TODO 防止被杀
     }
 
+    @Override
+    public void onDestroy() {
+        MusicList.infoLog("destroy service");
+        super.onDestroy();
+    }
+
     public void initView() {
         if (channel == null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {// TODO
+                MusicList.infoLog("create channel");
                 channel = new NotificationChannel("default", "default", NotificationManager.IMPORTANCE_DEFAULT);
+                channel.setImportance(NotificationManager.IMPORTANCE_LOW);
                 manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 manager.createNotificationChannel(channel);
             }
         }
 
         if (builder == null) {
+            MusicList.infoLog("create builder");
             builder = new NotificationCompat.Builder(this, "default")
                     .setSmallIcon(R.drawable.ic_launcher_background)
                     .setContent(remoteViews)
-                    .setOnlyAlertOnce(false)// TODO
+                    .setWhen(-System.currentTimeMillis())
+                    .setOnlyAlertOnce(true)// TODO
                     .setAutoCancel(false)// TODO
                     .setOngoing(true);// TODO
         }
 
-        initNext();
-        initPrev();
+//        initNext();
+//        initPrev();
         initClose();
-        initOpen();
+//        initOpen();
+    }
+
+    public void close() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            manager.deleteNotificationChannel("default");
+//            channel = null;
+//        }
+        // 避免震动
+        stopForeground(true);
     }
 
     public void initPlay() {
@@ -136,9 +133,6 @@ public class PlayNotification extends Service {
         intent.putExtra("mode", MODE_PLAY);
         intent.putExtra("fromNotification", true);
         remoteViews.setOnClickPendingIntent(R.id.button_play, PendingIntent.getActivity(this, 0, intent, 0));
-
-        builder.setContent(remoteViews);
-        startForeground(100, builder.build());
     }
 
     public void initPause() {
