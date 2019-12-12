@@ -24,7 +24,7 @@ public class PlayTime {
     static public Thread musicPlay;
 
     // 用于部件交互
-    static final int MODE_START = 0;
+    static final int MODE_PLAY = 0;
     static final int MODE_PAUSE = 1;
     static final int MODE_NEXT = 2;
     static final int MODE_PREV = 3;
@@ -109,7 +109,7 @@ public class PlayTime {
         MusicList.button_play.setBackgroundDrawable(myContext.getResources().getDrawable(R.drawable.player_pause));
 
 
-        callNotification(MODE_START);
+        callNotification(MODE_PLAY);
 
         musicPlay = new Thread(new Runnable() {
             @Override
@@ -169,7 +169,7 @@ public class PlayTime {
     public void callNotification(int mode) {
         Intent intent;
         switch (mode) {
-            case MODE_START:// TODO bugbugbug
+            case MODE_PLAY:// TODO bugbugbug
                 intent = new Intent(myContext, PlayNotification.class);
                 intent.putExtra("mode", mode);
                 myActivity.startService(intent);
