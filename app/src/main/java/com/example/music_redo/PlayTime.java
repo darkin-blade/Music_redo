@@ -180,10 +180,9 @@ public class PlayTime {
 
     public void getBar() {// 从进度条更新播放进度
         int curProgress = MusicList.seekBar.getProgress();
-        int maxProgress = MusicList.seekBar.getMax();
 
         // 调整时间
-        cur_time = curProgress * total_time / maxProgress;
+        cur_time = curProgress;
         player.seekTo(cur_time);
         setTime();
     }
@@ -195,7 +194,6 @@ public class PlayTime {
                 MusicList.seekBar.setProgress(cur_time);
             }
         });
-        callNotification(MODE_UPDATE);// 更新状态栏进度条
     }
 
     public void setTime() {// 更新时间
@@ -209,5 +207,6 @@ public class PlayTime {
                 MusicList.curTime.setText(formatTime);
             }
         });
+        callNotification(MODE_UPDATE);// 更新状态栏进度条
     }
 }
