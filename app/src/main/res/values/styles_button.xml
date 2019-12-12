@@ -36,7 +36,7 @@
         <item name="android:textColor">@color/theme_black</item>
     </style>
 
-    <!--  播放器按钮  -->
+    <!--  主播放器按钮  -->
     <style name="tool_1">
         <!--    父类型    -->
         <item name="android:layout_height">40dp</item>

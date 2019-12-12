@@ -3,37 +3,30 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/play_notification"
-    android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:orientation="horizontal">
+    android:layout_width="250dp"
+    android:layout_height="70dp"
+    android:orientation="horizontal"
+    android:background="@color/grey">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
             style="@style/tab_1"
+            android:layout_height="25dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/cur_music"
-                android:layout_height="35dp"
+                style="@style/tab_1"
+                android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:layout_weight="2"
 
-                android:background="@color/grey"
-                android:textColor="@color/color_5"
-
-                android:gravity="center"
-                android:textSize="16dp"
                 android:text="no music"
-
-                android:singleLine="true"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit ="marquee_forever"
-                android:focusable="true"
-                android:focusableInTouchMode="true">
+                android:textSize="15dp">
             </TextView>
         </LinearLayout>
 
@@ -44,35 +37,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="12dp"
             android:gravity="center">
-
-            <Button
-                android:id="@+id/button_open"
-                style="@style/button_8"
-                android:layout_marginRight="40dp"
-                android:text="open">
-            </Button>
 
             <ImageView
                 android:id="@id/button_prev"
-                style="@style/tool_3"/>
+                style="@style/tool_3"
+                android:layout_height="30dp"
+                android:layout_width="30dp"/>
             <ImageView
                 android:id="@+id/button_play"
                 style="@style/tool_1"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                android:layout_height="30dp"
+                android:layout_width="30dp"
+                android:src="@drawable/player_play"/>
             <ImageView
                 android:id="@id/button_next"
-                style="@style/tool_2"/>
+                style="@style/tool_2"
+                android:layout_height="30dp"
+                android:layout_width="30dp"/>
 
-            <Button
-                android:id="@+id/button_close"
-                style="@style/button_8"
-                android:layout_marginLeft="40dp"
-                android:text="close">
-
-            </Button>
         </LinearLayout>
 
     </LinearLayout>
