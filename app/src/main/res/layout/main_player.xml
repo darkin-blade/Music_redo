@@ -76,7 +76,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/cur_time"
+                    android:id="@+id/music_bar"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:text="00:00"

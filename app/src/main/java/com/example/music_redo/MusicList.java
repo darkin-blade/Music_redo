@@ -33,7 +33,6 @@ import com.example.music_redo.mix.MixRename;
 import com.example.music_redo.mix.MusicEdit;
 import com.example.music_redo.mix.MusicMove;
 import com.example.music_redo.mix.MusicSelect;
-import com.example.music_redo.widget.PlayNotification;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -208,7 +207,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         // 播放器进度部件
         seekBar = findViewById(R.id.music_bar);// 进度条
         totalTime = findViewById(R.id.total_time);// 音乐总时长
-        curTime = findViewById(R.id.cur_time);// 音乐进度
+        curTime = findViewById(R.id.music_bar);// 音乐进度
         // 主体部件
         mixName = findViewById(R.id.cur_mix);
         musicName = findViewById(R.id.cur_music);

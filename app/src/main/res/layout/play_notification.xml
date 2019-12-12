@@ -5,7 +5,8 @@
     android:id="@+id/play_notification"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@color/grey">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,9 +27,13 @@
             </TextView>
         </LinearLayout>
 
-        <ImageView
-            style="@style/line">
-        </ImageView>
+        <ProgressBar
+            android:id="@+id/music_bar"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+        </ProgressBar>
 
         <LinearLayout
             android:layout_width="match_parent"

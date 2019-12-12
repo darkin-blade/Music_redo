@@ -27,7 +27,8 @@ public class PlayNotification extends Service {
     static final int MODE_PAUSE = 1;
     static final int MODE_NEXT = 2;
     static final int MODE_PREV = 3;
-    static final int MODE_CLOSE = 4;
+    static final int MODE_UPDATE = 4;// 更新进度条
+    static final int MODE_CLOSE = 5;
 
     @Override
     public void onCreate() {
@@ -81,6 +82,9 @@ public class PlayNotification extends Service {
                 }
                 initPause();
                 break;
+            case MODE_UPDATE:
+                update();
+                break;
             case MODE_CLOSE:
                 close();
                 break;
@@ -125,6 +129,10 @@ public class PlayNotification extends Service {
 //        }
         // 避免震动
         stopForeground(true);
+    }
+
+    public void update() {
+        remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, true);
     }
 
     public void initPlay() {

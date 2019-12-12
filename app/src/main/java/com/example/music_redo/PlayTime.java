@@ -28,6 +28,7 @@ public class PlayTime {
     static final int MODE_PAUSE = 1;
     static final int MODE_NEXT = 2;
     static final int MODE_PREV = 3;
+    static final int MODE_UPDATE = 4;
 
     public PlayTime(Context context, Activity activity) {
         myContext = context;
@@ -195,6 +196,7 @@ public class PlayTime {
                 MusicList.seekBar.setProgress(curProgress);
             }
         });
+        callNotification(MODE_UPDATE);// 更新状态栏进度条
     }
 
     public void setTime() {// 更新时间
