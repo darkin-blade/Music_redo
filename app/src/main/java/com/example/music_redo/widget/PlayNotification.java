@@ -16,8 +16,6 @@ import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
 
 public class PlayNotification extends Service {
-    //    Activity myActivity;
-//    Context myContext;
 
     NotificationCompat.Builder builder;
     NotificationChannel channel;
