@@ -26,14 +26,14 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
     RemoteViews remoteViews;
     AppWidgetManager appWidgetManager;
-    ArrayList<Integer> appWidgetIds;
+    static public ArrayList<Integer> appWidgetIds;
 
     int isInit;
 
     @Override
-    public void onCreate() {// TODO 自动创建?
+    public void onCreate() {// TODO
         super.onCreate();
-        MusicList.infoLog("widget service init");
+        MusicList.infoLog("widget service create");
         isInit = 0;
     }
 
@@ -94,6 +94,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
     @Override
     public void onDestroy() {
         isInit = 0;
+        MusicList.infoLog("widget service destroy");
         super.onDestroy();
     }
 
