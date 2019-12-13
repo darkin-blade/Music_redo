@@ -63,7 +63,7 @@ public class PlayWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDisabled(Context context) {
-        MusicList.infoLog("widget provider");
+        MusicList.infoLog("widget provider disable");
         super.onDisabled(context);
     }
 
@@ -84,6 +84,10 @@ public class PlayWidgetProvider extends AppWidgetProvider {
     }
 
     public void initPrev(Context context) {
-        ;
+        Intent intent = new Intent(context, PlayWidgetService.class);
+        intent.putExtra("fromWidgetProvider", true);
+        intent.putExtra("mode", MODE_PREV);
+        PendingIntent pendingIntent = PendingIntent.getService(context, 3, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.button_prev, pendingIntent);
     }
 }

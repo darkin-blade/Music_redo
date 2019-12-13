@@ -18,9 +18,9 @@ public class PlayWidgetService extends Service {// 用于部件交互
     static final int MODE_CLOSE = 5;
 
     @Override
-    public void onCreate() {
-        super.onCreate();
+    public void onCreate() {// TODO 自动创建?
         MusicList.infoLog("widget service create");
+        super.onCreate();
     }
 
     @Nullable
@@ -33,7 +33,6 @@ public class PlayWidgetService extends Service {// 用于部件交互
     public int onStartCommand(Intent intent, int flags, int startId) {
         int cmd_mode = intent.getIntExtra("mode", -1);
         boolean from_widget_provider = intent.getBooleanExtra("fromWidgetProvider", false);
-        MusicList.infoLog("mode: " + cmd_mode);
 
         switch (cmd_mode) {
             case MODE_PLAY:
@@ -52,6 +51,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
         Intent tmp = new Intent("com.example.music_redo.UPDATE_ALL");
         sendBroadcast(tmp);
+        MusicList.infoLog("mode: " + cmd_mode);
 
         return START_STICKY;
     }
