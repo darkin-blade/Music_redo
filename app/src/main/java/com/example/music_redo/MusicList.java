@@ -194,9 +194,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         // 其余部件
         // TODO 通知栏部件
         // TODO 锁屏部件
-        playWidgetProvider = new PlayWidgetProvider();// TODO 桌面部件
-
-        registerReceiver(playWidgetProvider, new IntentFilter("com.example.music_redo.UPDATE_ALL"));// 桌面部件注册receiver
+        // TODO 桌面部件
 
         // 部件
         // 按钮
@@ -311,11 +309,15 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         listManager = new ListManager(this);
         playList = new PlayList(this, this);
         playTime = new PlayTime(this, this);
+        playWidgetProvider = new PlayWidgetProvider();// 桌面部件
+
 
         // 注意初始化顺序
         playTime.init();
         listManager.init();
         playList.init();
+        // 桌面部件注册receiver
+        registerReceiver(playWidgetProvider, new IntentFilter("com.example.music_redo.UPDATE_ALL"));
     }
 
     public void initNotification() {

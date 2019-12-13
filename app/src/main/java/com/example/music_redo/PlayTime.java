@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.music_redo.widget.PlayNotification;
+import com.example.music_redo.widget.PlayWidgetService;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -110,7 +111,7 @@ public class PlayTime {
 //        MusicList.button_play.setBackgroundResource(R.drawable.player_pause);
         MusicList.button_play.setBackgroundDrawable(myContext.getResources().getDrawable(R.drawable.player_pause));
 
-        callNotification(MODE_PLAY);
+        updateUI(MODE_PLAY);
 
         musicPlay = new Thread(new Runnable() {
             @Override
@@ -145,7 +146,7 @@ public class PlayTime {
 //            MusicList.button_play.setBackgroundResource(R.drawable.player_play);
             MusicList.button_play.setBackgroundDrawable(myContext.getResources().getDrawable(R.drawable.player_play));
             musicPlay.interrupt();// TODO
-            callNotification(MODE_PAUSE);
+            updateUI(MODE_PAUSE);
         }
     }
 
@@ -158,24 +159,13 @@ public class PlayTime {
     public void next() {
         playList.loadMusic(1);
         playList.highlightMusic();
-        callNotification(MODE_NEXT);
+        updateUI(MODE_NEXT);
     }
 
     public void prev() {
         playList.loadMusic(2);
         playList.highlightMusic();
-        callNotification(MODE_PREV);
-    }
-
-    public void callNotification(int mode) {
-        Intent intent;
-        switch (mode) {
-            default:
-                intent = new Intent(myContext, PlayNotification.class);
-                intent.putExtra("mode", mode);
-                myActivity.startService(intent);
-                break;
-        }
+        updateUI(MODE_PREV);
     }
 
     public void getBar() {// 从进度条更新播放进度
@@ -207,6 +197,20 @@ public class PlayTime {
                 MusicList.curTime.setText(formatTime);
             }
         });
-        callNotification(MODE_UPDATE);// 更新状态栏进度条
+        updateUI(MODE_UPDATE);// 更新状态栏进度条
+    }
+
+    public void updateUI(int mode) {
+        Intent intent;
+        switch (mode) {
+            default:
+                intent = new Intent(myContext, PlayNotification.class);
+                intent.putExtra("mode", mode);
+                myActivity.startService(intent);
+                intent = new Intent(myContext, PlayWidgetService.class);
+                intent.putExtra("mode", mode);
+                myActivity.startService(intent);
+                break;
+        }
     }
 }

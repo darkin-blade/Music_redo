@@ -49,9 +49,8 @@ public class PlayWidgetService extends Service {// 用于部件交互
                 break;
         }
 
-        Intent tmp = new Intent("com.example.music_redo.UPDATE_ALL");
-        sendBroadcast(tmp);
-        MusicList.infoLog("mode: " + cmd_mode);
+        // TODO 更新ui
+        MusicList.infoLog("widget service mode: " + cmd_mode);
 
         return START_STICKY;
     }
@@ -59,5 +58,10 @@ public class PlayWidgetService extends Service {// 用于部件交互
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    public void updateUI() {// 调用provider
+        Intent intent = new Intent("com.example.music_redo.UPDATE_ALL");
+        sendBroadcast(intent);
     }
 }
