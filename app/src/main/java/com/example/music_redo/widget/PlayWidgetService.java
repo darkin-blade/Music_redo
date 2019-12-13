@@ -47,6 +47,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
     public int onStartCommand(Intent intent, int flags, int startId) {
         int cmd_mode = intent.getIntExtra("mode", -1);
         boolean from_widget_service = intent.getBooleanExtra("fromWidgetService", false);
+        int[] ids = intent.getIntArrayExtra("appWidgetIds");
 
         // TODO 更新ui
 //        MusicList.infoLog("widget service: " + cmd_mode);
@@ -83,7 +84,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
                 update();
                 break;
             case MODE_INIT:
-                init();
+                init(ids);
                 break;
         }
 
@@ -96,16 +97,20 @@ public class PlayWidgetService extends Service {// 用于部件交互
         super.onDestroy();
     }
 
-    public void init() {
+    public void init(int[] ids) {
         MusicList.infoLog("init mode");
 
         // TODO 接收变量
-        appWidgetManager = MusicList.appWidgetManager;
+        appWidgetManager = AppWidgetManager.getInstance(this);
         if (appWidgetIds == null) {
             appWidgetIds = new ArrayList<>();
         }
         appWidgetIds.clear();
-        appWidgetIds.addAll(MusicList.appWidgetIds);
+        if (ids != null) {
+            for (int i = 0; i < ids.length; i ++) {
+                appWidgetIds.add(ids[i]);
+            }
+        }
 
         // 初始化监听
         initPlay();// 初始为暂停
@@ -127,10 +132,6 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
         if (MusicList.playTime == null) {
             return;
-        }
-
-        for (int i = 0; i < appWidgetIds.size(); i ++) {
-            MusicList.infoLog("widget id[" + i + "] " + appWidgetIds.get(i));
         }
 
         remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, false);

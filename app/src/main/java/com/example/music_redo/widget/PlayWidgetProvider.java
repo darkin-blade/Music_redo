@@ -20,6 +20,8 @@ public class PlayWidgetProvider extends AppWidgetProvider {
     static final int MODE_CLOSE = 5;
     static final int MODE_INIT = 6;
 
+    ArrayList<Integer> appWidgetIds;
+
     public PlayWidgetProvider() {
         super();
     }
@@ -29,11 +31,11 @@ public class PlayWidgetProvider extends AppWidgetProvider {
         super.onReceive(context, intent);
 
         // TODO 初始化变量
-        MusicList.appWidgetManager = AppWidgetManager.getInstance(context);
-        if (MusicList.appWidgetIds == null) {
-            MusicList.appWidgetIds = new ArrayList<>();
+        if (this.appWidgetIds == null) {
+            this.appWidgetIds = new ArrayList<>();
+            MusicList.infoLog("init ids");
         }
-        MusicList.appWidgetIds.clear();
+        this.appWidgetIds.clear();
 
         String action = intent.getAction();
         MusicList.infoLog("widget provider receive " + action);
@@ -43,7 +45,7 @@ public class PlayWidgetProvider extends AppWidgetProvider {
                 int[] appWidgetIds = extras.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
                 if (appWidgetIds != null && appWidgetIds.length > 0) {
                     for (int i = 0; i < appWidgetIds.length; i ++) {
-                        MusicList.appWidgetIds.add(appWidgetIds[i]);
+                        this.appWidgetIds.add(appWidgetIds[i]);
                     }
                 }
             }
@@ -51,14 +53,19 @@ public class PlayWidgetProvider extends AppWidgetProvider {
             Bundle extras = intent.getExtras();
             if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
                 int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
-                MusicList.appWidgetIds.remove(appWidgetId);
+                this.appWidgetIds.remove(appWidgetId);
             }
         } else {
             return;
         }
 
+        int[] ids = new int[appWidgetIds.size()];
+        for (int i = 0; i < appWidgetIds.size(); i ++) {
+            ids[i] = appWidgetIds.get(i);
+        }
         Intent tmp = new Intent(context, PlayWidgetService.class);
         tmp.putExtra("mode", MODE_INIT);
+        tmp.putExtra("appWidgetIds", ids);
         context.startService(tmp);
     }
 

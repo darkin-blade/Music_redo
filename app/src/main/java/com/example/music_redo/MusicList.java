@@ -104,10 +104,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public PlayList playList;
     static public PlayTime playTime;
 
-    // TODO 仅用于传递变量
-    public static AppWidgetManager appWidgetManager;
-    public static ArrayList<Integer> appWidgetIds;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
