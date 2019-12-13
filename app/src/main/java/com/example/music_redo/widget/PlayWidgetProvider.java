@@ -15,6 +15,13 @@ public class PlayWidgetProvider extends AppWidgetProvider {
 
     RemoteViews remoteViews;
 
+    static final int MODE_PLAY = 0;
+    static final int MODE_PAUSE = 1;
+    static final int MODE_NEXT = 2;
+    static final int MODE_PREV = 3;
+    static final int MODE_UPDATE = 4;// 更新进度条
+    static final int MODE_CLOSE = 5;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -41,19 +48,38 @@ public class PlayWidgetProvider extends AppWidgetProvider {
         MusicList.infoLog("provider update");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
+        // TODO 初始化桌面部件
         if (remoteViews == null) {
             remoteViews = new RemoteViews(context.getPackageName(), R.layout.play_widget);
-            Intent intent = new Intent(context, PlayWidgetService.class);
-            intent.putExtra("fromWidgetProvider", true);
-            intent.putExtra("mode", -1);
-            PendingIntent pendingIntent = PendingIntent.getService(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
-            appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
         }
+
+        initNext(context, appWidgetManager, appWidgetIds);
+        initPrev(context, appWidgetManager, appWidgetIds);
     }
 
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
+    }
+
+    public void initPlay(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        ;
+    }
+
+    public void initPause(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        ;
+    }
+
+    public void initNext(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Intent intent = new Intent(context, PlayWidgetService.class);
+        intent.putExtra("fromWidgetProvider", true);
+        intent.putExtra("mode", MODE_NEXT);
+        PendingIntent pendingIntent = PendingIntent.getService(context, 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.button_next, pendingIntent);
+        appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
+    }
+
+    public void initPrev(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        ;
     }
 }

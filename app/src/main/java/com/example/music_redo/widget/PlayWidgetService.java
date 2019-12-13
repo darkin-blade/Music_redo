@@ -34,6 +34,22 @@ public class PlayWidgetService extends Service {// 用于部件交互
         int cmd_mode = intent.getIntExtra("mode", -1);
         boolean from_widget_provider = intent.getBooleanExtra("fromWidgetProvider", false);
         MusicList.infoLog("mode: " + cmd_mode);
+
+        switch (cmd_mode) {
+            case MODE_PLAY:
+                break;
+            case MODE_PAUSE:
+                break;
+            case MODE_NEXT:
+                break;
+            case MODE_PREV:
+                break;
+            case MODE_UPDATE:
+                break;
+            case MODE_CLOSE:
+                break;
+        }
+
         return START_STICKY;
     }
 
