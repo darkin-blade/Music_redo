@@ -80,37 +80,10 @@ public class PlayWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, PlayWidgetService.class);
         intent.putExtra("mode", MODE_INIT);
         context.startService(intent);
-
-        // 初始化监听
-        initNext(context);
-        initPrev(context);
-        appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
     }
 
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
-    }
-
-    public void initPlay(Context context) {
-    }
-
-    public void initPause(Context context) {
-    }
-
-    public void initNext(Context context) {
-        Intent intent = new Intent(context, PlayWidgetService.class);
-        intent.putExtra("fromWidgetProvider", true);
-        intent.putExtra("mode", MODE_NEXT);
-        PendingIntent pendingIntent = PendingIntent.getService(context, 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.button_next, pendingIntent);
-    }
-
-    public void initPrev(Context context) {
-        Intent intent = new Intent(context, PlayWidgetService.class);
-        intent.putExtra("fromWidgetProvider", true);
-        intent.putExtra("mode", MODE_PREV);
-        PendingIntent pendingIntent = PendingIntent.getService(context, 3, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.button_prev, pendingIntent);
     }
 }

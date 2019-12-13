@@ -1,5 +1,6 @@
 package com.example.music_redo.widget;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -56,6 +57,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
         switch (cmd_mode) {
             case MODE_PLAY:
+                initPause();
                 break;
             case MODE_PAUSE:
                 break;
@@ -63,11 +65,13 @@ public class PlayWidgetService extends Service {// 用于部件交互
                 if (from_widget_provider == true) {
                     MusicList.playTime.next();
                 }
+                initPause();
                 break;
             case MODE_PREV:
                 if (from_widget_provider == true) {
                     MusicList.playTime.prev();
                 }
+                initPause();
                 break;
             case MODE_UPDATE:
                 update();
@@ -88,12 +92,25 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
     public void init() {
         MusicList.infoLog("init mode");
+
+        // TODO 接收变量
         appWidgetManager = MusicList.appWidgetManager;
         if (appWidgetIds == null) {
             appWidgetIds = new ArrayList<>();
         }
         appWidgetIds.clear();
         appWidgetIds.addAll(MusicList.appWidgetIds);
+
+        // 初始化监听
+        initNext();
+        initPrev();
+
+        // 更新ui
+        int[] tmp = new int[appWidgetIds.size()];
+        for (int i = 0; i < appWidgetIds.size(); i ++) {
+            tmp[i] = appWidgetIds.get(i);
+        }
+        appWidgetManager.updateAppWidget(tmp, remoteViews);
 
         isInit = 1;
     }
@@ -115,5 +132,27 @@ public class PlayWidgetService extends Service {// 用于部件交互
             tmp[i] = appWidgetIds.get(i);
         }
         appWidgetManager.updateAppWidget(tmp, remoteViews);
+    }
+
+    public void initPlay() {
+    }
+
+    public void initPause() {
+    }
+
+    public void initNext() {
+        Intent intent = new Intent(this, PlayWidgetService.class);
+        intent.putExtra("fromWidgetProvider", true);
+        intent.putExtra("mode", MODE_NEXT);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.button_next, pendingIntent);
+    }
+
+    public void initPrev() {
+        Intent intent = new Intent(this, PlayWidgetService.class);
+        intent.putExtra("fromWidgetProvider", true);
+        intent.putExtra("mode", MODE_PREV);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 3, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.button_prev, pendingIntent);
     }
 }
