@@ -1,26 +1,16 @@
 package com.example.music_redo.widget;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.widget.RemoteViews;
 
 import com.example.music_redo.MusicList;
-import com.example.music_redo.R;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class PlayWidgetProvider extends AppWidgetProvider {
-
-    RemoteViews remoteViews;
-    AppWidgetManager appWidgetManager;
-    ArrayList<Integer> appWidgetIds;
 
     static final int MODE_PLAY = 0;
     static final int MODE_PAUSE = 1;
@@ -62,11 +52,6 @@ public class PlayWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         MusicList.infoLog("provider update");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-
-        // 初始化ui
-        if (remoteViews == null) {
-            remoteViews = new RemoteViews(context.getPackageName(), R.layout.play_widget);
-        }
 
         // TODO 初始化变量
         MusicList.appWidgetManager = appWidgetManager;

@@ -33,8 +33,6 @@ import com.example.music_redo.mix.MixRename;
 import com.example.music_redo.mix.MusicEdit;
 import com.example.music_redo.mix.MusicMove;
 import com.example.music_redo.mix.MusicSelect;
-import com.example.music_redo.widget.PlayWidgetProvider;
-import com.example.music_redo.widget.PlayWidgetService;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;

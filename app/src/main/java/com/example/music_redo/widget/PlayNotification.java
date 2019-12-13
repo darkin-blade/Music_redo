@@ -157,10 +157,9 @@ public class PlayNotification extends Service {
 
     public void initPlay() {
         remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_play);
-
         Intent intent = new Intent(this, PlayNotification.class);
-        intent.putExtra("mode", MODE_PLAY);
         intent.putExtra("fromNotification", true);
+        intent.putExtra("mode", MODE_PLAY);
         PendingIntent pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
         remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
@@ -176,16 +175,16 @@ public class PlayNotification extends Service {
             isShown = 1;
         }
 
-        remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_pause);
         if (MusicList.playList.curMusic.length() <= 0 || MusicList.playList.curMix.length() <= 0) {
             remoteViews.setTextViewText(R.id.cur_music, "no music");
         } else {
             remoteViews.setTextViewText(R.id.cur_music, MusicList.playList.curMix + "    " + MusicList.playList.curMusic.replaceAll(".*/", ""));
         }
 
+        remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_pause);
         Intent intent = new Intent(this, PlayNotification.class);
-        intent.putExtra("mode", MODE_PAUSE);
         intent.putExtra("fromNotification", true);
+        intent.putExtra("mode", MODE_PAUSE);
         PendingIntent pendingIntent = PendingIntent.getService(this, 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
         remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
@@ -196,8 +195,8 @@ public class PlayNotification extends Service {
 
     public void initNext() {
         Intent intent = new Intent(this, PlayNotification.class);
-        intent.putExtra("mode", MODE_NEXT);
         intent.putExtra("fromNotification", true);
+        intent.putExtra("mode", MODE_NEXT);
         PendingIntent pendingIntent = PendingIntent.getService(this, 3, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
         remoteViews.setOnClickPendingIntent(R.id.button_next, pendingIntent);
@@ -205,8 +204,8 @@ public class PlayNotification extends Service {
 
     public void initPrev() {
         Intent intent = new Intent(this, PlayNotification.class);
-        intent.putExtra("mode", MODE_PREV);
         intent.putExtra("fromNotification", true);
+        intent.putExtra("mode", MODE_PREV);
         PendingIntent pendingIntent = PendingIntent.getService(this, 4, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
         remoteViews.setOnClickPendingIntent(R.id.button_prev, pendingIntent);
@@ -214,8 +213,8 @@ public class PlayNotification extends Service {
 
     public void initClose() {
         Intent intent = new Intent(this, PlayNotification.class);
-        intent.putExtra("mode", MODE_CLOSE);
         intent.putExtra("fromNotification", true);
+        intent.putExtra("mode", MODE_CLOSE);
         PendingIntent pendingIntent = PendingIntent.getService(this, 5, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
         remoteViews.setOnClickPendingIntent(R.id.button_close, pendingIntent);
