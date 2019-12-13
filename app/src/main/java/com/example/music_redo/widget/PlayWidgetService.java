@@ -32,6 +32,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int cmd_mode = intent.getIntExtra("mode", -1);
+        boolean from_widget_provider = intent.getBooleanExtra("fromWidgetProvider", false);
         MusicList.infoLog("mode: " + cmd_mode);
         return START_STICKY;
     }

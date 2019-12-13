@@ -49,7 +49,7 @@
                 android:id="@+id/button_open"
                 style="@style/button_8"
                 android:layout_marginRight="40dp"
-                android:text="open"
+                android:text="Open"
                 android:textSize="14dp">
             </Button>
 
@@ -69,7 +69,7 @@
                 android:id="@+id/button_close"
                 style="@style/button_8"
                 android:layout_marginLeft="40dp"
-                android:text="close"
+                android:text="Exit"
                 android:textSize="14dp">
 
             </Button>

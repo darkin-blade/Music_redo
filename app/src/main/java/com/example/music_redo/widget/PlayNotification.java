@@ -58,6 +58,11 @@ public class PlayNotification extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         initView();
 
+        // TODO 关闭
+        if (intent == null) {
+            return START_STICKY;
+        }
+
         int cmd_mode = intent.getIntExtra("mode", -1);
         boolean from_notification = intent.getBooleanExtra("fromNotification", false);
         switch (cmd_mode) {
@@ -130,12 +135,16 @@ public class PlayNotification extends Service {
 //            manager.deleteNotificationChannel("default");
 //            channel = null;
 //        }
+        isShown = 0;
+
         // 暂停音乐
         MusicList.playTime.pause();
 
         // 避免震动
         stopForeground(true);
-        isShown = 0;
+
+        // TODO 关闭服务
+        onDestroy();// TODO
     }
 
     public void update() {
@@ -156,8 +165,10 @@ public class PlayNotification extends Service {
         builder.setContentIntent(pendingIntent);
         remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
 
-        builder.setContent(remoteViews);
-        startForeground(100, builder.build());
+        if (isShown == 1) {
+            builder.setContent(remoteViews);
+            startForeground(100, builder.build());
+        }
     }
 
     public void initPause() {

@@ -455,16 +455,8 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     @Override
     public void onDestroy() {
         unregisterReceiver(receiver);// 解决泄漏问题
+        playList.save();
         super.onDestroy();
-    }
-
-    @Override
-    public void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-
-        // TODO 通知栏部件
-        Uri uri = intent.getData();
-
     }
 
     @Override
