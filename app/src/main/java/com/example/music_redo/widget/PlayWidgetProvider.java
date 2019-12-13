@@ -24,22 +24,25 @@ public class PlayWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        MusicList.infoLog("widget provider");
         super.onReceive(context, intent);
     }
 
     @Override
     public void onEnabled(Context context) {
-        MusicList.infoLog("on enabled");
+        MusicList.infoLog("widget provider enabled");
         super.onEnabled(context);
     }
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+        MusicList.infoLog("widget provider app widget options changed");
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 
     @Override
     public void onRestored(Context context, int[] oldWidgetIds, int[] newWidgetIds) {
+        MusicList.infoLog("widget provider");
         super.onRestored(context, oldWidgetIds, newWidgetIds);
     }
 
@@ -53,33 +56,34 @@ public class PlayWidgetProvider extends AppWidgetProvider {
             remoteViews = new RemoteViews(context.getPackageName(), R.layout.play_widget);
         }
 
-        initNext(context, appWidgetManager, appWidgetIds);
-        initPrev(context, appWidgetManager, appWidgetIds);
+        initNext(context);
+        initPrev(context);
+        appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
     }
 
     @Override
     public void onDisabled(Context context) {
+        MusicList.infoLog("widget provider");
         super.onDisabled(context);
     }
 
-    public void initPlay(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void initPlay(Context context) {
         ;
     }
 
-    public void initPause(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void initPause(Context context) {
         ;
     }
 
-    public void initNext(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void initNext(Context context) {
         Intent intent = new Intent(context, PlayWidgetService.class);
         intent.putExtra("fromWidgetProvider", true);
         intent.putExtra("mode", MODE_NEXT);
         PendingIntent pendingIntent = PendingIntent.getService(context, 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.button_next, pendingIntent);
-        appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
     }
 
-    public void initPrev(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void initPrev(Context context) {
         ;
     }
 }

@@ -20,7 +20,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
     @Override
     public void onCreate() {
         super.onCreate();
-        MusicList.infoLog("service on create");
+        MusicList.infoLog("widget service create");
     }
 
     @Nullable
@@ -49,6 +49,9 @@ public class PlayWidgetService extends Service {// 用于部件交互
             case MODE_CLOSE:
                 break;
         }
+
+        Intent tmp = new Intent("com.example.music_redo.UPDATE_ALL");
+        sendBroadcast(tmp);
 
         return START_STICKY;
     }
