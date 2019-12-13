@@ -144,7 +144,7 @@ public class PlayNotification extends Service {
         stopForeground(true);
 
         // TODO 关闭服务
-        onDestroy();// TODO
+        stopSelf();
     }
 
     public void update() {

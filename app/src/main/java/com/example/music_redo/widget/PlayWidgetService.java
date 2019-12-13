@@ -106,11 +106,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
         initPrev();
 
         // 更新ui
-        int[] tmp = new int[appWidgetIds.size()];
-        for (int i = 0; i < appWidgetIds.size(); i ++) {
-            tmp[i] = appWidgetIds.get(i);
-        }
-        appWidgetManager.updateAppWidget(tmp, remoteViews);
+        updateUI();
 
         isInit = 1;
     }
@@ -127,6 +123,10 @@ public class PlayWidgetService extends Service {// 用于部件交互
         }
 
         remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, false);
+        updateUI();
+    }
+
+    public void updateUI() {
         int[] tmp = new int[appWidgetIds.size()];
         for (int i = 0; i < appWidgetIds.size(); i ++) {
             tmp[i] = appWidgetIds.get(i);
@@ -135,9 +135,17 @@ public class PlayWidgetService extends Service {// 用于部件交互
     }
 
     public void initPlay() {
+        updateUI();
     }
 
     public void initPause() {
+        if (MusicList.playList.curMusic.length() <= 0 || MusicList.playList.curMix.length() <= 0) {
+            remoteViews.setTextViewText(R.id.cur_music, "no music");
+        } else {
+            remoteViews.setTextViewText(R.id.cur_music, MusicList.playList.curMix + "    " + MusicList.playList.curMusic.replaceAll(".*/", ""));
+        }
+
+        updateUI();
     }
 
     public void initNext() {

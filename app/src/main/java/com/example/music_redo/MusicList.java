@@ -74,7 +74,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public BluetoothList bluetoothList;// 蓝牙管理
     // 其它部件
     // TODO 锁屏
-    static public PlayWidgetProvider playWidgetProvider;// TODO 桌面部件
+    // TODO 桌面部件
     // TODO 通知栏部件
 
     // 公共变量
@@ -120,7 +120,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         initUI();
         initBluetooth();
         initData();
-        initReceiver();
     }
 
     public void initApp() {
@@ -323,17 +322,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         playList.init();
     }
 
-    public void initReceiver() {
-//        playWidgetProvider = new PlayWidgetProvider();// 桌面部件
-//
-//        // 桌面部件注册receiver
-//        infoLog("play widget provider is null " + (playWidgetProvider == null));
-//        if (playWidgetProvider != null) {
-//            registerReceiver(playWidgetProvider, new IntentFilter("com.example.music_redo.UPDATE_ALL"));
-//            registerReceiver(playWidgetProvider, new IntentFilter("android.appwidget.action.APPWIDGET_UPDATE"));
-//        }
-    }
-
     static public int cmd(String sql) {// 操作数据库
         try {
             database.execSQL(sql);
@@ -472,7 +460,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     public void onDestroy() {
         // 解决泄漏问题
         unregisterReceiver(receiver);
-        unregisterReceiver(playWidgetProvider);
 
         playList.save();
         super.onDestroy();
