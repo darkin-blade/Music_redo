@@ -33,6 +33,7 @@ import com.example.music_redo.mix.MixRename;
 import com.example.music_redo.mix.MusicEdit;
 import com.example.music_redo.mix.MusicMove;
 import com.example.music_redo.mix.MusicSelect;
+import com.example.music_redo.widget.PlayWidgetProvider;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,7 +72,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public BluetoothList bluetoothList;// 蓝牙管理
     // 其它部件
     // TODO 锁屏
-    // TODO 桌面部件
+    static public PlayWidgetProvider playWidgetProvider;// TODO 桌面部件
     // TODO 通知栏部件
 
     // 公共变量
@@ -191,9 +192,11 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         // TODO 播放模式
         bluetoothList = new BluetoothList();// 蓝牙管理
         // 其余部件
-        ;// TODO 通知栏部件
+        // TODO 通知栏部件
         // TODO 锁屏部件
-        // TODO 桌面部件
+        playWidgetProvider = new PlayWidgetProvider();// TODO 桌面部件
+
+        registerReceiver(playWidgetProvider, new IntentFilter("com.example.music_redo.UPDATE_ALL"));// 桌面部件注册receiver
 
         // 部件
         // 按钮
@@ -454,7 +457,10 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     @Override
     public void onDestroy() {
-        unregisterReceiver(receiver);// 解决泄漏问题
+        // 解决泄漏问题
+        unregisterReceiver(receiver);
+        unregisterReceiver(playWidgetProvider);
+
         playList.save();
         super.onDestroy();
     }
