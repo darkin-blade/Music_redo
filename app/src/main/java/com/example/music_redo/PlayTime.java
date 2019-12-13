@@ -128,7 +128,7 @@ public class PlayTime {
 
                         // 统计时间
                         duration ++;
-                        MusicList.infoLog("duration: " + duration);
+//                        MusicList.infoLog("duration: " + duration);
                         Thread.sleep(1000);// 每一秒更新一次 TODO 注意该语句的位置,防止触发OnComplete
                     } catch (InterruptedException e) {
                         e.printStackTrace();

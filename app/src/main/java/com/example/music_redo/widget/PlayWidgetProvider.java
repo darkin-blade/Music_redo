@@ -22,15 +22,38 @@ public class PlayWidgetProvider extends AppWidgetProvider {
 
     public PlayWidgetProvider() {
         super();
-        MusicList.infoLog("create provider: " + this.toString());
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        MusicList.infoLog("widget provider receive");
         super.onReceive(context, intent);
+
+        String action = intent.getAction();
+        if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {// TODO 增加widget
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                int[] appWidgetIds = extras.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+                if (appWidgetIds != null && appWidgetIds.length > 0) {
+                    for (int i = 0; i < appWidgetIds.length; i ++) {
+                        MusicList.appWidgetIds.add(appWidgetIds[i]);
+                    }
+                }
+            }
+        } else if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {// TODO 删除widget
+            Bundle extras = intent.getExtras();
+            if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+                int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+                MusicList.appWidgetIds.remove(appWidgetId);
+            }
+        } else {
+            return;
+        }
+
+        Intent tmp = new Intent(context, PlayWidgetService.class);
+        tmp.putExtra("mode", MODE_INIT);
+        context.startService(tmp);
     }
-
-
 
     @Override
     public void onEnabled(Context context) {
@@ -65,6 +88,11 @@ public class PlayWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, PlayWidgetService.class);
         intent.putExtra("mode", MODE_INIT);
         context.startService(intent);
+    }
+
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        super.onDeleted(context, appWidgetIds);
     }
 
     @Override

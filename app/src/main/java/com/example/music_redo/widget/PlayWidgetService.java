@@ -49,7 +49,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
         boolean from_widget_service = intent.getBooleanExtra("fromWidgetService", false);
 
         // TODO 更新ui
-        MusicList.infoLog("widget service: " + cmd_mode);
+//        MusicList.infoLog("widget service: " + cmd_mode);
         if (remoteViews == null) {
             remoteViews = new RemoteViews(this.getPackageName(), R.layout.play_widget);// TODO context
         }
@@ -106,6 +106,8 @@ public class PlayWidgetService extends Service {// 用于部件交互
         }
         appWidgetIds.clear();
         appWidgetIds.addAll(MusicList.appWidgetIds);
+        MusicList.infoLog("id which changed: " + MusicList.appWidgetIds.get(0));
+        MusicList.infoLog("widget ids: " + appWidgetIds.size());
 
         // 初始化监听
         initPlay();// 初始为暂停
