@@ -28,7 +28,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
     AppWidgetManager appWidgetManager;
     static public ArrayList<Integer> appWidgetIds;
 
-    int isInit;
+    static public int isInit;
 
     @Override
     public void onCreate() {// TODO

@@ -31,46 +31,47 @@ public class PlayWidgetProvider extends AppWidgetProvider {
         super.onReceive(context, intent);
 
         // TODO 初始化变量
-        if (appWidgetIds == null) {
-            appWidgetIds = new ArrayList<>();
-            MusicList.infoLog("init ids");
-        }
-
-        String action = intent.getAction();
-        MusicList.infoLog("widget provider receive " + action);
-        if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {// TODO 增加widget
-            Bundle extras = intent.getExtras();
-            if (extras != null) {
-                int[] ids = extras.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-                if (ids != null && ids.length > 0) {
-                    for (int i = 0; i < ids.length; i ++) {
-                        appWidgetIds.add(ids[i]);
-                    }
-                }
-            }
-        } else if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {// TODO 删除widget
-            Bundle extras = intent.getExtras();
-            if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
-                int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+//        if (appWidgetIds == null) {
+//            appWidgetIds = new ArrayList<>();
+//            MusicList.infoLog("init ids");
+//        }
+//
+//        String action = intent.getAction();
+//        MusicList.infoLog("widget provider receive " + action);
+//        if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {// TODO 增加widget
+//            Bundle extras = intent.getExtras();
+//            if (extras != null) {
+//                int[] ids = extras.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+//                if (ids != null && ids.length > 0) {
+//                    for (int i = 0; i < ids.length; i ++) {
+//                        appWidgetIds.add(ids[i]);
+//                    }
+//                }
+//            }
+//        } else if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {// TODO 删除widget
+//            Bundle extras = intent.getExtras();
+//            if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+//                int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
 //                this.appWidgetIds.remove(appWidgetId);
-            }
-        } else {
-            return;
-        }
+//            }
+//        } else {
+//            return;
+//        }
 
-        int[] ids = new int[appWidgetIds.size()];
-        for (int i = 0; i < appWidgetIds.size(); i ++) {
-            ids[i] = appWidgetIds.get(i);
-            MusicList.infoLog("id: " + ids[i]);
-        }
+//        int[] ids = new int[appWidgetIds.size()];
+//        for (int i = 0; i < appWidgetIds.size(); i ++) {
+//            ids[i] = appWidgetIds.get(i);
+//            MusicList.infoLog("id: " + ids[i]);
+//        }
         Intent tmp = new Intent(context, PlayWidgetService.class);
         tmp.putExtra("mode", MODE_INIT);
-        tmp.putExtra("appWidgetIds", ids);
+        tmp.putExtra("appWidgetIds", (int[]) null);
         context.startService(tmp);
     }
 
     @Override
     public void onEnabled(Context context) {
+        MusicList.infoLog("widget provider enabled");
         super.onEnabled(context);
     }
 
