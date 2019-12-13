@@ -3,6 +3,7 @@ package com.example.music_redo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import android.appwidget.AppWidgetManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -33,7 +34,9 @@ import com.example.music_redo.mix.MusicEdit;
 import com.example.music_redo.mix.MusicMove;
 import com.example.music_redo.mix.MusicSelect;
 import com.example.music_redo.widget.PlayWidgetProvider;
+import com.example.music_redo.widget.PlayWidgetService;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -102,6 +105,10 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public ListManager listManager;
     static public PlayList playList;
     static public PlayTime playTime;
+
+    // TODO 仅用于传递变量
+    public static AppWidgetManager appWidgetManager;
+    public static ArrayList<Integer> appWidgetIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -317,14 +324,14 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     }
 
     public void initReceiver() {
-        playWidgetProvider = new PlayWidgetProvider();// 桌面部件
-
-        // 桌面部件注册receiver
-        infoLog("play widget provider is null " + (playWidgetProvider == null));
-        if (playWidgetProvider != null) {
-            registerReceiver(playWidgetProvider, new IntentFilter("com.example.music_redo.UPDATE_ALL"));
-            registerReceiver(playWidgetProvider, new IntentFilter("android.appwidget.action.APPWIDGET_UPDATE"));
-        }
+//        playWidgetProvider = new PlayWidgetProvider();// 桌面部件
+//
+//        // 桌面部件注册receiver
+//        infoLog("play widget provider is null " + (playWidgetProvider == null));
+//        if (playWidgetProvider != null) {
+//            registerReceiver(playWidgetProvider, new IntentFilter("com.example.music_redo.UPDATE_ALL"));
+//            registerReceiver(playWidgetProvider, new IntentFilter("android.appwidget.action.APPWIDGET_UPDATE"));
+//        }
     }
 
     static public int cmd(String sql) {// 操作数据库
