@@ -317,14 +317,14 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     }
 
     public void initReceiver() {
-//        playWidgetProvider = new PlayWidgetProvider();// 桌面部件
-//
-//        // 桌面部件注册receiver
-//        infoLog("play widget provider is null " + (playWidgetProvider == null));
-//        if (playWidgetProvider != null) {
-//            registerReceiver(playWidgetProvider, new IntentFilter("com.example.music_redo.UPDATE_ALL"));
-//            registerReceiver(playWidgetProvider, new IntentFilter("android.appwidget.action.APPWIDGET_UPDATE"));
-//        }
+        playWidgetProvider = new PlayWidgetProvider();// 桌面部件
+
+        // 桌面部件注册receiver
+        infoLog("play widget provider is null " + (playWidgetProvider == null));
+        if (playWidgetProvider != null) {
+            registerReceiver(playWidgetProvider, new IntentFilter("com.example.music_redo.UPDATE_ALL"));
+            registerReceiver(playWidgetProvider, new IntentFilter("android.appwidget.action.APPWIDGET_UPDATE"));
+        }
     }
 
     static public int cmd(String sql) {// 操作数据库

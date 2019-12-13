@@ -27,12 +27,9 @@ public class PlayWidgetProvider extends AppWidgetProvider {
     static final int MODE_UPDATE = 4;// 更新进度条
     static final int MODE_CLOSE = 5;
 
-    int isShown;
-
     public PlayWidgetProvider() {
         super();
-        isShown = (int) (Math.random() * 100);
-        MusicList.infoLog("create provider: " + isShown);
+        MusicList.infoLog("create provider: " + this.toString());
     }
 
     @Override
@@ -59,17 +56,16 @@ public class PlayWidgetProvider extends AppWidgetProvider {
     }
 
     public void update() {// TODO 更新桌面部件进度条
-        MusicList.infoLog("remote views is null: " + (remoteViews == null) + " is show " + isShown);
-        if (remoteViews == null) {
-            return;
-        }
-
-        remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, false);
-        int[] tmp = new int[appWidgetIds.size()];
-        for (int i = 0; i < appWidgetIds.size(); i ++) {
-            tmp[i] = appWidgetIds.get(i);
-        }
-        appWidgetManager.updateAppWidget(tmp, remoteViews);
+//        if (remoteViews == null) {
+//            return;
+//        }
+//
+//        remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, false);
+//        int[] tmp = new int[appWidgetIds.size()];
+//        for (int i = 0; i < appWidgetIds.size(); i ++) {
+//            tmp[i] = appWidgetIds.get(i);
+//        }
+//        appWidgetManager.updateAppWidget(tmp, remoteViews);
     }
 
     @Override
@@ -90,9 +86,11 @@ public class PlayWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        MusicList.infoLog("provider update " + isShown + " " + (MusicList.playWidgetProvider == null));
+        MusicList.infoLog("provider update\n" + this);
+        MusicList.infoLog("musicList receiver is null: " + (MusicList.playWidgetProvider == null));
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
+        // TODO 没用
         this.appWidgetManager = appWidgetManager;
         if (this.appWidgetIds == null) {
             this.appWidgetIds = new ArrayList<>();
@@ -102,11 +100,12 @@ public class PlayWidgetProvider extends AppWidgetProvider {
             this.appWidgetIds.add(appWidgetIds[i]);
         }
 
-        // TODO 初始化桌面部件
+        // 初始化ui
         if (remoteViews == null) {
             remoteViews = new RemoteViews(context.getPackageName(), R.layout.play_widget);
         }
 
+        // 初始化监听
         initNext(context);
         initPrev(context);
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
@@ -118,13 +117,9 @@ public class PlayWidgetProvider extends AppWidgetProvider {
     }
 
     public void initPlay(Context context) {
-//        Intent intent = new Intent(context, MusicList.class);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
     }
 
     public void initPause(Context context) {
-        ;
     }
 
     public void initNext(Context context) {
