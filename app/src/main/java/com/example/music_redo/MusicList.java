@@ -15,7 +15,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -114,7 +113,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         initUI();
         initBluetooth();
         initData();
-        initNotification();
+        initReceiver();
     }
 
     public void initApp() {
@@ -309,18 +308,23 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         listManager = new ListManager(this);
         playList = new PlayList(this, this);
         playTime = new PlayTime(this, this);
-        playWidgetProvider = new PlayWidgetProvider();// 桌面部件
 
 
         // 注意初始化顺序
         playTime.init();
         listManager.init();
         playList.init();
-        // 桌面部件注册receiver
-        registerReceiver(playWidgetProvider, new IntentFilter("com.example.music_redo.UPDATE_ALL"));
     }
 
-    public void initNotification() {
+    public void initReceiver() {
+//        playWidgetProvider = new PlayWidgetProvider();// 桌面部件
+//
+//        // 桌面部件注册receiver
+//        infoLog("play widget provider is null " + (playWidgetProvider == null));
+//        if (playWidgetProvider != null) {
+//            registerReceiver(playWidgetProvider, new IntentFilter("com.example.music_redo.UPDATE_ALL"));
+//            registerReceiver(playWidgetProvider, new IntentFilter("android.appwidget.action.APPWIDGET_UPDATE"));
+//        }
     }
 
     static public int cmd(String sql) {// 操作数据库

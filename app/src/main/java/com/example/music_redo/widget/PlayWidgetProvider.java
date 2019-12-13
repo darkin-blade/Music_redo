@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 
@@ -27,6 +28,12 @@ public class PlayWidgetProvider extends AppWidgetProvider {
     static final int MODE_CLOSE = 5;
 
     int isShown;
+
+    public PlayWidgetProvider() {
+        super();
+        isShown = (int) (Math.random() * 100);
+        MusicList.infoLog("create provider: " + isShown);
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -67,7 +74,6 @@ public class PlayWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        MusicList.infoLog("widget provider enabled");
         super.onEnabled(context);
     }
 
@@ -79,13 +85,12 @@ public class PlayWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onRestored(Context context, int[] oldWidgetIds, int[] newWidgetIds) {
-        MusicList.infoLog("widget provider");
         super.onRestored(context, oldWidgetIds, newWidgetIds);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        MusicList.infoLog("provider update");
+        MusicList.infoLog("provider update " + isShown + " " + (MusicList.playWidgetProvider == null));
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
         this.appWidgetManager = appWidgetManager;
@@ -105,18 +110,17 @@ public class PlayWidgetProvider extends AppWidgetProvider {
         initNext(context);
         initPrev(context);
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
-        MusicList.infoLog("is null: " + (remoteViews == null) + " " + (appWidgetManager == null) + " " + (appWidgetIds.length));
-        isShown = 1;
     }
 
     @Override
     public void onDisabled(Context context) {
-        MusicList.infoLog("widget provider disable");
         super.onDisabled(context);
     }
 
     public void initPlay(Context context) {
-        ;
+//        Intent intent = new Intent(context, MusicList.class);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
     }
 
     public void initPause(Context context) {

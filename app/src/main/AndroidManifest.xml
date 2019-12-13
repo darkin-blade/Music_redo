@@ -47,9 +47,9 @@
         </service>
         <receiver android:name=".widget.PlayWidgetProvider">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"></action>
+<!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"></action>-->
                 <!--        接收自定义的broadcast 适用低版本android       -->
-<!--                <action android:name="com.example.music_redo.UPDATE_ALL"></action>-->
+                <action android:name="com.example.music_redo.UPDATE_ALL"></action>
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"

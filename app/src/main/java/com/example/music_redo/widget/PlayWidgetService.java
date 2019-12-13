@@ -34,6 +34,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
         boolean from_widget_provider = intent.getBooleanExtra("fromWidgetProvider", false);
 
         // TODO 更新ui
+        MusicList.infoLog("widget service: " + cmd_mode);
         updateUI(cmd_mode, from_widget_provider);
 
         return START_STICKY;
@@ -46,6 +47,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
     public void updateUI(int mode, boolean flag) {// 调用provider
         Intent intent = new Intent("com.example.music_redo.UPDATE_ALL");
+        intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         intent.putExtra("mode", mode);
         intent.putExtra("from_widget_service", flag);
         sendBroadcast(intent);
