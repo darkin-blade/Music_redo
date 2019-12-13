@@ -149,7 +149,7 @@ public class PlayNotification extends Service {
 
     public void update() {
         if (isShown == 1) {
-            remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, false);
+            remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, false);// 明确进度
             builder.setContent(remoteViews);
             startForeground(100, builder.build());
         }

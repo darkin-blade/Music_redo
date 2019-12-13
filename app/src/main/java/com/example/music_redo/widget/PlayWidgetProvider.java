@@ -11,9 +11,13 @@ import android.widget.RemoteViews;
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
 
+import java.util.ArrayList;
+
 public class PlayWidgetProvider extends AppWidgetProvider {
 
     RemoteViews remoteViews;
+    AppWidgetManager appWidgetManager;
+    ArrayList<Integer> appWidgetIds;
 
     static final int MODE_PLAY = 0;
     static final int MODE_PAUSE = 1;
@@ -24,8 +28,34 @@ public class PlayWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        MusicList.infoLog("widget provider");
+        int cmd_mode = intent.getIntExtra("mode", -1);
+        boolean from_widget_provider = intent.getBooleanExtra("fromWidgetProvider", false);
+        MusicList.infoLog("widget provider receive: " + cmd_mode);
+
+        switch (cmd_mode) {
+            case MODE_PLAY:
+                break;
+            case MODE_PAUSE:
+                break;
+            case MODE_NEXT:
+                break;
+            case MODE_PREV:
+                break;
+            case MODE_UPDATE:
+                update();
+                break;
+        }
+
         super.onReceive(context, intent);
+    }
+
+    public void update() {// TODO 更新桌面部件进度条
+        remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, false);
+        int[] tmp = new int[appWidgetIds.size()];
+        for (int i = 0; i < appWidgetIds.size(); i ++) {
+            tmp[i] = appWidgetIds.get(i);
+        }
+        appWidgetManager.updateAppWidget(tmp, remoteViews);
     }
 
     @Override
@@ -50,6 +80,15 @@ public class PlayWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         MusicList.infoLog("provider update");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
+
+        this.appWidgetManager = appWidgetManager;
+        if (this.appWidgetIds == null) {
+            this.appWidgetIds = new ArrayList<>();
+        }
+        this.appWidgetIds.clear();
+        for (int i = 0; i < appWidgetIds.length; i ++) {
+            this.appWidgetIds.add(appWidgetIds[i]);
+        }
 
         // TODO 初始化桌面部件
         if (remoteViews == null) {

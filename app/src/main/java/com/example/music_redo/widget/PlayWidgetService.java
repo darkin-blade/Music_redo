@@ -34,23 +34,9 @@ public class PlayWidgetService extends Service {// 用于部件交互
         int cmd_mode = intent.getIntExtra("mode", -1);
         boolean from_widget_provider = intent.getBooleanExtra("fromWidgetProvider", false);
 
-        switch (cmd_mode) {
-            case MODE_PLAY:
-                break;
-            case MODE_PAUSE:
-                break;
-            case MODE_NEXT:
-                break;
-            case MODE_PREV:
-                break;
-            case MODE_UPDATE:
-                break;
-            case MODE_CLOSE:
-                break;
-        }
-
-        // TODO 更新ui
         MusicList.infoLog("widget service mode: " + cmd_mode);
+        // TODO 更新ui
+        updateUI(cmd_mode, from_widget_provider);
 
         return START_STICKY;
     }
@@ -60,8 +46,10 @@ public class PlayWidgetService extends Service {// 用于部件交互
         super.onDestroy();
     }
 
-    public void updateUI() {// 调用provider
+    public void updateUI(int mode, boolean flag) {// 调用provider
         Intent intent = new Intent("com.example.music_redo.UPDATE_ALL");
+        intent.putExtra("mode", mode);
+        intent.putExtra("from_widget_service", flag);
         sendBroadcast(intent);
     }
 }
