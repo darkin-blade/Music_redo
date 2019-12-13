@@ -106,8 +106,6 @@ public class PlayWidgetService extends Service {// 用于部件交互
         }
         appWidgetIds.clear();
         appWidgetIds.addAll(MusicList.appWidgetIds);
-        MusicList.infoLog("id which changed: " + MusicList.appWidgetIds.get(0));
-        MusicList.infoLog("widget ids: " + appWidgetIds.size());
 
         // 初始化监听
         initPlay();// 初始为暂停
@@ -129,6 +127,10 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
         if (MusicList.playTime == null) {
             return;
+        }
+
+        for (int i = 0; i < appWidgetIds.size(); i ++) {
+            MusicList.infoLog("widget id[" + i + "] " + appWidgetIds.get(i));
         }
 
         remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, false);

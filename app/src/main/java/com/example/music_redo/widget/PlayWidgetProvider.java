@@ -26,10 +26,17 @@ public class PlayWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        MusicList.infoLog("widget provider receive");
         super.onReceive(context, intent);
 
+        // TODO 初始化变量
+        MusicList.appWidgetManager = AppWidgetManager.getInstance(context);
+        if (MusicList.appWidgetIds == null) {
+            MusicList.appWidgetIds = new ArrayList<>();
+        }
+        MusicList.appWidgetIds.clear();
+
         String action = intent.getAction();
+        MusicList.infoLog("widget provider receive " + action);
         if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {// TODO 增加widget
             Bundle extras = intent.getExtras();
             if (extras != null) {
@@ -75,19 +82,6 @@ public class PlayWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         MusicList.infoLog("provider update");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-
-        // TODO 初始化变量
-        MusicList.appWidgetManager = appWidgetManager;
-        if (MusicList.appWidgetIds == null) {
-            MusicList.appWidgetIds = new ArrayList<>();
-        }
-        MusicList.appWidgetIds.clear();
-        for (int i = 0; i < appWidgetIds.length; i ++) {
-            MusicList.appWidgetIds.add(appWidgetIds[i]);
-        }
-        Intent intent = new Intent(context, PlayWidgetService.class);
-        intent.putExtra("mode", MODE_INIT);
-        context.startService(intent);
     }
 
     @Override
