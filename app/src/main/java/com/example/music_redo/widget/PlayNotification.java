@@ -130,6 +130,9 @@ public class PlayNotification extends Service {
 //            manager.deleteNotificationChannel("default");
 //            channel = null;
 //        }
+        // 暂停音乐
+        MusicList.playTime.pause();
+
         // 避免震动
         stopForeground(true);
         isShown = 0;
