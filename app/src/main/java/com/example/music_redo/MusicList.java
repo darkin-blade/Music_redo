@@ -152,7 +152,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 ");");
     }
 
-    public void initBluetooth() {
+    public void initBluetooth() {// TODO 将按键与其他action分离
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();// 获取蓝牙适配器
         receiver = new MediaReceiver(this);
 
@@ -176,7 +176,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {// 播放完毕回调函数
             @Override
             public void onCompletion(MediaPlayer mp) {
-                infoLog("complete");// TODO
                 playTime.next();// 下一首
             }
         });
