@@ -26,6 +26,8 @@ public class PlayWidgetProvider extends AppWidgetProvider {
     static final int MODE_UPDATE = 4;// 更新进度条
     static final int MODE_CLOSE = 5;
 
+    int isShown;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         int cmd_mode = intent.getIntExtra("mode", -1);
@@ -50,6 +52,11 @@ public class PlayWidgetProvider extends AppWidgetProvider {
     }
 
     public void update() {// TODO 更新桌面部件进度条
+        MusicList.infoLog("remote views is null: " + (remoteViews == null) + " is show " + isShown);
+        if (remoteViews == null) {
+            return;
+        }
+
         remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, false);
         int[] tmp = new int[appWidgetIds.size()];
         for (int i = 0; i < appWidgetIds.size(); i ++) {
@@ -98,6 +105,8 @@ public class PlayWidgetProvider extends AppWidgetProvider {
         initNext(context);
         initPrev(context);
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
+        MusicList.infoLog("is null: " + (remoteViews == null) + " " + (appWidgetManager == null) + " " + (appWidgetIds.length));
+        isShown = 1;
     }
 
     @Override

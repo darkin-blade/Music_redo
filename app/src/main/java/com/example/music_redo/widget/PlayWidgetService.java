@@ -19,7 +19,6 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
     @Override
     public void onCreate() {// TODO 自动创建?
-        MusicList.infoLog("widget service create");
         super.onCreate();
     }
 
@@ -34,7 +33,6 @@ public class PlayWidgetService extends Service {// 用于部件交互
         int cmd_mode = intent.getIntExtra("mode", -1);
         boolean from_widget_provider = intent.getBooleanExtra("fromWidgetProvider", false);
 
-        MusicList.infoLog("widget service mode: " + cmd_mode);
         // TODO 更新ui
         updateUI(cmd_mode, from_widget_provider);
 
