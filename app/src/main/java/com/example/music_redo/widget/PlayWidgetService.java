@@ -3,6 +3,9 @@ package com.example.music_redo.widget;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProvider;
+import android.appwidget.AppWidgetProviderInfo;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.IBinder;
 import android.widget.RemoteViews;
@@ -16,6 +19,7 @@ import com.example.music_redo.player.PlayList;
 import com.example.music_redo.player.PlayTime;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlayWidgetService extends Service {// 用于部件交互
 
@@ -109,8 +113,6 @@ public class PlayWidgetService extends Service {// 用于部件交互
         isInit = 0;
         MusicList.infoLog("widget service destroy\n\n");
         super.onDestroy();
-
-        // TODO 保存所有widget
     }
 
     public void init(int[] ids) {
@@ -187,6 +189,24 @@ public class PlayWidgetService extends Service {// 用于部件交互
             }
         } else {
             MusicList.infoLog("ids is null");
+        }
+
+        // TODO debug
+        AppWidgetManager tmp = AppWidgetManager.getInstance(this);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            List<AppWidgetProviderInfo> infos = tmp.getInstalledProvidersForPackage(getPackageName(), null);
+            if (infos.size() >= 1) {// 非空
+                String providerName = infos.get(0).provider.getClassName();
+
+                int[] ids = tmp.getAppWidgetIds(new ComponentName(getPackageName(), providerName));
+                if (ids != null) {
+                    MusicList.infoLog("[] size: " + ids.length);
+                    for (int i = 0; i < ids.length; i ++) {
+                        MusicList.infoLog("[" + i + "]: " + ids[i]);
+                    }
+                }
+
+            }
         }
     }
 
