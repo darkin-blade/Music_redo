@@ -92,7 +92,7 @@ public class MusicEdit extends DialogFragment {
             public void onClick(View v) {
                 for (int i = 0; i < MusicList.listManager.musicSelected.size(); i ++) {
                     String tmp = MusicList.listManager.musicSelected.get(i);
-                    int result = MusicList.deleteMusic(MusicList.listManager.curMix, tmp);
+                    int result = MusicDataBase.deleteMusic(MusicList.listManager.curMix, tmp);
                 }
                 MusicList.listManager.musicSelected.clear();
                 MusicList.dialog_result = "delete";

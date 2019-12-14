@@ -1,6 +1,7 @@
 package com.example.music_redo.mix;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,17 +15,10 @@ public class MusicDataBase extends Service {
     static public SQLiteDatabase database;
     static public String appPath;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-    }
-
-    public void initData() {
+    static public void initData(Context context) {
         // 初始化路径字符串
-        appPath = getExternalFilesDir("").getAbsolutePath();
-    }
+        appPath = context.getExternalFilesDir("").getAbsolutePath();
 
-    static public void initDataBase() {
         // 初始化数据库
         database = SQLiteDatabase.openOrCreateDatabase(appPath + "/player.db", null);
 
@@ -43,11 +37,14 @@ public class MusicDataBase extends Service {
                 ");");
     }
 
-    static public int cmd(String sql) {// 操作数据库
+    static public int cmd(Context context, String sql) {// 附加初始化的数据库使用
         if (database == null) {
-            initDataBase();
+            initData(context);
         }
+        return cmd(sql);
+    }
 
+    static public int cmd(String sql) {// 操作数据库
         try {
             database.execSQL(sql);
         } catch (SQLException e) {

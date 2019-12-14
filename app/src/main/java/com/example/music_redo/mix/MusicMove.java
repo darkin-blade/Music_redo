@@ -78,7 +78,7 @@ public class MusicMove extends DialogFragment {
         layout.removeAllViews();
 
         // 列举所有歌单
-        Cursor cursor = MusicList.database.query(
+        Cursor cursor = MusicDataBase.database.query(
                 "mix_list",// 歌单列表
                 new String[]{"name"},
                 null,
@@ -90,7 +90,7 @@ public class MusicMove extends DialogFragment {
         if (cursor.moveToFirst()) {// TODO 判断非空
             do {
                 String mix_name = cursor.getString(0);// 获取歌单名
-                Cursor cursor_count = MusicList.database.query(
+                Cursor cursor_count = MusicDataBase.database.query(
                         mix_name,// 歌单详情
                         new String[]{"path", "name", "count"},
                         null,
@@ -157,7 +157,7 @@ public class MusicMove extends DialogFragment {
                 // TODO 添加到该歌单
                 for (int i = 0; i < MusicList.listManager.musicSelected.size(); i ++) {
                     String tmp = MusicList.listManager.musicSelected.get(i);
-                    MusicList.addMusic(item_name, tmp);
+                    MusicDataBase.addMusic(item_name, tmp);
                 }
                 MusicList.dialog_result = "add to";
                 dismiss();// TODO

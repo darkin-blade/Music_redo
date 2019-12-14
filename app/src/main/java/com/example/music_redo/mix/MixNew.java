@@ -74,7 +74,7 @@ public class MixNew extends DialogFragment {
             @Override
             public void onClick(View v) {
                 String tmp = editText.getText().toString();
-                int result = MusicList.createMix(tmp);
+                int result = MusicDataBase.createMix(tmp);
                 switch (result) {
                     case 0:
                         MusicList.infoLog("create mix " + tmp + " succeed");

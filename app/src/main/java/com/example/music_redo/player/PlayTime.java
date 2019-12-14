@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
+import com.example.music_redo.mix.MusicDataBase;
 import com.example.music_redo.widget.PlayNotification;
 import com.example.music_redo.widget.PlayWidgetService;
 
@@ -102,7 +103,7 @@ public class PlayTime extends Service {
                 e.printStackTrace();
 
                 // 歌曲无法播放
-                MusicList.deleteMusic(PlayList.curMix, PlayList.curMusic);
+                MusicDataBase.deleteMusic(PlayList.curMix, PlayList.curMusic);
 
                 // TODO 只刷新歌单
                 Intent intent = new Intent(this, PlayList.class);

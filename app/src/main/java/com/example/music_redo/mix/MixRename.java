@@ -80,7 +80,7 @@ public class MixRename extends DialogFragment {
             @Override
             public void onClick(View v) {
                 String tmp = editText.getText().toString();
-                int result = MusicList.renameMix(MusicList.listManager.curMix, tmp);// 重命名歌单
+                int result = MusicDataBase.renameMix(MusicList.listManager.curMix, tmp);// 重命名歌单
                 switch (result) {
                     case 0:
                         MusicList.infoLog("rename mix " + tmp + " succeed");

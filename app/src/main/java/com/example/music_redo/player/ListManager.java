@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
+import com.example.music_redo.mix.MusicDataBase;
 import com.example.music_redo.player.PlayList;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class ListManager {
         MusicList.itemList.removeAllViews();// 清空ui
         MusicList.window_num = MusicList.MIX_LIST;
 
-        Cursor cursor = MusicList.database.query(
+        Cursor cursor = MusicDataBase.database.query(
                 "mix_list",// 歌单列表
                 new String[]{"name"},
                 null,
@@ -56,7 +57,7 @@ public class ListManager {
             // 列举所有歌单
             do {
                 String mix_name = cursor.getString(0);// 获取歌单名
-                Cursor cursor_count = MusicList.database.query(
+                Cursor cursor_count = MusicDataBase.database.query(
                         mix_name,// 歌单详情
                         new String[]{"path", "name", "count"},
                         null,
@@ -83,7 +84,7 @@ public class ListManager {
         MusicList.itemList.removeAllViews();// 清空ui
         MusicList.window_num = MusicList.MUSIC_LIST;
 
-        Cursor cursor = MusicList.database.query(
+        Cursor cursor = MusicDataBase.database.query(
                 curMix,// 歌单详情
                 new String[]{"path", "name", "count"},
                 null,

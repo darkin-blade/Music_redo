@@ -42,7 +42,7 @@ public class MusicSelect extends FileManager {
 
         // 调用文件管理器
         if (lastPath == null) {
-            lastPath = MusicList.pathSimplify(MusicList.appPath + "/../../../..");// 根目录
+            lastPath = MusicList.pathSimplify(MusicDataBase.appPath + "/../../../..");// 根目录
         }
         readPath(lastPath);
 
@@ -72,12 +72,9 @@ public class MusicSelect extends FileManager {
         button_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO 添加到当前选定歌曲
-                // TODO 保存歌曲名
+                // TODO 添加选定的歌曲
                 for (int i = 0; i < musicList.size(); i ++) {
-                    MusicList.cmd("insert into " + MusicList.listManager.curMix + " (path, name, count)\n" +
-                            "  values\n" +
-                            "  ('" + musicList.get(i) + "', '" + musicList.get(i).replaceAll(".*/", "")  + "', 0);");
+                    MusicDataBase.addMusic(MusicList.listManager.curMix, musicList.get(i));
                 }
                 musicList.clear();// 清空
                 MusicList.dialog_result = "add";
@@ -95,7 +92,7 @@ public class MusicSelect extends FileManager {
         // 特判根目录
         if (dirPath == null) {
             MusicList.infoToast(getContext(), "can't access this path");
-            lastPath = MusicList.appPath;// 重置路径
+            lastPath = MusicDataBase.appPath;// 重置路径
             dismiss();// 强制返回
             return;
         }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.example.music_redo.MusicList;
+import com.example.music_redo.mix.MusicDataBase;
 
 import java.util.ArrayList;
 
@@ -44,10 +45,10 @@ public class PlayList extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        init();
+        initData();
     }
 
-    public void init() {
+    public void initData() {
         curMix = "";
         curMusic = "";
         curMusicList = new ArrayList<String>();
@@ -111,7 +112,7 @@ public class PlayList extends Service {
         curMusicList.clear();
 
         try {// 加载歌单
-            Cursor cursor = MusicList.database.query(
+            Cursor cursor = MusicDataBase.database.query(
                     curMix,// 当前歌单
                     new String[]{"path", "name", "count"},
                     null,
@@ -179,7 +180,9 @@ public class PlayList extends Service {
     }
 
     public void recover() {// 恢复数据
-        Cursor cursor = MusicList.database.query(
+        MusicDataBase.initData(this);// TODO 初始化
+
+        Cursor cursor = MusicDataBase.database.query(
                 "user_data",
                 new String[] {"cur_mix", "cur_music", "play_mode", "cur_time", "total_time"},
                 null,
@@ -196,12 +199,14 @@ public class PlayList extends Service {
             PlayTime.cur_time = cursor.getInt(3);
             PlayTime.total_time = cursor.getInt(4);
 
-            // 加载歌单
-            MusicList.listManager.listMusic(curMix);
-            if (loadMix(curMix, curMusic, 1) == 0) {
-                highlightMusic();
+            // TODO 加载歌单
+            if (MusicList.listManager != null) {
+                MusicList.listManager.listMusic(curMix);
+                if (loadMix(curMix, curMusic, 1) == 0) {
+                    highlightMusic();
+                }
+                MusicList.listManager.showMix(curMix);
             }
-            MusicList.listManager.showMix(curMix);
         } else {
             MusicList.infoLog("cannot find user data");
         }
@@ -209,8 +214,8 @@ public class PlayList extends Service {
     }
 
     public void save() {// 保存应用数据到数据库
-        MusicList.cmd("drop table user_data;");
-        MusicList.cmd("create table if not exists user_data (\n" +
+        MusicDataBase.cmd(this, "drop table user_data;");
+        MusicDataBase.cmd(this, "create table if not exists user_data (\n" +
                 "  cur_mix varchar(32) default \"\",\n" +
                 "  cur_music varchar(128) default \"\",\n" +
                 "  play_mode int default 0,\n" +
@@ -218,7 +223,7 @@ public class PlayList extends Service {
                 "  total_time int default 0\n" +
                 ");");// 用户数据存储
 
-        int result = MusicList.cmd("insert into user_data (cur_mix, cur_music, play_mode, cur_time, total_time)\n" +
+        int result = MusicDataBase.cmd(this, "insert into user_data (cur_mix, cur_music, play_mode, cur_time, total_time)\n" +
                 "  values ('" + curMix + "', '" + curMusic + "', " + playMode + ", "
                 + PlayTime.cur_time +", " + PlayTime.total_time +");");
 
@@ -309,6 +314,10 @@ public class PlayList extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent == null) {
+            return START_STICKY;
+        }
+
         String command = intent.getStringExtra("cmd");
         MusicList.infoLog("play list start command " + command);// TODO debug
 

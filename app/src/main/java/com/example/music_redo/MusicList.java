@@ -28,6 +28,7 @@ import com.example.music_redo.device.MediaReceiver;
 import com.example.music_redo.mix.MixEdit;
 import com.example.music_redo.mix.MixNew;
 import com.example.music_redo.mix.MixRename;
+import com.example.music_redo.mix.MusicDataBase;
 import com.example.music_redo.mix.MusicEdit;
 import com.example.music_redo.mix.MusicMove;
 import com.example.music_redo.mix.MusicSelect;
@@ -125,6 +126,9 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         dialog_result = "";
 
         // TODO 初始化数据库
+        if (MusicDataBase.appPath == null) {
+            MusicDataBase.initData(this);
+        }
     }
 
     public void initReceiver() {// TODO 将按键与其他action分离

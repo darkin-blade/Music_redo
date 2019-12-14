@@ -79,7 +79,7 @@ public class MixEdit extends DialogFragment {
             public void onClick(View v) {
                 for (int i = 0; i < MusicList.listManager.mixSelected.size(); i ++) {
                     String tmp = MusicList.listManager.mixSelected.get(i);
-                    int result = MusicList.deleteMix(tmp);
+                    int result = MusicDataBase.deleteMix(tmp);
                 }
                 MusicList.listManager.mixSelected.clear();
                 MusicList.dialog_result = "delete";
