@@ -14,6 +14,8 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
+import com.example.music_redo.player.PlayList;
+import com.example.music_redo.player.PlayTime;
 
 public class PlayNotification extends Service {
 
@@ -65,28 +67,34 @@ public class PlayNotification extends Service {
 
         int cmd_mode = intent.getIntExtra("mode", -1);
         boolean from_notification = intent.getBooleanExtra("fromNotification", false);
+        Intent playCmd = new Intent(this, PlayTime.class);// TODO
         switch (cmd_mode) {
-            case MODE_PLAY:// 从内部启动
+            case MODE_PLAY:
                 if (from_notification == true) {
-                    MusicList.playTime.play(0);
+                    playCmd.putExtra("cmd", "play");
+                    playCmd.putExtra("mode", 0);
+                    startService(intent);
                 }
                 initPause();
                 break;
             case MODE_PAUSE:
                 if (from_notification == true) {
-                    MusicList.playTime.pause();
+                    playCmd.putExtra("cmd", "pause");
+                    startService(intent);
                 }
                 initPlay();
                 break;
             case MODE_NEXT:
                 if (from_notification == true) {
-                    MusicList.playTime.next();
+                    playCmd.putExtra("cmd", "next");
+                    startService(intent);
                 }
                 initPause();
                 break;
             case MODE_PREV:
                 if (from_notification == true) {
-                    MusicList.playTime.prev();
+                    playCmd.putExtra("cmd", "prev");
+                    startService(intent);
                 }
                 initPause();
                 break;
@@ -98,7 +106,7 @@ public class PlayNotification extends Service {
                 break;
         }
 
-        return START_STICKY;// TODO 防止被杀
+        return START_STICKY;
     }
 
     @Override
@@ -137,8 +145,10 @@ public class PlayNotification extends Service {
 //        }
         isShown = 0;
 
-        // 暂停音乐
-        MusicList.playTime.pause();
+        // TODO 暂停音乐
+        Intent intent = new Intent(this, PlayTime.class);
+        intent.putExtra("cmd", "pause");
+        startService(intent);
 
         // 避免震动
         stopForeground(true);
@@ -149,7 +159,7 @@ public class PlayNotification extends Service {
 
     public void update() {
         if (isShown == 1) {
-            remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, false);// 明确进度
+            remoteViews.setProgressBar(R.id.music_bar, PlayTime.total_time, PlayTime.cur_time, false);// 明确进度
             builder.setContent(remoteViews);
             startForeground(100, builder.build());
         }
@@ -175,10 +185,10 @@ public class PlayNotification extends Service {
             isShown = 1;
         }
 
-        if (MusicList.playList.curMusic.length() <= 0 || MusicList.playList.curMix.length() <= 0) {
+        if (PlayList.curMusic.length() <= 0 || PlayList.curMix.length() <= 0) {
             remoteViews.setTextViewText(R.id.cur_music, "no music");
         } else {
-            remoteViews.setTextViewText(R.id.cur_music, MusicList.playList.curMix + "    " + MusicList.playList.curMusic.replaceAll(".*/", ""));
+            remoteViews.setTextViewText(R.id.cur_music, PlayList.curMix + "    " + PlayList.curMusic.replaceAll(".*/", ""));
         }
 
         remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_pause);
