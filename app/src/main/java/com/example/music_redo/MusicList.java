@@ -227,7 +227,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         button_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                infoLog("edit window_num: " + window_num);
                 if (window_num == MUSIC_LIST) {
                     musicEdit.show(getSupportFragmentManager(), "edit music");
                 } else if (window_num == MIX_LIST) {
@@ -378,6 +377,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     listManager.listMix();
 
                     // 尝试引发错误
+                    intent.putExtra("cmd", "loadMix");
                     intent.putExtra("curMix", PlayList.curMix);
                     intent.putExtra("curMusic", PlayList.curMusic);
                     intent.putExtra("mode", 2);
@@ -389,6 +389,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     listManager.listMusic(listManager.curMix);// 无条件刷新列表
 
                     // 更新当前播放列表
+                    intent.putExtra("cmd", "loadMix");
                     intent.putExtra("curMix", PlayList.curMix);
                     intent.putExtra("curMusic", PlayList.curMusic);
                     intent.putExtra("mode", 2);
@@ -400,6 +401,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     listManager.listMusic(listManager.curMix);// 无条件刷新列表
 
                     // 更新当前播放列表
+                    intent.putExtra("cmd", "loadMix");
                     intent.putExtra("curMix", PlayList.curMix);
                     intent.putExtra("curMusic", PlayList.curMusic);
                     intent.putExtra("mode", 2);                }
@@ -409,6 +411,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 if (dialog_result.equals("rename")) {// 重命名歌单
 
                     // 只刷新mix
+                    intent.putExtra("cmd", "loadMix");
                     intent.putExtra("curMix", PlayList.curMix);
                     intent.putExtra("curMusic", PlayList.curMusic);
                     intent.putExtra("mode", 2);
@@ -423,6 +426,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     }
 
                     // 更新当前播放列表
+                    intent.putExtra("cmd", "loadMix");
                     intent.putExtra("curMix", PlayList.curMix);
                     intent.putExtra("curMusic", PlayList.curMusic);
                     intent.putExtra("mode", 2);
