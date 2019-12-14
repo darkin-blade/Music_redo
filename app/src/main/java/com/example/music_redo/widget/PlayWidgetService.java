@@ -59,6 +59,11 @@ public class PlayWidgetService extends Service {// 用于部件交互
         if (remoteViews == null) {
             remoteViews = new RemoteViews(this.getPackageName(), R.layout.play_widget);// TODO context
         }
+        if (appWidgetIds != null) {
+            for (int i = 0; i < appWidgetIds.size(); i++) {
+                MusicList.infoLog("ids: " + appWidgetIds.get(i));
+            }
+        }
 
         switch (cmd_mode) {
             case MODE_PLAY:

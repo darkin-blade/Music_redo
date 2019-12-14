@@ -61,7 +61,6 @@ public class PlayWidgetProvider extends AppWidgetProvider {
         int[] ids = new int[appWidgetIds.size()];
         for (int i = 0; i < appWidgetIds.size(); i ++) {
             ids[i] = appWidgetIds.get(i);
-            MusicList.infoLog("id: " + ids[i]);
         }
 
         Intent tmp = new Intent(context, PlayWidgetService.class);
