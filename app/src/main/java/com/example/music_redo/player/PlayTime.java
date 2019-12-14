@@ -24,9 +24,9 @@ public class PlayTime extends Service {
     public Activity myActivity ;
 
     // 时间管理
-    public int total_time;
-    public int cur_time;
-    public int duration;// 播放时间累计
+    static public int total_time;
+    static public int cur_time;
+    static public int duration;// 播放时间累计
     static public Thread musicPlay;
 
     // 用于部件交互

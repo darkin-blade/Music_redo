@@ -68,12 +68,15 @@ public class PlayList extends Service {
             curMusic = curMusicList.get(curMusicIndex);
         }
 
-        // 加载歌曲
+        // TODO 加载歌曲
+        Intent intent = new Intent(this, PlayTime.class);
+        intent.putExtra("cmd", "play");
         if (mode != -1) {
-            MusicList.playTime.play(3);
+            intent.putExtra("mode", 3);
         } else {
-            MusicList.playTime.play(1);// 不进行置零
+            intent.putExtra("mode", 1);// 不进行置零
         }
+        startService(intent);
     }
 
     public int loadMix(String nextMix, String nextMusic, int mode) {
@@ -94,7 +97,7 @@ public class PlayList extends Service {
             return 1;
         }
 
-        if (mode == 0 && nextMix.equals(curMix) && nextMusic.equals(curMusic)) {// TODO null
+        if (mode == 0 && nextMix.equals(curMix) && nextMusic.equals(curMusic)) {
             return 0;
         }
 
@@ -165,7 +168,11 @@ public class PlayList extends Service {
         }
 
         highlightMusic();
-        MusicList.playTime.reset();// TODO 重置player
+
+        // TODO 重置player
+        Intent intent = new Intent(this, PlayTime.class);
+        intent.putExtra("cmd", "reset");
+        startService(intent);
     }
 
     public void recover() {// 恢复数据
@@ -183,8 +190,8 @@ public class PlayList extends Service {
             curMix = cursor.getString(0);
             curMusic = cursor.getString(1);
             playMode = cursor.getInt(2);
-            MusicList.playTime.cur_time = cursor.getInt(3);
-            MusicList.playTime.total_time = cursor.getInt(4);
+            PlayTime.cur_time = cursor.getInt(3);
+            PlayTime.total_time = cursor.getInt(4);
 
             // 加载歌单
             MusicList.listManager.listMusic(curMix);
@@ -192,15 +199,13 @@ public class PlayList extends Service {
                 highlightMusic();
             }
             MusicList.listManager.showMix(curMix);
-
-            // TODO 恢复进度
         } else {
             MusicList.infoLog("cannot find user data");
         }
         cursor.close();
     }
 
-    public void save() {// TODO 保存应用数据到数据库
+    public void save() {// 保存应用数据到数据库
         MusicList.cmd("drop table user_data;");
         MusicList.cmd("create table if not exists user_data (\n" +
                 "  cur_mix varchar(32) default \"\",\n" +
@@ -212,7 +217,7 @@ public class PlayList extends Service {
 
         int result = MusicList.cmd("insert into user_data (cur_mix, cur_music, play_mode, cur_time, total_time)\n" +
                 "  values ('" + curMix + "', '" + curMusic + "', " + playMode + ", "
-                + MusicList.playTime.cur_time +", " + MusicList.playTime.total_time +");");
+                + PlayTime.cur_time +", " + PlayTime.total_time +");");
 
         if (result == 0) {
             MusicList.infoLog("save user data succeed");
