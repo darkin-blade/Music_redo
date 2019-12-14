@@ -13,8 +13,6 @@ import android.content.pm.PackageManager;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -72,7 +70,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public BluetoothList bluetoothList;// 蓝牙管理
     static public BluetoothAdapter bluetoothAdapter;// 蓝牙
     // 播放管理
-    static public MediaPlayer player;// 媒体播放器
     // TODO 播放模式
     // TODO 歌单管理
     // TODO 时间管理
@@ -112,7 +109,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         setContentView(R.layout.main_player);
 
         initApp();
-        initPlayer();
         initUI();
         initReceiver();
         initData();
@@ -167,21 +163,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     }
 
-    public void initPlayer() {
-        player = new MediaPlayer();
-        player.setLooping(false);
-        player.setAudioStreamType(AudioManager.STREAM_MUSIC);// 设置为音频
-        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {// 播放完毕回调函数
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                // 下一首
-                Intent intent = new Intent(MusicList.this, PlayTime.class);
-                intent.putExtra("cmd", "next");
-                startService(intent);
-            }
-        });
-    }
-
     public void initUI() {// 初始化ui,layout和dialog
         // 功能界面
         // dialog
@@ -223,7 +204,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MusicList.this, PlayTime.class);
-                if (player.isPlaying() == true) {
+                if (PlayTime.player.isPlaying() == true) {
                     intent.putExtra("cmd", "pause");
                 } else {
                     intent.putExtra("cmd", "play");
@@ -266,7 +247,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     intent.putExtra("cmd", "highlightMusic");
                     startService(intent);
                 } else {
-                    // TODO 切换到当前歌单
+                    // 切换到当前歌单
                     if (PlayList.curMusic.length() > 0) {
                         listManager.listMusic(PlayList.curMix);
                         window_num = MUSIC_LIST;
@@ -322,7 +303,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     public void initData() {
         // 初始化核心功能
         listManager = new ListManager(this);
-
 
         // TODO 注意初始化顺序
         PlayTime.myActivity = this;

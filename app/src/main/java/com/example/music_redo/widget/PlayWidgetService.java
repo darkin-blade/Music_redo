@@ -134,7 +134,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
         }
 
         // 初始化监听
-        if (MusicList.player.isPlaying()) {
+        if (PlayTime.player.isPlaying()) {
             initPause();
         } else {
             initPlay();// 初始为暂停

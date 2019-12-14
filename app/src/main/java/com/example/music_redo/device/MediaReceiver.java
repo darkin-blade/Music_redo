@@ -12,8 +12,6 @@ import android.view.KeyEvent;
 import com.example.music_redo.MusicList;
 import com.example.music_redo.player.PlayTime;
 
-import static com.example.music_redo.MusicList.player;
-
 public class MediaReceiver extends BroadcastReceiver {
 
     public MediaReceiver() {// 静态注册会调用无参的构造方法
@@ -106,7 +104,7 @@ public class MediaReceiver extends BroadcastReceiver {
                                         if (last_click_times == -1) {
                                             MusicList.infoLog("click -1 time???");
                                         } else if (last_click_times == 0) {
-                                            if (player.isPlaying() == true) {// 播放/暂停
+                                            if (PlayTime.player.isPlaying() == true) {// 播放/暂停
                                                 threadCmd.putExtra("cmd", "pause");
                                             } else {
                                                 threadCmd.putExtra("mode", 0);
@@ -130,7 +128,7 @@ public class MediaReceiver extends BroadcastReceiver {
                             break;
                         case KeyEvent.KEYCODE_MEDIA_PLAY:// 播放 126
                         case KeyEvent.KEYCODE_MEDIA_PAUSE:// 暂停 127
-                            if (player.isPlaying()) {
+                            if (PlayTime.player.isPlaying()) {
                                 playCmd.putExtra("cmd", "pause");
                             } else {
                                 playCmd.putExtra("cmd", "play");

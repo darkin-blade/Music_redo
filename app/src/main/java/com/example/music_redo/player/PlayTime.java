@@ -2,8 +2,9 @@ package com.example.music_redo.player;
 
 import android.app.Activity;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
@@ -17,10 +18,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.example.music_redo.MusicList.player;
-
 public class PlayTime extends Service {
-    static public Activity myActivity ;
+    static public Activity myActivity;
+
+    static public MediaPlayer player;// 媒体播放器
 
     // 时间管理
     static public int total_time;
@@ -42,13 +43,27 @@ public class PlayTime extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        init();// TODO
+        initData();
+        initPlayer();
     }
 
-    public void init() {
+    public void initData() {
         total_time = 0;
         cur_time = 0;
         duration = 0;
+    }
+
+    public void initPlayer() {
+        player = new MediaPlayer();
+        player.setLooping(false);
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);// 设置为音频
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {// 播放完毕回调函数
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                // 下一首
+                next();
+            }
+        });
     }
 
     public void play(int mode) {
