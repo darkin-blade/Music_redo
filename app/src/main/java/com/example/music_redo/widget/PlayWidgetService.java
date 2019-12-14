@@ -24,8 +24,8 @@ public class PlayWidgetService extends Service {// 用于部件交互
     static final int MODE_CLOSE = 5;
     static final int MODE_INIT = 6;
 
-    RemoteViews remoteViews;
-    AppWidgetManager appWidgetManager;
+    static public RemoteViews remoteViews;
+    static public AppWidgetManager appWidgetManager;
     static public ArrayList<Integer> appWidgetIds;
 
     static public int isInit;
@@ -45,6 +45,10 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent == null) {
+            return START_STICKY;
+        }
+
         int cmd_mode = intent.getIntExtra("mode", -1);
         boolean from_widget_service = intent.getBooleanExtra("fromWidgetService", false);
         int[] ids = intent.getIntArrayExtra("appWidgetIds");
@@ -114,7 +118,11 @@ public class PlayWidgetService extends Service {// 用于部件交互
         }
 
         // 初始化监听
-        initPlay();// 初始为暂停
+        if (MusicList.player.isPlaying()) {
+            initPause();
+        } else {
+            initPlay();// 初始为暂停
+        }
         initNext();
         initPrev();
 
@@ -148,8 +156,14 @@ public class PlayWidgetService extends Service {// 用于部件交互
     }
 
     public void initPlay() {
-             remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_play);
-   Intent intent = new Intent(this, PlayWidgetService.class);
+        if (MusicList.playList.curMusic.length() <= 0 || MusicList.playList.curMix.length() <= 0) {
+            remoteViews.setTextViewText(R.id.cur_music, "no music");
+        } else {
+            remoteViews.setTextViewText(R.id.cur_music, MusicList.playList.curMix + "    " + MusicList.playList.curMusic.replaceAll(".*/", ""));
+        }
+
+        remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_play);
+        Intent intent = new Intent(this, PlayWidgetService.class);
         intent.putExtra("fromWidgetService", true);
         intent.putExtra("mode", MODE_PLAY);
         PendingIntent pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
