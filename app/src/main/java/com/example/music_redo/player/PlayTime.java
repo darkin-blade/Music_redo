@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.example.music_redo.MusicList.playList;
 import static com.example.music_redo.MusicList.player;
 
 public class PlayTime extends Service {
@@ -37,9 +36,10 @@ public class PlayTime extends Service {
     static final int MODE_PREV = 3;
     static final int MODE_UPDATE = 4;
 
-    public PlayTime(Context context, Activity activity) {
-        myContext = context;
-        myActivity = activity;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        init();// TODO
     }
 
     public void init() {
@@ -65,7 +65,7 @@ public class PlayTime extends Service {
             // 加载
             try {
                 player.reset();
-                player.setDataSource(playList.curMusic);
+                player.setDataSource(PlayList.curMusic);
                 player.prepare();
                 total_time = player.getDuration();
                 MusicList.seekBar.setMax(total_time);
@@ -84,16 +84,32 @@ public class PlayTime extends Service {
                 e.printStackTrace();
 
                 // 歌曲无法播放
-                MusicList.deleteMusic(playList.curMix, playList.curMusic);
-                playList.loadMix(playList.curMix, playList.curMusic, 2);// TODO 只刷新歌单
-                if (MusicList.window_num != MusicList.MIX_LIST) {// TODO 如果不是歌单列表
-                    MusicList.listManager.listMusic(playList.curMix);
+                MusicList.deleteMusic(PlayList.curMix, PlayList.curMusic);
+
+                // TODO 只刷新歌单
+                Intent intent = new Intent(this, PlayList.class);
+                intent.putExtra("cmd", "loadMix");
+                intent.putExtra("curMix", PlayList.curMix);
+                intent.putExtra("curMusic", PlayList.curMusic);
+                intent.putExtra("mode", 2);
+                startService(intent);// TODO 不需要highlightMusic
+
+                if (MusicList.window_num != MusicList.MIX_LIST) {// 如果不是歌单列表
+                    MusicList.listManager.listMusic(PlayList.curMix);
                 }
-                playList.stopMusic(1);
+                intent = new Intent(this, PlayList.class);
+                intent.putExtra("cmd", "stopMusic");
+                intent.putExtra("mode", 1);
+                startService(intent);
                 return;
             } catch (IllegalStateException e) {
                 e.printStackTrace();
-                playList.stopMusic(1);
+
+                // TODO
+                Intent intent = new Intent(this, PlayList.class);
+                intent.putExtra("cmd", "stopMusic");
+                intent.putExtra("mode", 1);
+                startService(intent);
                 return;
             }
 
@@ -125,7 +141,7 @@ public class PlayTime extends Service {
                 while (Thread.currentThread().isInterrupted() == false) {
                     try {
                         if (player.isPlaying() == false) {
-                            break;// TODO interrupt
+                            break;
                         }
 
                         cur_time = player.getCurrentPosition();
@@ -151,7 +167,7 @@ public class PlayTime extends Service {
             player.pause();
 //            MusicList.button_play.setBackgroundResource(R.drawable.player_play);
             MusicList.button_play.setBackgroundDrawable(myContext.getResources().getDrawable(R.drawable.player_play));
-            musicPlay.interrupt();// TODO
+            musicPlay.interrupt();
             updateUI(MODE_PAUSE);
         }
     }
@@ -162,15 +178,29 @@ public class PlayTime extends Service {
         setBar();
     }
 
-    public void next() {
-        playList.loadMusic(1);
-        playList.highlightMusic();
+    public void next() {// TODO
+        Intent intent = new Intent(this, PlayList.class);
+        intent.putExtra("cmd", "loadMusic");
+        intent.putExtra("mode", 1);
+        startService(intent);
+
+        intent = new Intent(this, PlayList.class);
+        intent.putExtra("cmd", "highlightMusic");
+        startService(intent);
+
         updateUI(MODE_NEXT);
     }
 
-    public void prev() {
-        playList.loadMusic(2);
-        playList.highlightMusic();
+    public void prev() {// TODO
+        Intent intent = new Intent(this, PlayList.class);
+        intent.putExtra("cmd", "loadMusic");
+        intent.putExtra("mode", 2);
+        startService(intent);
+
+        intent = new Intent(this, PlayList.class);
+        intent.putExtra("cmd", "highlightMusic");
+        startService(intent);
+
         updateUI(MODE_PREV);
     }
 
@@ -212,10 +242,10 @@ public class PlayTime extends Service {
             default:
                 intent = new Intent(myContext, PlayNotification.class);
                 intent.putExtra("mode", mode);
-                myActivity.startService(intent);
+                startService(intent);
                 intent = new Intent(myContext, PlayWidgetService.class);
                 intent.putExtra("mode", mode);
-                myActivity.startService(intent);
+                startService(intent);
                 break;
         }
     }
@@ -224,8 +254,8 @@ public class PlayTime extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         String command = intent.getStringExtra("cmd");
         if (command != null) {
-            if (command.equals("init")) {
-                init();
+            if (command.equals("init")) {// TODO 初始化
+                MusicList.infoLog("play time init");
             } else if (command.equals("play")) {
                 int mode = intent.getIntExtra("mode", -1);
                 play(mode);

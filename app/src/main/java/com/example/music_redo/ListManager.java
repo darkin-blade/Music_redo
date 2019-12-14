@@ -1,6 +1,7 @@
 package com.example.music_redo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.view.Gravity;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.music_redo.player.PlayList;
 
 import java.util.ArrayList;
 
@@ -59,7 +62,7 @@ public class ListManager {
                         null,
                         null,
                         "name");// 统计歌单内歌曲数目
-                create_item(new String[]{mix_name, "total: " + cursor_count.getCount()}, 0);// TODO 列举歌单
+                create_item(new String[]{mix_name, "total: " + cursor_count.getCount()}, 0);// 列举歌单
             } while (cursor.moveToNext());
         } else {
             MusicList.infoToast(myContext, "no mix");
@@ -70,7 +73,7 @@ public class ListManager {
     public void listMusic(String mixName) {
         if (mixName == null || mixName.length() <= 0) {
             MusicList.infoLog("list invalid mix");
-            return;// TODO
+            return;
         }
 
         curMix = mixName;// 置null当前歌单
@@ -182,9 +185,13 @@ public class ListManager {
             item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listMusic(item_detail[0]);// 点击查看对应歌单详情
-                    MusicList.playList.highlightMusic();
+                    // 点击查看对应歌单详情
+                    listMusic(item_detail[0]);
                     MusicList.listManager.showMix(curMix);
+                    // TODO
+                    Intent intent = new Intent(myContext, PlayList.class);
+                    intent.putExtra("cmd", "highlightMusic");
+                    myContext.startService(intent);
                 }
             });
 
@@ -205,9 +212,12 @@ public class ListManager {
             item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (MusicList.playList.loadMix(curMix, item_detail[2], 0) == 0) {// TODO 加载专辑曲目并播放歌曲
-                        MusicList.playList.highlightMusic();
-                    }
+                    // TODO 加载专辑曲目并播放歌曲
+                    Intent intent = new Intent(myContext, PlayList.class);
+                    intent.putExtra("curMix", PlayList.curMix);
+                    intent.putExtra("curMusic", PlayList.curMusic);
+                    intent.putExtra("mode", 2);
+                    myContext.startService(intent);
                 }
             });
 

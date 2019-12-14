@@ -539,7 +539,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     if (PlayList.curMix.equals(listManager.curMix)) {// 播放正在浏览的歌单,此情况不可能?
                         listManager.listMusic(listManager.curMix);
                     }
-                    
+
                     // 更新当前播放列表
                     intent.putExtra("curMix", PlayList.curMix);
                     intent.putExtra("curMusic", PlayList.curMusic);
