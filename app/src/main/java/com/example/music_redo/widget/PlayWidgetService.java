@@ -48,7 +48,6 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // TODO 删除widget
         if (intent == null) {
             return START_STICKY;
         }
@@ -57,20 +56,13 @@ public class PlayWidgetService extends Service {// 用于部件交互
         boolean from_widget_service = intent.getBooleanExtra("fromWidgetService", false);
         int[] ids = intent.getIntArrayExtra("appWidgetIds");
 
-        // TODO 更新layout
+        // 更新layout
 //        MusicList.infoLog("widget service: " + cmd_mode);
         if (remoteViews == null) {
-            remoteViews = new RemoteViews(this.getPackageName(), R.layout.play_widget);// TODO context
+            remoteViews = new RemoteViews(this.getPackageName(), R.layout.play_widget);
         }
 
-        // TODO debug
-        if (appWidgetIds != null) {
-            for (int i = 0; i < appWidgetIds.size(); i++) {
-                MusicList.infoLog("ids: " + appWidgetIds.get(i));
-            }
-        }
-
-        Intent playCmd = new Intent(this, PlayTime.class);// TODO
+        Intent playCmd = new Intent(this, PlayTime.class);
         switch (cmd_mode) {
             case MODE_PLAY:
                 if (from_widget_service == true) {
@@ -117,11 +109,11 @@ public class PlayWidgetService extends Service {// 用于部件交互
         isInit = 0;
         MusicList.infoLog("widget service destroy");
         super.onDestroy();
+
+        // TODO 保存所有widget
     }
 
     public void init(int[] ids) {
-        MusicList.infoLog("init mode");
-
         // 接收变量
         appWidgetManager = AppWidgetManager.getInstance(this);
         if (appWidgetIds == null) {
@@ -150,8 +142,6 @@ public class PlayWidgetService extends Service {// 用于部件交互
     }
 
     public void update() {// 更新桌面部件进度条
-        MusicList.infoLog("update mode");
-
         if (isInit != 1) {
             return;
         }
@@ -188,6 +178,15 @@ public class PlayWidgetService extends Service {// 用于部件交互
             remoteViews.setTextViewText(R.id.cur_music, "no music");
         } else {
             remoteViews.setTextViewText(R.id.cur_music, PlayList.curMix + "    " + PlayList.curMusic.replaceAll(".*/", ""));
+        }
+
+        // TODO debug
+        if (appWidgetIds != null) {
+            for (int i = 0; i < appWidgetIds.size(); i++) {
+                MusicList.infoLog("ids: " + appWidgetIds.get(i));
+            }
+        } else {
+            MusicList.infoLog("ids is null");
         }
     }
 
