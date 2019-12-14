@@ -73,28 +73,28 @@ public class PlayNotification extends Service {
                 if (from_notification == true) {
                     playCmd.putExtra("cmd", "play");
                     playCmd.putExtra("mode", 0);
-                    startService(intent);
+                    startService(playCmd);
                 }
                 initPause();
                 break;
             case MODE_PAUSE:
                 if (from_notification == true) {
                     playCmd.putExtra("cmd", "pause");
-                    startService(intent);
+                    startService(playCmd);
                 }
                 initPlay();
                 break;
             case MODE_NEXT:
                 if (from_notification == true) {
                     playCmd.putExtra("cmd", "next");
-                    startService(intent);
+                    startService(playCmd);
                 }
                 initPause();
                 break;
             case MODE_PREV:
                 if (from_notification == true) {
                     playCmd.putExtra("cmd", "prev");
-                    startService(intent);
+                    startService(playCmd);
                 }
                 initPause();
                 break;

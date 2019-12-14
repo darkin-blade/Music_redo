@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
+import com.example.music_redo.player.PlayList;
+import com.example.music_redo.player.PlayTime;
 
 import java.util.ArrayList;
 
@@ -54,39 +56,47 @@ public class PlayWidgetService extends Service {// 用于部件交互
         boolean from_widget_service = intent.getBooleanExtra("fromWidgetService", false);
         int[] ids = intent.getIntArrayExtra("appWidgetIds");
 
-        // TODO 更新ui
+        // TODO 更新layout
 //        MusicList.infoLog("widget service: " + cmd_mode);
         if (remoteViews == null) {
             remoteViews = new RemoteViews(this.getPackageName(), R.layout.play_widget);// TODO context
         }
+
+        // TODO debug
         if (appWidgetIds != null) {
             for (int i = 0; i < appWidgetIds.size(); i++) {
                 MusicList.infoLog("ids: " + appWidgetIds.get(i));
             }
         }
 
+        Intent playCmd = new Intent(this, PlayTime.class);// TODO
         switch (cmd_mode) {
             case MODE_PLAY:
                 if (from_widget_service == true) {
-                    MusicList.playTime.play(0);
+                    playCmd.putExtra("cmd", "play");
+                    playCmd.putExtra("mode", 0);
+                    startService(playCmd);
                 }
                 initPause();
                 break;
             case MODE_PAUSE:
                 if (from_widget_service == true) {
-                    MusicList.playTime.pause();
+                    playCmd.putExtra("cmd", "pause");
+                    startService(playCmd);
                 }
                 initPlay();
                 break;
             case MODE_NEXT:
                 if (from_widget_service == true) {
-                    MusicList.playTime.next();
+                    playCmd.putExtra("cmd", "next");
+                    startService(playCmd);
                 }
                 initPause();
                 break;
             case MODE_PREV:
                 if (from_widget_service == true) {
-                    MusicList.playTime.prev();
+                    playCmd.putExtra("cmd", "prev");
+                    startService(playCmd);
                 }
                 initPause();
                 break;
@@ -111,7 +121,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
     public void init(int[] ids) {
         MusicList.infoLog("init mode");
 
-        // TODO 接收变量
+        // 接收变量
         appWidgetManager = AppWidgetManager.getInstance(this);
         if (appWidgetIds == null) {
             appWidgetIds = new ArrayList<>();
@@ -145,11 +155,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
             return;
         }
 
-        if (MusicList.playTime == null) {
-            return;
-        }
-
-        remoteViews.setProgressBar(R.id.music_bar, MusicList.playTime.total_time, MusicList.playTime.cur_time, false);
+        remoteViews.setProgressBar(R.id.music_bar, PlayTime.total_time, PlayTime.cur_time, false);
         updateUI();
     }
 
@@ -162,10 +168,10 @@ public class PlayWidgetService extends Service {// 用于部件交互
     }
 
     public void initPlay() {
-        if (MusicList.playList.curMusic.length() <= 0 || MusicList.playList.curMix.length() <= 0) {
+        if (PlayList.curMusic.length() <= 0 || PlayList.curMix.length() <= 0) {
             remoteViews.setTextViewText(R.id.cur_music, "no music");
         } else {
-            remoteViews.setTextViewText(R.id.cur_music, MusicList.playList.curMix + "    " + MusicList.playList.curMusic.replaceAll(".*/", ""));
+            remoteViews.setTextViewText(R.id.cur_music, PlayList.curMix + "    " + PlayList.curMusic.replaceAll(".*/", ""));
         }
 
         remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_play);
@@ -181,10 +187,10 @@ public class PlayWidgetService extends Service {// 用于部件交互
     }
 
     public void initPause() {
-        if (MusicList.playList.curMusic.length() <= 0 || MusicList.playList.curMix.length() <= 0) {
+        if (PlayList.curMusic.length() <= 0 || PlayList.curMix.length() <= 0) {
             remoteViews.setTextViewText(R.id.cur_music, "no music");
         } else {
-            remoteViews.setTextViewText(R.id.cur_music, MusicList.playList.curMix + "    " + MusicList.playList.curMusic.replaceAll(".*/", ""));
+            remoteViews.setTextViewText(R.id.cur_music, PlayList.curMix + "    " + PlayList.curMusic.replaceAll(".*/", ""));
         }
 
         remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_pause);
