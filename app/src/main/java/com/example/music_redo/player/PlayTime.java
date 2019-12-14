@@ -87,25 +87,27 @@ public class PlayTime extends Service {
                 player.setDataSource(PlayList.curMusic);
                 player.prepare();
                 total_time = player.getDuration();
-                MusicList.seekBar.setMax(total_time);
+                if (MusicList.window_num != 0) {// TODO
+                    MusicList.seekBar.setMax(total_time);
+                }
 
                 // 设置时长ui
                 SimpleDateFormat format = new SimpleDateFormat("mm:ss");
                 Date tmp = new Date(total_time);
                 final String formatTime = format.format(tmp);
-                myActivity.runOnUiThread(new Runnable() {
+                updateUI(new Runnable() {
                     @Override
                     public void run() {
                         MusicList.totalTime.setText(formatTime);
                     }
                 });
-            } catch (IOException e) {// TODO prepare failed
+            } catch (IOException e) {// prepare failed
                 e.printStackTrace();
 
                 // 歌曲无法播放
                 MusicDataBase.deleteMusic(PlayList.curMix, PlayList.curMusic);
 
-                // TODO 只刷新歌单
+                // 只刷新歌单
                 Intent intent = new Intent(this, PlayList.class);
                 intent.putExtra("cmd", "loadMix");
                 intent.putExtra("curMix", PlayList.curMix);
@@ -151,7 +153,7 @@ public class PlayTime extends Service {
         player.start();
         MusicList.button_play.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.player_pause));
 
-        updateUI(MODE_PLAY);
+        updateService(MODE_PLAY);
 
         musicPlay = new Thread(new Runnable() {
             @Override
@@ -185,7 +187,7 @@ public class PlayTime extends Service {
             player.pause();
             MusicList.button_play.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.player_play));
             musicPlay.interrupt();
-            updateUI(MODE_PAUSE);
+            updateService(MODE_PAUSE);
         }
     }
 
@@ -195,7 +197,7 @@ public class PlayTime extends Service {
         setBar();
     }
 
-    public void next() {// TODO
+    public void next() {
         Intent intent = new Intent(this, PlayList.class);
         intent.putExtra("cmd", "loadMusic");
         intent.putExtra("mode", 1);
@@ -205,10 +207,10 @@ public class PlayTime extends Service {
         intent.putExtra("cmd", "highlightMusic");
         startService(intent);
 
-        updateUI(MODE_NEXT);
+        updateService(MODE_NEXT);
     }
 
-    public void prev() {// TODO
+    public void prev() {
         Intent intent = new Intent(this, PlayList.class);
         intent.putExtra("cmd", "loadMusic");
         intent.putExtra("mode", 2);
@@ -218,7 +220,7 @@ public class PlayTime extends Service {
         intent.putExtra("cmd", "highlightMusic");
         startService(intent);
 
-        updateUI(MODE_PREV);
+        updateService(MODE_PREV);
     }
 
     public void getBar() {// 从进度条更新播放进度
@@ -231,7 +233,7 @@ public class PlayTime extends Service {
     }
 
     public void setBar() {// 更新进度条
-        myActivity.runOnUiThread(new Runnable() {
+        updateUI(new Runnable() {
             @Override
             public void run() {
                 MusicList.seekBar.setProgress(cur_time);
@@ -244,16 +246,16 @@ public class PlayTime extends Service {
         Date tmp = new Date(cur_time);
         final String formatTime = format.format(tmp);
 
-        myActivity.runOnUiThread(new Runnable() {
+        updateUI(new Runnable() {
             @Override
             public void run() {
                 MusicList.curTime.setText(formatTime);
             }
         });
-        updateUI(MODE_UPDATE);// 更新状态栏进度条
+        updateService(MODE_UPDATE);// 更新状态栏进度条
     }
 
-    public void updateUI(int mode) {
+    public void updateService(int mode) {
         Intent intent;
         switch (mode) {
             default:
@@ -267,6 +269,14 @@ public class PlayTime extends Service {
         }
     }
 
+    public void updateUI(Runnable runnable) {
+        if (myActivity == null) {
+            return;
+        }
+
+        myActivity.runOnUiThread(runnable);
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent == null) {
@@ -275,7 +285,7 @@ public class PlayTime extends Service {
 
         String command = intent.getStringExtra("cmd");
         if (command != null) {
-            if (command.equals("init")) {// TODO 初始化
+            if (command.equals("init")) {// 初始化
                 MusicList.infoLog("play time init");
             } else if (command.equals("play")) {
                 int mode = intent.getIntExtra("mode", -1);

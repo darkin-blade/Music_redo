@@ -38,19 +38,6 @@ public class PlayWidgetService extends Service {// 用于部件交互
         super.onCreate();
         MusicList.infoLog("widget service create");
         isInit = 0;
-
-        if (MusicList.window_num == 0) {
-            // TODO 初始化其他所有service
-            MusicDataBase.initData(this);
-
-            Intent intent = new Intent(this, PlayTime.class);
-            intent.putExtra("cmd", "init");
-            startService(intent);
-
-            intent = new Intent(this, PlayList.class);
-            intent.putExtra("cmd", "init");
-            startService(intent);
-        }
     }
 
     @Nullable
@@ -181,12 +168,31 @@ public class PlayWidgetService extends Service {// 用于部件交互
         appWidgetManager.updateAppWidget(tmp, remoteViews);
     }
 
-    public void initPlay() {
+    public void initService() {
+        // TODO 初始化其他所有service
+        Intent intent;
+        if (PlayTime.player == null) {// TODO 播放器无效
+            intent = new Intent(this, PlayTime.class);
+            intent.putExtra("cmd", "init");
+            startService(intent);
+        }
+
+        if (PlayList.curMix == null) {// TODO 需要恢复歌单
+            intent = new Intent(this, PlayList.class);
+            intent.putExtra("cmd", "init");
+            startService(intent);
+        }
+
+        // 修改ui
         if (PlayList.curMusic.length() <= 0 || PlayList.curMix.length() <= 0) {
             remoteViews.setTextViewText(R.id.cur_music, "no music");
         } else {
             remoteViews.setTextViewText(R.id.cur_music, PlayList.curMix + "    " + PlayList.curMusic.replaceAll(".*/", ""));
         }
+    }
+
+    public void initPlay() {
+        initService();
 
         remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_play);
         Intent intent = new Intent(this, PlayWidgetService.class);
@@ -201,11 +207,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
     }
 
     public void initPause() {
-        if (PlayList.curMusic.length() <= 0 || PlayList.curMix.length() <= 0) {
-            remoteViews.setTextViewText(R.id.cur_music, "no music");
-        } else {
-            remoteViews.setTextViewText(R.id.cur_music, PlayList.curMix + "    " + PlayList.curMusic.replaceAll(".*/", ""));
-        }
+        initService();
 
         remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_pause);
         Intent intent = new Intent(this, PlayWidgetService.class);
