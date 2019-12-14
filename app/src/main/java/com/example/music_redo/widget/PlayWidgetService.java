@@ -107,7 +107,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
     @Override
     public void onDestroy() {
         isInit = 0;
-        MusicList.infoLog("widget service destroy");
+        MusicList.infoLog("widget service destroy\n\n");
         super.onDestroy();
 
         // TODO 保存所有widget
