@@ -112,7 +112,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         initApp();
         initPlayer();
         initUI();
-//        initBluetooth();
+        initBluetooth();
         initData();
     }
 
