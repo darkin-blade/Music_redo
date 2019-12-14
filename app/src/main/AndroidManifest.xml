@@ -29,6 +29,9 @@
             </intent-filter>
         </activity>
 
+        <!--    数据库    -->
+        <service android:name=".mix.MusicDataBase"></service>
+
         <!--    播放器    -->
         <service android:name=".player.PlayList"></service>
         <service android:name=".player.PlayTime"></service>
