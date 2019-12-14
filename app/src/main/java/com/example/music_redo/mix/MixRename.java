@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
+import com.example.music_redo.player.PlayList;
 
 public class MixRename extends DialogFragment {
     public View myView;
@@ -79,7 +80,7 @@ public class MixRename extends DialogFragment {
             @Override
             public void onClick(View v) {
                 String tmp = editText.getText().toString();
-                int result = MusicList.renameMix(MusicList.listManager.curMix, tmp);// TODO 重命名歌单
+                int result = MusicList.renameMix(MusicList.listManager.curMix, tmp);// 重命名歌单
                 switch (result) {
                     case 0:
                         MusicList.infoLog("rename mix " + tmp + " succeed");
@@ -91,9 +92,9 @@ public class MixRename extends DialogFragment {
                 }
 
                 // TODO 如果修改的是当前mix
-                if (MusicList.listManager.curMix.equals(MusicList.playList.curMix)) {
+                if (MusicList.listManager.curMix.equals(PlayList.curMix)) {
                     MusicList.listManager.curMix = tmp;
-                    MusicList.playList.curMix = tmp;
+                    PlayList.curMix = tmp;
                     MusicList.dialog_result = "rename";
                 }
                 dismiss();

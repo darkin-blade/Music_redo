@@ -150,7 +150,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     public void initBluetooth() {// TODO 将按键与其他action分离
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();// 获取蓝牙适配器
-        receiver = new MediaReceiver(this);
+        receiver = new MediaReceiver();
 
         IntentFilter intentFilter = new IntentFilter();
 
