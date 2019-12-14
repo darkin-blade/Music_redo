@@ -3,7 +3,6 @@ package com.example.music_redo.widget;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -14,11 +13,9 @@ import androidx.annotation.Nullable;
 
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
-import com.example.music_redo.mix.MusicDataBase;
 import com.example.music_redo.player.PlayList;
 import com.example.music_redo.player.PlayTime;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayWidgetService extends Service {// 用于部件交互
@@ -33,7 +30,6 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
     static public RemoteViews remoteViews;
     static public AppWidgetManager appWidgetManager;
-    static public ArrayList<Integer> appWidgetIds;
 
     static public int isInit;
 
@@ -101,7 +97,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
                 update();
                 break;
             case MODE_INIT:
-                init(ids);
+                initListener();
                 break;
         }
 
@@ -115,34 +111,6 @@ public class PlayWidgetService extends Service {// 用于部件交互
         super.onDestroy();
     }
 
-    public void init(int[] ids) {
-        // 接收变量
-        appWidgetManager = AppWidgetManager.getInstance(this);
-        if (appWidgetIds == null) {
-            appWidgetIds = new ArrayList<>();
-        }
-        appWidgetIds.clear();
-        if (ids != null) {
-            for (int i = 0; i < ids.length; i ++) {
-                appWidgetIds.add(ids[i]);
-            }
-        }
-
-        // 初始化监听
-        if (PlayTime.player.isPlaying()) {
-            initPause();
-        } else {
-            initPlay();// 初始为暂停
-        }
-        initNext();
-        initPrev();
-
-        // 更新ui
-        updateUI();
-
-        isInit = 1;
-    }
-
     public void update() {// 更新桌面部件进度条
         if (isInit != 1) {
             return;
@@ -153,11 +121,16 @@ public class PlayWidgetService extends Service {// 用于部件交互
     }
 
     public void updateUI() {
-        int[] tmp = new int[appWidgetIds.size()];
-        for (int i = 0; i < appWidgetIds.size(); i ++) {
-            tmp[i] = appWidgetIds.get(i);
+        // TODO
+        appWidgetManager = AppWidgetManager.getInstance(this);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            List<AppWidgetProviderInfo> infos = appWidgetManager.getInstalledProvidersForPackage(getPackageName(), null);
+            if (infos.size() >= 1) {// 非空
+                String providerName = infos.get(0).provider.getClassName();
+                int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getPackageName(), providerName));
+                appWidgetManager.updateAppWidget(ids, remoteViews);
+            }
         }
-        appWidgetManager.updateAppWidget(tmp, remoteViews);
     }
 
     public void initService() {
@@ -174,6 +147,26 @@ public class PlayWidgetService extends Service {// 用于部件交互
             intent.putExtra("cmd", "init");
             startService(intent);
         }
+    }
+
+    public void initListener() {
+        // 初始化监听
+        if (PlayTime.player.isPlaying()) {
+            initPause();
+        } else {
+            initPlay();// 初始为暂停
+        }
+        initNext();
+        initPrev();
+
+        // 更新ui
+        updateUI();
+
+        isInit = 1;
+    }
+
+    public void initPlay() {
+        initService();
 
         // TODO 修改ui
         if (PlayList.curMix == null || PlayList.curMusic.length() <= 0 || PlayList.curMix.length() <= 0) {
@@ -181,37 +174,6 @@ public class PlayWidgetService extends Service {// 用于部件交互
         } else {
             remoteViews.setTextViewText(R.id.cur_music, PlayList.curMix + "    " + PlayList.curMusic.replaceAll(".*/", ""));
         }
-
-        // TODO debug
-        if (appWidgetIds != null) {
-            for (int i = 0; i < appWidgetIds.size(); i++) {
-                MusicList.infoLog("ids: " + appWidgetIds.get(i));
-            }
-        } else {
-            MusicList.infoLog("ids is null");
-        }
-
-        // TODO debug
-        AppWidgetManager tmp = AppWidgetManager.getInstance(this);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            List<AppWidgetProviderInfo> infos = tmp.getInstalledProvidersForPackage(getPackageName(), null);
-            if (infos.size() >= 1) {// 非空
-                String providerName = infos.get(0).provider.getClassName();
-
-                int[] ids = tmp.getAppWidgetIds(new ComponentName(getPackageName(), providerName));
-                if (ids != null) {
-                    MusicList.infoLog("[] size: " + ids.length);
-                    for (int i = 0; i < ids.length; i ++) {
-                        MusicList.infoLog("[" + i + "]: " + ids[i]);
-                    }
-                }
-
-            }
-        }
-    }
-
-    public void initPlay() {
-        initService();
 
         remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_play);
         Intent intent = new Intent(this, PlayWidgetService.class);
@@ -227,6 +189,13 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
     public void initPause() {
         initService();
+
+        // TODO 修改ui
+        if (PlayList.curMix == null || PlayList.curMusic.length() <= 0 || PlayList.curMix.length() <= 0) {
+            remoteViews.setTextViewText(R.id.cur_music, "no music");
+        } else {
+            remoteViews.setTextViewText(R.id.cur_music, PlayList.curMix + "    " + PlayList.curMusic.replaceAll(".*/", ""));
+        }
 
         remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_pause);
         Intent intent = new Intent(this, PlayWidgetService.class);
