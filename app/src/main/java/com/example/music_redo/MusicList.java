@@ -91,8 +91,8 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     // 功能代号
     static public int window_num;
     static public String dialog_result;
-    static public final int MUSIC_LIST = 0;// 主界面
-    static public final int MIX_LIST = 1;// 歌单列表
+    static public final int MUSIC_LIST = 1;// 主界面
+    static public final int MIX_LIST = 2;// 歌单列表
     static public final int MUSIC_MOVE = 3;// `添加至`列表
     static public final int MUSIC_SELECT = 4;// 文件管理器
     static public final int MIX_EDIT = 5;// 歌单列表管理歌单

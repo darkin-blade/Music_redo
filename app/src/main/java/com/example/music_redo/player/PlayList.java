@@ -180,8 +180,6 @@ public class PlayList extends Service {
     }
 
     public void recover() {// 恢复数据
-        MusicDataBase.initData(this);// TODO 初始化
-
         Cursor cursor = MusicDataBase.database.query(
                 "user_data",
                 new String[] {"cur_mix", "cur_music", "play_mode", "cur_time", "total_time"},
@@ -200,7 +198,7 @@ public class PlayList extends Service {
             PlayTime.total_time = cursor.getInt(4);
 
             // TODO 加载歌单
-            if (MusicList.listManager != null) {
+            if (MusicList.window_num != 0) {
                 MusicList.listManager.listMusic(curMix);
                 if (loadMix(curMix, curMusic, 1) == 0) {
                     highlightMusic();

@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.example.music_redo.MusicList;
 import com.example.music_redo.R;
+import com.example.music_redo.mix.MusicDataBase;
 import com.example.music_redo.player.PlayList;
 import com.example.music_redo.player.PlayTime;
 
@@ -33,10 +34,23 @@ public class PlayWidgetService extends Service {// 用于部件交互
     static public int isInit;
 
     @Override
-    public void onCreate() {// TODO
+    public void onCreate() {
         super.onCreate();
         MusicList.infoLog("widget service create");
         isInit = 0;
+
+        if (MusicList.window_num == 0) {
+            // TODO 初始化其他所有service
+            MusicDataBase.initData(this);
+
+            Intent intent = new Intent(this, PlayTime.class);
+            intent.putExtra("cmd", "init");
+            startService(intent);
+
+            intent = new Intent(this, PlayList.class);
+            intent.putExtra("cmd", "init");
+            startService(intent);
+        }
     }
 
     @Nullable

@@ -290,9 +290,6 @@ public class PlayTime extends Service {
                 reset();
             } else if (command.equals("getBar")) {
                 getBar();
-            } else {// TODO debug
-                String tmp = null;
-                int sb = tmp.length();
             }
         }
         return START_STICKY;
