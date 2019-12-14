@@ -268,6 +268,10 @@ public class PlayTime extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent == null) {
+            return  START_STICKY;
+        }
+
         String command = intent.getStringExtra("cmd");
         if (command != null) {
             if (command.equals("init")) {// TODO 初始化
