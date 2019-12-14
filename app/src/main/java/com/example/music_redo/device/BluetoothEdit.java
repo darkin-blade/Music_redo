@@ -1,4 +1,4 @@
-package com.example.music_redo.bluetooth;
+package com.example.music_redo.device;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;

@@ -1,4 +1,4 @@
-package com.example.music_redo.bluetooth;
+package com.example.music_redo.device;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -12,8 +12,8 @@ import android.media.AudioManager;
 import com.example.music_redo.MediaReceiver;
 import com.example.music_redo.MusicList;
 
-import static com.example.music_redo.bluetooth.BluetoothList.addresses;
-import static com.example.music_redo.bluetooth.BluetoothList.devices;
+import static com.example.music_redo.device.BluetoothList.addresses;
+import static com.example.music_redo.device.BluetoothList.devices;
 
 public class DeviceReceiver extends BroadcastReceiver {
     Activity myActivity;

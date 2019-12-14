@@ -25,7 +25,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.music_redo.bluetooth.BluetoothList;
+import com.example.music_redo.device.BluetoothList;
 import com.example.music_redo.mix.MixEdit;
 import com.example.music_redo.mix.MixNew;
 import com.example.music_redo.mix.MixRename;

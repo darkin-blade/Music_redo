@@ -1,4 +1,4 @@
-package com.example.music_redo.bluetooth;
+package com.example.music_redo.device;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.MainThread;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 

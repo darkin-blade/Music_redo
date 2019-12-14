@@ -9,31 +9,28 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.view.KeyEvent;
 
-import static com.example.music_redo.MusicList.playTime;
+import com.example.music_redo.player.PlayTime;
+
 import static com.example.music_redo.MusicList.player;
 
 public class MediaReceiver extends BroadcastReceiver {
-    public Context myContext = null;
 
-    public MediaReceiver() {// 系统会自动调用无参的构造方法
-        ;// 不能直接调用 mContext
-    }
-
-    public MediaReceiver(Context context) {
-        this.myContext = context;
+    public MediaReceiver() {// 静态注册会调用无参的构造方法
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {// 接收信号
+    public void onReceive(final Context context, Intent intent) {// 接收信号
         String action = intent.getAction();
         if (action != null) {
-            MusicList.infoLog("media action: " + action);// TODO debug
+//            MusicList.infoLog("media action: " + action);// TODO debug
+            Intent playCmd = new Intent(context, PlayTime.class);
             switch (action) {
                 // 有线耳机状态改变
                 case Intent.ACTION_HEADSET_PLUG:
                     int mediaState = intent.getIntExtra("state", 0);// 判断插拔
-                    if (mediaState == 0) {// 拔出耳机
-                        playTime.pause();
+                    if (mediaState == 0) {// TODO 拔出耳机
+                        playCmd.putExtra("cmd", "pause");
+                        context.startService(playCmd);
                     } else if (mediaState == 1) {// 插入耳机
                     }
                     break;
@@ -57,11 +54,12 @@ public class MediaReceiver extends BroadcastReceiver {
                             break;
                     }
                     break;
-                // TODO
+                // TODO 没屌用
                 case BluetoothDevice.ACTION_ACL_CONNECTED:// 连接
                     break;
-                case BluetoothDevice.ACTION_ACL_DISCONNECTED:// 断开
-                    playTime.pause();
+                case BluetoothDevice.ACTION_ACL_DISCONNECTED:// TODO 断开
+                    playCmd.putExtra("cmd", "pause");
+                    context.startService(playCmd);
                     break;
 
                 // 接收蓝牙/媒体按键信号
@@ -70,7 +68,7 @@ public class MediaReceiver extends BroadcastReceiver {
 
                     // 如果是down,忽略
                     if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                        break;// TODO
+                        break;
                     }
 
                     // up
@@ -79,10 +77,11 @@ public class MediaReceiver extends BroadcastReceiver {
                     switch (keycode) {
                         case KeyEvent.KEYCODE_MEDIA_NEXT:// TODO 下一首 87
                             MusicList.infoLog("next");
-                            playTime.next();
+                            playCmd.putExtra("cmd", "next");
+                            context.startService(playCmd);
                             break;
                         case KeyEvent.KEYCODE_HEADSETHOOK:// 媒体键(播放/暂停) 79
-                            // TODO 切歌
+                            // 切歌
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -90,34 +89,38 @@ public class MediaReceiver extends BroadcastReceiver {
                                     Long timeDiff = tmp - MusicList.myTime;
                                     MusicList.myTime = tmp;
                                     MusicList.infoLog("time diff: " + timeDiff);
-                                    if (timeDiff < 500) {// TODO 累计
+                                    if (timeDiff < 500) {// 累计
                                         MusicList.clickTimes ++;
                                     }
 
                                     int last_click_times = MusicList.clickTimes;// 之前累积的次数
                                     try {
-                                        Thread.sleep(500);// TODO 延迟
+                                        Thread.sleep(500);// 延迟
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
 
-                                    if (last_click_times == MusicList.clickTimes) {// TODO 忽略4次以上的点击
+                                    if (last_click_times == MusicList.clickTimes) {// 忽略4次以上的点击
+                                        Intent threadCmd = new Intent(context, PlayTime.class);
                                         if (last_click_times == -1) {
                                             MusicList.infoLog("click -1 time???");
                                         } else if (last_click_times == 0) {
                                             if (player.isPlaying() == true) {// 播放/暂停
-                                                playTime.pause();
+                                                threadCmd.putExtra("cmd", "pause");
                                             } else {
-                                                playTime.play(0);
+                                                threadCmd.putExtra("mode", 0);
+                                                threadCmd.putExtra("cmd", "play");
                                             }
                                         } else if (last_click_times == 1) {// 下一首
-                                            playTime.next();
+                                            threadCmd.putExtra("cmd", "next");
                                             MusicList.infoLog("todo next");
                                         } else if (last_click_times == 2) {// 上一首
-                                            playTime.prev();
+                                            threadCmd.putExtra("cmd", "prev");
                                             MusicList.infoLog("todo last");
                                         }
-                                        MusicList.clickTimes = 0;// TODO 累计清零
+                                        context.startService(threadCmd);// TODO
+
+                                        MusicList.clickTimes = 0;// 累计清零
                                     } else {
                                         MusicList.infoLog("click times: " + last_click_times + "/" + MusicList.clickTimes);
                                     }
@@ -127,10 +130,12 @@ public class MediaReceiver extends BroadcastReceiver {
                         case KeyEvent.KEYCODE_MEDIA_PLAY:// 播放 126
                         case KeyEvent.KEYCODE_MEDIA_PAUSE:// 暂停 127
                             if (player.isPlaying()) {
-                                playTime.pause();
+                                playCmd.putExtra("cmd", "pause");
                             } else {
-                                playTime.play(0);
+                                playCmd.putExtra("cmd", "play");
+                                playCmd.putExtra("mode", 0);
                             }
+                            context.startService(playCmd);// TODO
                             break;
                     }
                     break;
