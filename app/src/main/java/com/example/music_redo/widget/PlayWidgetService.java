@@ -35,9 +35,25 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
     @Override
     public void onCreate() {
-        super.onCreate();
         MusicList.infoLog("widget service create");
         isInit = 0;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                initService();
+                while (PlayTime.player == null || PlayList.curMix == null) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {// 中断
+                        e.printStackTrace();
+                    }
+                }
+                initListener();// TODO 创建时就进行初始化
+            }
+        }).start();
+
+        super.onCreate();
     }
 
     @Nullable
@@ -58,9 +74,6 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
         // 更新layout
 //        MusicList.infoLog("widget service: " + cmd_mode);
-        if (remoteViews == null) {
-            remoteViews = new RemoteViews(this.getPackageName(), R.layout.play_widget);
-        }
 
         Intent playCmd = new Intent(this, PlayTime.class);
         switch (cmd_mode) {
@@ -150,7 +163,10 @@ public class PlayWidgetService extends Service {// 用于部件交互
     }
 
     public void initListener() {
-        // 初始化监听
+        // TODO 初始化监听
+        if (remoteViews == null) {
+            remoteViews = new RemoteViews(this.getPackageName(), R.layout.play_widget);
+        }
         if (PlayTime.player.isPlaying()) {
             initPause();
         } else {
