@@ -20,8 +20,8 @@ import com.example.music_redo.MusicList;
 import java.util.ArrayList;
 
 public class PlayList extends Service {
-    Context myContext;
-    Activity myActivity;
+    static public Context myContext;
+    static public Activity myActivity;
 
     // 播放管理
     // 每次加载必须要恢复的数据
@@ -38,6 +38,16 @@ public class PlayList extends Service {
     static public final int SINGLE = 2;// 单曲循环
     static public final int AVERAGE = 3;// 平均
     static public final int POLARIZATION = 4;// 两极分化
+
+    public PlayList() {
+        MusicList.infoLog("playList constructor");
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        init();
+    }
 
     public PlayList(Context context, Activity activity) {
         myContext = context;
@@ -309,22 +319,22 @@ public class PlayList extends Service {
         String command = intent.getStringExtra("cmd");
 
         if (command != null) {
-            if (command.equals("loadMusic")) {// TODO 加载单个音乐
+            if (command.equals("loadMusic")) {// 加载单个音乐
                 int mode = intent.getIntExtra("mode", -1);
                 loadMusic(mode);
-            } else if (command.equals("loadMix")) {// TODO 加载歌单
+            } else if (command.equals("loadMix")) {// 加载歌单
                 String nextMix = intent.getStringExtra("nextMix");
                 String nextMusic = intent.getStringExtra("nextMusic");
                 int mode = intent.getIntExtra("mode", -1);
                 loadMix(nextMix, nextMusic, mode);
-            } else if (command.equals("stopMusic")) {// TODO 强制暂停
+            } else if (command.equals("stopMusic")) {// 强制暂停
                 int mode = intent.getIntExtra("mode", -1);
                 stopMusic(mode);
-            } else if (command.equals("save")) {// TODO 保存数据
+            } else if (command.equals("save")) {// 保存数据
                 save();
             } else if (command.equals("init")) {// TODO 恢复数据
-                init();
-            } else if (command.equals("highlightMusic")) {// TODO 修改监听
+                MusicList.infoLog("play list init");
+            } else if (command.equals("highlightMusic")) {// 修改监听
                 highlightMusic();
             }
         }

@@ -34,25 +34,25 @@
         <service android:name=".player.PlayTime"></service>
 
         <!--    接收媒体设备信号    -->
-        <receiver android:name=".MediaReceiver">
-            <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.MEDIA_BUTTON"></action>
-            </intent-filter>
-        </receiver>
+<!--        <receiver android:name=".MediaReceiver">-->
+<!--            <intent-filter android:priority="1000">-->
+<!--                <action android:name="android.intent.action.MEDIA_BUTTON"></action>-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
 
         <!--    状态栏部件    -->
-        <service android:name=".widget.PlayNotification"></service>
+<!--        <service android:name=".widget.PlayNotification"></service>-->
 
         <!--    桌面部件    -->
-        <service android:name=".widget.PlayWidgetService"></service>
-        <receiver android:name=".widget.PlayWidgetProvider">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"></action>
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/play_widget"></meta-data>
-        </receiver>
+<!--        <service android:name=".widget.PlayWidgetService"></service>-->
+<!--        <receiver android:name=".widget.PlayWidgetProvider">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"></action>-->
+<!--            </intent-filter>-->
+<!--            <meta-data-->
+<!--                android:name="android.appwidget.provider"-->
+<!--                android:resource="@xml/play_widget"></meta-data>-->
+<!--        </receiver>-->
     </application>
 
 </manifest>

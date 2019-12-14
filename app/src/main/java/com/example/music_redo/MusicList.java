@@ -112,7 +112,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         initApp();
         initPlayer();
         initUI();
-        initBluetooth();
+//        initBluetooth();
         initData();
     }
 
@@ -323,6 +323,9 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
 
         // TODO 注意初始化顺序
+        PlayTime.myActivity = this;
+        PlayList.myActivity = this;
+
         Intent intent = new Intent(this, PlayTime.class);
         intent.putExtra("cmd", "init");
         startService(intent);
