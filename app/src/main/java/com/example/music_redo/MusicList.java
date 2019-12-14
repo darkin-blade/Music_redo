@@ -481,67 +481,80 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     @Override
     public void onDismiss(DialogInterface dialog) {
+        Intent intent = new Intent(this, PlayList.class);
         switch (window_num) {
             case MIX_NEW:
                 window_num = MIX_LIST;
                 if (dialog_result.equals("new")) {// 新建歌单
                     listManager.listMix();
-                    playList.highlightMusic();
+                    intent.putExtra("cmd", "highlightMusic");
                 }
                 break;
             case MIX_EDIT:
                 window_num = MIX_LIST;
                 if (dialog_result.equals("delete")) {// 删除歌单
                     listManager.listMix();
-                    if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 尝试引发错误
-                        playList.highlightMusic();
-                    }
+
+                    // 尝试引发错误
+                    intent.putExtra("curMix", PlayList.curMix);
+                    intent.putExtra("curMusic", PlayList.curMusic);
+                    intent.putExtra("mode", 2);
                 }
                 break;
             case MUSIC_SELECT:
                 window_num = MUSIC_LIST;
                 if (dialog_result.equals("add")) {// 添加歌曲
                     listManager.listMusic(listManager.curMix);// 无条件刷新列表
-                    if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 更新当前播放列表
-                        playList.highlightMusic();
-                    }
+
+                    // 更新当前播放列表
+                    intent.putExtra("curMix", PlayList.curMix);
+                    intent.putExtra("curMusic", PlayList.curMusic);
+                    intent.putExtra("mode", 2);
                 }
                 break;
             case MUSIC_EDIT:
                 window_num = MUSIC_LIST;
                 if (dialog_result.equals("delete")) {// 删除歌曲
                     listManager.listMusic(listManager.curMix);// 无条件刷新列表
-                    if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 更新当前播放列表
-                        playList.highlightMusic();
-                    }
-                }
+
+                    // 更新当前播放列表
+                    intent.putExtra("curMix", PlayList.curMix);
+                    intent.putExtra("curMusic", PlayList.curMusic);
+                    intent.putExtra("mode", 2);                }
                 break;
             case MIX_RENAME:
                 window_num = MUSIC_LIST;
                 if (dialog_result.equals("rename")) {// 重命名歌单
-                    if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 只刷新mix
-                        playList.highlightMusic();
-                    }
+
+                    // 只刷新mix
+                    intent.putExtra("curMix", PlayList.curMix);
+                    intent.putExtra("curMusic", PlayList.curMusic);
+                    intent.putExtra("mode", 2);
                     listManager.showMix(listManager.curMix);
                 }
                 break;
             case MUSIC_MOVE:
                 window_num = MUSIC_LIST;
                 if (dialog_result.equals("add to")) {// 转移歌曲
-                    if (playList.curMix.equals(listManager.curMix)) {// 播放正在浏览的歌单,此情况不可能?
+                    if (PlayList.curMix.equals(listManager.curMix)) {// 播放正在浏览的歌单,此情况不可能?
                         listManager.listMusic(listManager.curMix);
                     }
-                    if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 更新当前播放列表
-                        playList.highlightMusic();
-                    }
+                    
+                    // 更新当前播放列表
+                    intent.putExtra("curMix", PlayList.curMix);
+                    intent.putExtra("curMusic", PlayList.curMusic);
+                    intent.putExtra("mode", 2);
                 }
                 break;
             case BLUETOOTH_LIST:// 蓝牙管理器
                 window_num = bluetoothList.window_num;
                 break;
-            case  BLUETOOTH_EDIT:// `修改蓝牙设备`窗口
+            case BLUETOOTH_EDIT:// `修改蓝牙设备`窗口
                 window_num = BLUETOOTH_LIST;
                 break;
+            default:
+                return;
         }
+        startService(intent);// TODO
     }
 }

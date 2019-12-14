@@ -129,8 +129,10 @@ public class PlayList extends Service {
                 } else {
                     if (mode == 0) {
                         loadMusic(0);
+                        highlightMusic();// TODO
                     } else if (mode == 1) {
                         loadMusic(-1);
+                        highlightMusic();// TODO
                     } else if (mode == 2) {
                     }
                     return 0;
