@@ -10,8 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -111,6 +109,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         initUI();
         initReceiver();
         initData();
+        infoLog("main create");
     }
 
     public void initApp() {
@@ -293,13 +292,20 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         PlayTime.myActivity = this;
         PlayList.myActivity = this;
 
-        Intent intent = new Intent(this, PlayTime.class);
-        intent.putExtra("cmd", "init");
-        startService(intent);
+        Intent intent;
+        if (PlayTime.player == null) {
+            intent = new Intent(this, PlayTime.class);
+            intent.putExtra("cmd", "init");
+            startService(intent);
+        }
         listManager.init();
-        intent = new Intent(this, PlayList.class);
-        intent.putExtra("cmd", "init");
-        startService(intent);
+        if (PlayList.curMix == null) {
+            intent = new Intent(this, PlayList.class);
+            intent.putExtra("cmd", "init");
+            startService(intent);
+        } else {// TODO 显示歌曲列表
+            listManager.listMusic(PlayList.curMix);
+        }
     }
 
     static public void infoLog(String log) {
