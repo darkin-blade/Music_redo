@@ -20,7 +20,6 @@ import java.util.Date;
 import static com.example.music_redo.MusicList.player;
 
 public class PlayTime extends Service {
-    static public Context myContext;
     static public Activity myActivity ;
 
     // 时间管理
@@ -134,7 +133,7 @@ public class PlayTime extends Service {
 
         // 播放
         player.start();
-//        MusicList.button_play.setBackgroundDrawable(myContext.getResources().getDrawable(R.drawable.player_pause));
+        MusicList.button_play.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.player_pause));
 
         updateUI(MODE_PLAY);
 
@@ -168,7 +167,7 @@ public class PlayTime extends Service {
     public void pause() {
         if (player.isPlaying() == true) {
             player.pause();
-//            MusicList.button_play.setBackgroundDrawable(myContext.getResources().getDrawable(R.drawable.player_play));
+            MusicList.button_play.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.player_play));
             musicPlay.interrupt();
             updateUI(MODE_PAUSE);
         }
@@ -242,12 +241,12 @@ public class PlayTime extends Service {
         Intent intent;
         switch (mode) {
             default:
-//                intent = new Intent(myContext, PlayNotification.class);
-//                intent.putExtra("mode", mode);
-//                startService(intent);
-//                intent = new Intent(myContext, PlayWidgetService.class);
-//                intent.putExtra("mode", mode);
-//                startService(intent);
+                intent = new Intent(this, PlayNotification.class);
+                intent.putExtra("mode", mode);
+                startService(intent);
+                intent = new Intent(this, PlayWidgetService.class);
+                intent.putExtra("mode", mode);
+                startService(intent);
                 break;
         }
     }

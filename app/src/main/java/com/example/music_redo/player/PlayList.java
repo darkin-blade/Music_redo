@@ -20,7 +20,6 @@ import com.example.music_redo.MusicList;
 import java.util.ArrayList;
 
 public class PlayList extends Service {
-    static public Context myContext;
     static public Activity myActivity;
 
     // 播放管理
@@ -47,11 +46,6 @@ public class PlayList extends Service {
     public void onCreate() {
         super.onCreate();
         init();
-    }
-
-    public PlayList(Context context, Activity activity) {
-        myContext = context;
-        myActivity = activity;
     }
 
     public void init() {
