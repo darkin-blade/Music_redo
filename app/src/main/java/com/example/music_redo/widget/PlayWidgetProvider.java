@@ -52,7 +52,7 @@ public class PlayWidgetProvider extends AppWidgetProvider {
             Bundle extras = intent.getExtras();
             if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
                 int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
-                this.appWidgetIds.remove(appWidgetId);
+                appWidgetIds.remove(appWidgetIds.indexOf(appWidgetId));
             }
         } else {
             return;

@@ -45,6 +45,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // TODO 删除widget
         if (intent == null) {
             return START_STICKY;
         }
