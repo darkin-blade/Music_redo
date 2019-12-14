@@ -214,9 +214,10 @@ public class ListManager {
                 public void onClick(View v) {
                     // TODO 加载专辑曲目并播放歌曲
                     Intent intent = new Intent(myContext, PlayList.class);
-                    intent.putExtra("curMix", PlayList.curMix);
-                    intent.putExtra("curMusic", PlayList.curMusic);
-                    intent.putExtra("mode", 2);
+                    intent.putExtra("cmd", "loadMix");
+                    intent.putExtra("nextMix", curMix);
+                    intent.putExtra("nextMusic", item_detail[2]);
+                    intent.putExtra("mode", 0);
                     myContext.startService(intent);
                 }
             });

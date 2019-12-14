@@ -317,6 +317,7 @@ public class PlayList extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String command = intent.getStringExtra("cmd");
+        MusicList.infoLog("play list start command " + command);// TODO debug
 
         if (command != null) {
             if (command.equals("loadMusic")) {// 加载单个音乐

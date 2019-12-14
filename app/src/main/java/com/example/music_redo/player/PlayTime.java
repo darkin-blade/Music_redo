@@ -134,7 +134,7 @@ public class PlayTime extends Service {
 
         // 播放
         player.start();
-        MusicList.button_play.setBackgroundDrawable(myContext.getResources().getDrawable(R.drawable.player_pause));
+//        MusicList.button_play.setBackgroundDrawable(myContext.getResources().getDrawable(R.drawable.player_pause));
 
         updateUI(MODE_PLAY);
 
@@ -168,7 +168,7 @@ public class PlayTime extends Service {
     public void pause() {
         if (player.isPlaying() == true) {
             player.pause();
-            MusicList.button_play.setBackgroundDrawable(myContext.getResources().getDrawable(R.drawable.player_play));
+//            MusicList.button_play.setBackgroundDrawable(myContext.getResources().getDrawable(R.drawable.player_play));
             musicPlay.interrupt();
             updateUI(MODE_PAUSE);
         }
