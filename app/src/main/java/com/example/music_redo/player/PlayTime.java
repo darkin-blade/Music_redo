@@ -90,6 +90,22 @@ public class PlayTime extends Service {
 
     }
 
+    public void load() {// 只刷新歌曲的ui
+        total_time = player.getDuration();
+
+        // 设置时长ui
+        SimpleDateFormat format = new SimpleDateFormat("mm:ss");
+        Date tmp = new Date(total_time);
+        final String formatTime = format.format(tmp);
+        updateUI(new Runnable() {
+            @Override
+            public void run() {
+                MusicList.seekBar.setMax(total_time);
+                MusicList.totalTime.setText(formatTime);
+            }
+        });
+    }
+
     public void play(int mode) {
         /**
          * mode:
@@ -109,21 +125,7 @@ public class PlayTime extends Service {
                 player.reset();
                 player.setDataSource(PlayList.curMusic);
                 player.prepare();
-                total_time = player.getDuration();
-                if (MusicList.window_num != 0) {// TODO
-                    MusicList.seekBar.setMax(total_time);
-                }
-
-                // 设置时长ui
-                SimpleDateFormat format = new SimpleDateFormat("mm:ss");
-                Date tmp = new Date(total_time);
-                final String formatTime = format.format(tmp);
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        MusicList.totalTime.setText(formatTime);
-                    }
-                });
+                load();
             } catch (IOException e) {// prepare failed
                 e.printStackTrace();
 
@@ -316,6 +318,8 @@ public class PlayTime extends Service {
         if (command != null) {
             if (command.equals("init")) {// 初始化
                 MusicList.infoLog("play time init");
+            } else if (command.equals("load")) {
+                load();
             } else if (command.equals("play")) {
                 int mode = intent.getIntExtra("mode", -1);
                 play(mode);

@@ -141,6 +141,7 @@ public class PlayList extends Service {
                         loadMusic(-1);
                         highlightMusic();
                     } else if (mode == 2) {
+                        highlightMusic();
                     }
                     return 0;
                 }

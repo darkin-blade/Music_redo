@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.music_redo.device.BluetoothList;
-import com.example.music_redo.player.MediaReceiver;
 import com.example.music_redo.mix.MixEdit;
 import com.example.music_redo.mix.MixNew;
 import com.example.music_redo.mix.MixRename;
@@ -283,8 +282,16 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             intent = new Intent(this, PlayList.class);
             intent.putExtra("cmd", "init");
             startService(intent);
-        } else {// TODO 显示歌曲列表
+        } else {// TODO 恢复ui
+            intent = new Intent(this, PlayList.class);
+            intent.putExtra("cmd", "loadMix");
+            intent.putExtra("nextMix", PlayList.curMix);
+            intent.putExtra("nextMusic", PlayList.curMusic);
+            intent.putExtra("mode", 2);
+            startService(intent);
+
             listManager.listMusic(PlayList.curMix);
+            listManager.showMix(PlayList.curMix);
         }
     }
 
