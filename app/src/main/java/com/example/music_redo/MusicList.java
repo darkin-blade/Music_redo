@@ -290,6 +290,10 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             intent.putExtra("mode", 2);
             startService(intent);
 
+            intent = new Intent(this, PlayTime.class);
+            intent.putExtra("cmd", "load");
+            startService(intent);
+
             listManager.listMusic(PlayList.curMix);
             listManager.showMix(PlayList.curMix);
         }
