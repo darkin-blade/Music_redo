@@ -183,8 +183,8 @@ public class PlayWidgetService extends Service {// 用于部件交互
             startService(intent);
         }
 
-        // 修改ui
-        if (PlayList.curMusic.length() <= 0 || PlayList.curMix.length() <= 0) {
+        // TODO 修改ui
+        if (PlayList.curMix == null || PlayList.curMusic.length() <= 0 || PlayList.curMix.length() <= 0) {
             remoteViews.setTextViewText(R.id.cur_music, "no music");
         } else {
             remoteViews.setTextViewText(R.id.cur_music, PlayList.curMix + "    " + PlayList.curMusic.replaceAll(".*/", ""));

@@ -151,7 +151,9 @@ public class PlayTime extends Service {
 
         // 播放
         player.start();
-        MusicList.button_play.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.player_pause));
+        if (MusicList.window_num != 0) {
+            MusicList.button_play.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.player_pause));
+        }
 
         updateService(MODE_PLAY);
 
@@ -185,7 +187,9 @@ public class PlayTime extends Service {
     public void pause() {
         if (player.isPlaying() == true) {
             player.pause();
-            MusicList.button_play.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.player_play));
+            if (MusicList.window_num != 0) {
+                MusicList.button_play.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.player_play));
+            }
             musicPlay.interrupt();
             updateService(MODE_PAUSE);
         }
@@ -224,12 +228,14 @@ public class PlayTime extends Service {
     }
 
     public void getBar() {// 从进度条更新播放进度
-        int curProgress = MusicList.seekBar.getProgress();
+        if (MusicList.window_num != 0) {
+            int curProgress = MusicList.seekBar.getProgress();
 
-        // 调整时间
-        cur_time = curProgress;
-        player.seekTo(cur_time);
-        setTime();
+            // 调整时间
+            cur_time = curProgress;
+            player.seekTo(cur_time);
+            setTime();
+        }
     }
 
     public void setBar() {// 更新进度条
