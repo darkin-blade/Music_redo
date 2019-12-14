@@ -1,9 +1,15 @@
-package com.example.music_redo;
+package com.example.music_redo.player;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.IBinder;
 
+import androidx.annotation.Nullable;
+
+import com.example.music_redo.MusicList;
+import com.example.music_redo.R;
 import com.example.music_redo.widget.PlayNotification;
 import com.example.music_redo.widget.PlayWidgetService;
 
@@ -14,7 +20,7 @@ import java.util.Date;
 import static com.example.music_redo.MusicList.playList;
 import static com.example.music_redo.MusicList.player;
 
-public class PlayTime {
+public class PlayTime extends Service {
     public Context myContext;
     public Activity myActivity ;
 
@@ -212,5 +218,38 @@ public class PlayTime {
                 myActivity.startService(intent);
                 break;
         }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        String command = intent.getStringExtra("cmd");
+        if (command != null) {
+            if (command.equals("init")) {
+                init();
+            } else if (command.equals("play")) {
+                int mode = intent.getIntExtra("mode", -1);
+                play(mode);
+            } else if (command.equals("pause")) {
+                pause();
+            } else if (command.equals("next")) {
+                next();
+            } else if (command.equals("prev")) {
+                prev();
+            } else if (command.equals("reset")) {
+                reset();
+            } else if (command.equals("getBar")) {
+                getBar();
+            } else {// TODO debug
+                String tmp = null;
+                int sb = tmp.length();
+            }
+        }
+        return START_STICKY;
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }

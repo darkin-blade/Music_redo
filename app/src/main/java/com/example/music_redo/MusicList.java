@@ -3,7 +3,6 @@ package com.example.music_redo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import android.appwidget.AppWidgetManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -33,6 +32,8 @@ import com.example.music_redo.mix.MixRename;
 import com.example.music_redo.mix.MusicEdit;
 import com.example.music_redo.mix.MusicMove;
 import com.example.music_redo.mix.MusicSelect;
+import com.example.music_redo.player.PlayList;
+import com.example.music_redo.player.PlayTime;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -78,7 +79,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public String appPath;
     // TODO media信号处理
     static public Long myTime = System.currentTimeMillis();// 微秒时间
-    static public int clickTimes;// TODO 耳机信号次数
+    static public int clickTimes;// 耳机信号次数
 
     // 功能代号
     static public int window_num;
@@ -100,8 +101,8 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     // 核心功能
     public MediaReceiver receiver;// 接收`蓝牙/媒体`信号
     static public ListManager listManager;
-    static public PlayList playList;
-    static public PlayTime playTime;
+    // TODO 歌单管理
+    // TODO 时间管理
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +160,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);// 监听有线耳机的插拔
         intentFilter.addAction(Intent.ACTION_MEDIA_BUTTON);// TODO 重复?
 
-        registerReceiver(this.receiver, intentFilter);// 注册广播 TODO 有报错
+        registerReceiver(this.receiver, intentFilter);// 注册广播
         receiver.registerReceiver(this);
 
     }
@@ -171,7 +172,10 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {// 播放完毕回调函数
             @Override
             public void onCompletion(MediaPlayer mp) {
-                playTime.next();// 下一首
+                // 下一首
+                Intent intent = new Intent(MusicList.this, PlayTime.class);
+                intent.putExtra("cmd", "next");
+                startService(intent);
             }
         });
     }
@@ -212,15 +216,18 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         scrollView = findViewById(R.id.layout_scroll);
         itemList = findViewById(R.id.item_list);
 
-        button_play.setBackgroundDrawable(getResources().getDrawable(R.drawable.player_play));// TODO 启动时为暂停
+        button_play.setBackgroundDrawable(getResources().getDrawable(R.drawable.player_play));// 启动时为暂停
         button_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(MusicList.this, PlayTime.class);
                 if (player.isPlaying() == true) {
-                    playTime.pause();
+                    intent.putExtra("cmd", "pause");
                 } else {
-                    playTime.play(0);
+                    intent.putExtra("cmd", "play");
+                    intent.putExtra("mode", 0);
                 }
+                startService(intent);
             }
         });
 
@@ -228,7 +235,9 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             @Override
             public void onClick(View v) {
                 // 下一首
-                playTime.next();
+                Intent intent = new Intent(MusicList.this, PlayTime.class);
+                intent.putExtra("cmd", "next");
+                startService(intent);
             }
         });
 
@@ -236,7 +245,9 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             @Override
             public void onClick(View v) {
                 // 上一首
-                playTime.prev();
+                Intent intent = new Intent(MusicList.this, PlayTime.class);
+                intent.putExtra("cmd", "prev");
+                startService(intent);
             }
         });
 
@@ -247,12 +258,15 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                     // 切换至歌单列表
                     window_num = MIX_LIST;
                     listManager.listMix();
-                    MusicList.playList.highlightMusic();
                     MusicList.listManager.showMix("mix_list");
+
+                    Intent intent = new Intent(MusicList.this, PlayList.class);
+                    intent.putExtra("cmd", "highlightMusic");
+                    startService(intent);
                 } else {
-                    // 切换到当前歌单
-                    if (playList.curMusic.length() > 0) {
-                        listManager.listMusic(playList.curMix);
+                    // TODO 切换到当前歌单
+                    if (PlayList.curMusic.length() > 0) {
+                        listManager.listMusic(PlayList.curMix);
                         window_num = MUSIC_LIST;
                     } else {
                         infoToast(MusicList.this, "no current mix");
@@ -294,7 +308,9 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                playTime.getBar();
+                Intent intent = new Intent(MusicList.this, PlayTime.class);
+                intent.putExtra("cmd", "getBar");
+                startService(intent);
             }
         });
 
@@ -304,14 +320,16 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     public void initData() {
         // 初始化核心功能
         listManager = new ListManager(this);
-        playList = new PlayList(this, this);
-        playTime = new PlayTime(this, this);
 
 
-        // 注意初始化顺序
-        playTime.init();
+        // TODO 注意初始化顺序
+        Intent intent = new Intent(this, PlayTime.class);
+        intent.putExtra("cmd", "init");
+        startService(intent);
         listManager.init();
-        playList.init();
+        intent = new Intent(this, PlayList.class);
+        intent.putExtra("cmd", "init");
+        startService(intent);
     }
 
     static public int cmd(String sql) {// 操作数据库
@@ -380,7 +398,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         // 更改歌单名
         int result = cmd("alter table " + oldName + " rename to " + newName + ";");
         if (result != 0) {
-            return -1;// TODO 删除table失败
+            return -1;// 删除table失败
         }
 
         result = cmd("update mix_list set name = '" + newName + "' where name = '" + oldName + "';");
@@ -411,7 +429,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         toast.show();
     }
 
-    static public String pathSimplify(String path) {// TODO 简化路径
+    static public String pathSimplify(String path) {// 简化路径
         path = path.replaceAll("/+\\./", "/");// 除去`/.`
 
         Pattern pattern = Pattern.compile("/+\\.[\\.]+");
@@ -444,7 +462,9 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     @Override
     public void onPause() {
-        playList.save();
+        Intent intent = new Intent(this, PlayList.class);
+        intent.putExtra("cmd", "save");
+        startService(intent);
         super.onPause();
     }
 
@@ -453,7 +473,9 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         // 解决泄漏问题
         unregisterReceiver(receiver);
 
-        playList.save();
+        Intent intent = new Intent(this, PlayList.class);
+        intent.putExtra("cmd", "save");
+        startService(intent);
         super.onDestroy();
     }
 
@@ -506,7 +528,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             case MUSIC_MOVE:
                 window_num = MUSIC_LIST;
                 if (dialog_result.equals("add to")) {// 转移歌曲
-                    if (playList.curMix.equals(listManager.curMix)) {// 播放正在浏览的歌单 TODO 此情况不可能
+                    if (playList.curMix.equals(listManager.curMix)) {// 播放正在浏览的歌单,此情况不可能?
                         listManager.listMusic(listManager.curMix);
                     }
                     if (playList.loadMix(playList.curMix, playList.curMusic, 2) == 0) {// 更新当前播放列表

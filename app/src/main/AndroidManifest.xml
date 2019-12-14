@@ -29,6 +29,10 @@
             </intent-filter>
         </activity>
 
+        <!--    播放器    -->
+        <service android:name=".player.PlayList"></service>
+        <service android:name=".player.PlayTime"></service>
+
         <!--    接收媒体设备信号    -->
         <receiver android:name=".MediaReceiver">
             <intent-filter android:priority="1000">
@@ -40,11 +44,7 @@
         <service android:name=".widget.PlayNotification"></service>
 
         <!--    桌面部件    -->
-        <service android:name=".widget.PlayWidgetService">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.appwidget.action.APP_WIDGET_SERVICE"></action>-->
-<!--            </intent-filter>-->
-        </service>
+        <service android:name=".widget.PlayWidgetService"></service>
         <receiver android:name=".widget.PlayWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"></action>

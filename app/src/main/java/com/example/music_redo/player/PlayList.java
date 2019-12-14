@@ -1,30 +1,37 @@
-package com.example.music_redo;
+package com.example.music_redo.player;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
+import com.example.music_redo.MusicList;
+
 import java.util.ArrayList;
 
-public class PlayList {
+public class PlayList extends Service {
     Context myContext;
     Activity myActivity;
 
     // 播放管理
     // 每次加载必须要恢复的数据
-    public String curMix;// 当前歌单
-    public String curMusic;// 当前歌曲
-    int playMode;// 播放模式
+    static public String curMix;// 当前歌单
+    static public String curMusic;// 当前歌曲
+    static public int playMode;// 播放模式
     // 次要数据
-    ArrayList<String> curMusicList;// 当前歌单的所有歌曲
-    int curMusicIndex;
-    int curMixLen;
+    static public ArrayList<String> curMusicList;// 当前歌单的所有歌曲
+    static public int curMusicIndex;
+    static public int curMixLen;
 
     static public final int CIRCULATE = 0;// 顺序播放
     static public final int RANDOM = 1;// 随机
@@ -237,7 +244,7 @@ public class PlayList {
                 LinearLayout detail = (LinearLayout) contain.getChildAt(1);
                 TextView name = (TextView) detail.getChildAt(0);
                 TextView count = (TextView) detail.getChildAt(1);
-                if (MusicList.playList.curMix.equals(name.getText().toString())) {// 正在播放该歌单
+                if (curMix.equals(name.getText().toString())) {// 正在播放该歌单
                     dest = item;
                     name.setTextColor(Color.rgb(230, 100, 60));
                     count.setTextColor(Color.rgb(230, 100, 60));
@@ -258,7 +265,7 @@ public class PlayList {
                 });
             }
         } else if (MusicList.window_num == MusicList.MUSIC_LIST) {
-            if (MusicList.playList.curMix.equals(MusicList.listManager.curMix)) {
+            if (curMix.equals(MusicList.listManager.curMix)) {
                 // TODO 高亮music
                 for (int i = 0; i < childCount; i ++) {
                     LinearLayout item = (LinearLayout) layout.getChildAt(i);
@@ -266,7 +273,7 @@ public class PlayList {
                     LinearLayout detail = (LinearLayout) contain.getChildAt(1);
                     TextView name = (TextView) detail.getChildAt(0);
                     TextView count = (TextView) detail.getChildAt(1);
-                    if (MusicList.playList.curMusicIndex == i) {// 正在播放该歌单
+                    if (curMusicIndex == i) {// 正在播放该歌单
                         dest = item;
                         name.setTextColor(Color.rgb(230, 100, 60));
                         count.setTextColor(Color.rgb(230, 100, 60));
@@ -288,5 +295,39 @@ public class PlayList {
                 }
             }
         }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        String command = intent.getStringExtra("cmd");
+
+        if (command != null) {
+            if (command.equals("loadMusic")) {// TODO 加载单个音乐
+                int mode = intent.getIntExtra("mode", -1);
+                loadMusic(mode);
+            } else if (command.equals("loadMix")) {// TODO 加载歌单
+                String nextMix = intent.getStringExtra("nextMix");
+                String nextMusic = intent.getStringExtra("nextMusic");
+                int mode = intent.getIntExtra("mode", -1);
+                loadMix(nextMix, nextMusic, mode);
+            } else if (command.equals("stopMusic")) {// TODO 强制暂停
+                int mode = intent.getIntExtra("mode", -1);
+                stopMusic(mode);
+            } else if (command.equals("save")) {// TODO 保存数据
+                save();
+            } else if (command.equals("init")) {// TODO 恢复数据
+                init();
+            } else if (command.equals("highlightMusic")) {// TODO 修改监听
+                highlightMusic();
+            }
+        }
+
+        return START_STICKY;
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }
