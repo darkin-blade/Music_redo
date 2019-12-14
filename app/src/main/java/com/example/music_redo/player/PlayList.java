@@ -72,7 +72,7 @@ public class PlayList extends Service {
             curMusic = curMusicList.get(curMusicIndex);
         }
 
-        // TODO 加载歌曲
+        // 加载歌曲
         Intent intent = new Intent(this, PlayTime.class);
         intent.putExtra("cmd", "play");
         if (mode != -1) {
@@ -136,10 +136,10 @@ public class PlayList extends Service {
                 } else {
                     if (mode == 0) {
                         loadMusic(0);
-                        highlightMusic();// TODO
+                        highlightMusic();
                     } else if (mode == 1) {
                         loadMusic(-1);
-                        highlightMusic();// TODO
+                        highlightMusic();
                     } else if (mode == 2) {
                     }
                     return 0;
@@ -173,13 +173,17 @@ public class PlayList extends Service {
 
         highlightMusic();
 
-        // TODO 重置player
+        // 重置player
         Intent intent = new Intent(this, PlayTime.class);
         intent.putExtra("cmd", "reset");
         startService(intent);
     }
 
-    public void recover() {// 恢复数据
+    public void recover() {// TODO 恢复数据
+        if (MusicDataBase.database == null) {// TODO 自动启动service
+            MusicDataBase.initData(this);
+        }
+
         Cursor cursor = MusicDataBase.database.query(
                 "user_data",
                 new String[] {"cur_mix", "cur_music", "play_mode", "cur_time", "total_time"},
@@ -204,6 +208,8 @@ public class PlayList extends Service {
                     highlightMusic();
                 }
                 MusicList.listManager.showMix(curMix);
+            } else {
+                loadMix(curMix, curMusic, 1);
             }
         } else {
             MusicList.infoLog("cannot find user data");
@@ -231,6 +237,10 @@ public class PlayList extends Service {
     }
 
     public void highlightMusic() {
+        if (myActivity == null) {// TODO 没启动activity
+            return;
+        }
+
         String tmp = curMusic.replaceAll(".*/", "");
         if (tmp.length() <= 0) {
             tmp = "no music";
@@ -250,7 +260,7 @@ public class PlayList extends Service {
         LinearLayout dest = null;
         int childCount = layout.getChildCount();
         if (MusicList.window_num == MusicList.MIX_LIST) {
-            // TODO 高亮mix
+            // 高亮mix
             for (int i = 0; i < childCount; i ++) {
                 LinearLayout item = (LinearLayout) layout.getChildAt(i);
                 RelativeLayout contain = (RelativeLayout) item.getChildAt(0);
@@ -267,7 +277,7 @@ public class PlayList extends Service {
                 }
             }
 
-            // TODO 增加监听
+            // 增加监听
             if (dest != null) {
                 final LinearLayout finalDest = dest;
                 ((LinearLayout) MusicList.musicName.getParent()).setOnClickListener(new View.OnClickListener() {
@@ -279,7 +289,7 @@ public class PlayList extends Service {
             }
         } else if (MusicList.window_num == MusicList.MUSIC_LIST) {
             if (curMix.equals(MusicList.listManager.curMix)) {
-                // TODO 高亮music
+                // 高亮music
                 for (int i = 0; i < childCount; i ++) {
                     LinearLayout item = (LinearLayout) layout.getChildAt(i);
                     RelativeLayout contain = (RelativeLayout) item.getChildAt(0);
@@ -296,7 +306,7 @@ public class PlayList extends Service {
                     }
                 }
 
-                // TODO 增加监听
+                // 增加监听
                 if (dest != null) {
                     final LinearLayout finalDest = dest;
                     ((LinearLayout) MusicList.musicName.getParent()).setOnClickListener(new View.OnClickListener() {
@@ -317,8 +327,6 @@ public class PlayList extends Service {
         }
 
         String command = intent.getStringExtra("cmd");
-        MusicList.infoLog("play list start command " + command);// TODO debug
-
         if (command != null) {
             if (command.equals("loadMusic")) {// 加载单个音乐
                 int mode = intent.getIntExtra("mode", -1);
