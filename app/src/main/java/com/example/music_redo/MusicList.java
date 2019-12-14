@@ -26,12 +26,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.music_redo.device.BluetoothList;
+import com.example.music_redo.device.MediaReceiver;
 import com.example.music_redo.mix.MixEdit;
 import com.example.music_redo.mix.MixNew;
 import com.example.music_redo.mix.MixRename;
 import com.example.music_redo.mix.MusicEdit;
 import com.example.music_redo.mix.MusicMove;
 import com.example.music_redo.mix.MusicSelect;
+import com.example.music_redo.player.ListManager;
 import com.example.music_redo.player.PlayList;
 import com.example.music_redo.player.PlayTime;
 
@@ -58,24 +60,33 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public ScrollView scrollView;// 滚动界面
     static public LinearLayout itemList;// 列表部分
 
-    // ui功能
     // dialog界面
     static public MixEdit mixEdit;// 编辑歌单
     static public MusicEdit musicEdit;// 歌单界面 编辑歌曲
     static public MixNew mixNew;// 新建歌单
     static public MixRename mixRename;// 重命名歌单
-    // ui界面
+
+    // 核心功能
+    // 设备管理
+    public MediaReceiver receiver;// 接收`蓝牙/媒体`信号
+    static public BluetoothList bluetoothList;// 蓝牙管理
+    static public BluetoothAdapter bluetoothAdapter;// 蓝牙
+    // 播放管理
+    static public MediaPlayer player;// 媒体播放器
+    // TODO 播放模式
+    // TODO 歌单管理
+    // TODO 时间管理
+    // 歌单管理
+    static public ListManager listManager;// 主页面ui管理
     static public MusicSelect musicSelect;// 文件浏览器
     static public MusicMove musicMove;// 歌曲`添加至`歌单
-    static public SQLiteDatabase database;
-    // TODO 播放模式
-    static public BluetoothList bluetoothList;// 蓝牙管理
-    // 其它部件
+    // 部件管理
     // TODO 锁屏
     // TODO 桌面部件
     // TODO 通知栏部件
 
     // 公共变量
+    static public SQLiteDatabase database;
     static public String appPath;
     // TODO media信号处理
     static public Long myTime = System.currentTimeMillis();// 微秒时间
@@ -95,15 +106,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     static public final int BLUETOOTH_LIST = 9;// 蓝牙管理
     static public final int BLUETOOTH_EDIT = 10;// `蓝牙设备控制`窗口
 
-    // 核心组件
-    static public MediaPlayer player;// 媒体播放器
-    static public BluetoothAdapter bluetoothAdapter;// 蓝牙
-    // 核心功能
-    public MediaReceiver receiver;// 接收`蓝牙/媒体`信号
-    static public ListManager listManager;
-    // TODO 歌单管理
-    // TODO 时间管理
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,9 +114,8 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         initApp();
         initPlayer();
         initUI();
-        initBluetooth();
+        initReceiver();
         initData();
-        infoLog("player: " + (player == null));
     }
 
     public void initApp() {
@@ -149,7 +150,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
                 ");");
     }
 
-    public void initBluetooth() {// TODO 将按键与其他action分离
+    public void initReceiver() {// TODO 将按键与其他action分离
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();// 获取蓝牙适配器
         receiver = new MediaReceiver();
 

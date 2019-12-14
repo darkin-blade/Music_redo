@@ -1,4 +1,4 @@
-package com.example.music_redo;
+package com.example.music_redo.player;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.music_redo.MusicList;
+import com.example.music_redo.R;
 import com.example.music_redo.player.PlayList;
 
 import java.util.ArrayList;

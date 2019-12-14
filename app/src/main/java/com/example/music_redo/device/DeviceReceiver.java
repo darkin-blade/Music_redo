@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 
-import com.example.music_redo.MediaReceiver;
 import com.example.music_redo.MusicList;
 
 import static com.example.music_redo.device.BluetoothList.addresses;

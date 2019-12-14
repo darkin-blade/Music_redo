@@ -34,7 +34,7 @@
         <service android:name=".player.PlayTime"></service>
 
         <!--    接收媒体设备信号    -->
-        <receiver android:name=".MediaReceiver">
+        <receiver android:name=".device.MediaReceiver">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.MEDIA_BUTTON"></action>
             </intent-filter>
