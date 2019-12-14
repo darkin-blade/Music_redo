@@ -25,7 +25,7 @@ import com.example.music_redo.R;
 
 import java.util.ArrayList;
 
-import static com.example.music_redo.MusicList.bluetoothAdapter;
+import static com.example.music_redo.player.PlayTime.bluetoothAdapter;
 
 public class BluetoothList extends DialogFragment {
     View myView;

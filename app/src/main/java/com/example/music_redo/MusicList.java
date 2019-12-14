@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.music_redo.device.BluetoothList;
-import com.example.music_redo.device.MediaReceiver;
+import com.example.music_redo.player.MediaReceiver;
 import com.example.music_redo.mix.MixEdit;
 import com.example.music_redo.mix.MixNew;
 import com.example.music_redo.mix.MixRename;
@@ -65,9 +65,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     // 核心功能
     // 设备管理
-    public MediaReceiver receiver;// 接收`蓝牙/媒体`信号
     static public BluetoothList bluetoothList;// 蓝牙管理
-    static public BluetoothAdapter bluetoothAdapter;// 蓝牙
     // 播放管理
     // TODO 播放模式
     // TODO 歌单管理
@@ -107,7 +105,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
         initApp();
         initUI();
-        initReceiver();
         initData();
         infoLog("main create");
     }
@@ -123,28 +120,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         // 初始化功能编号
         window_num = MUSIC_LIST;
         dialog_result = "";
-
-        // TODO 初始化数据库
-        if (MusicDataBase.appPath == null) {
-            MusicDataBase.initData(this);
-        }
-    }
-
-    public void initReceiver() {// TODO 将按键与其他action分离
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();// 获取蓝牙适配器
-        receiver = new MediaReceiver();
-
-        IntentFilter intentFilter = new IntentFilter();
-
-        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);// 监视蓝牙设备与APP连接的状态
-        intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
-        intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
-        intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);// 监听有线耳机的插拔
-        intentFilter.addAction(Intent.ACTION_MEDIA_BUTTON);// TODO 重复?
-
-        registerReceiver(this.receiver, intentFilter);// 注册广播
-        receiver.registerReceiver(this);
-
     }
 
     public void initUI() {// 初始化ui,layout和dialog
@@ -292,6 +267,11 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         PlayTime.myActivity = this;
         PlayList.myActivity = this;
 
+        // TODO 初始化数据库
+        if (MusicDataBase.appPath == null) {
+            MusicDataBase.initData(this);
+        }
+
         Intent intent;
         if (PlayTime.player == null) {
             intent = new Intent(this, PlayTime.class);
@@ -364,9 +344,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
 
     @Override
     public void onDestroy() {
-        // 解决泄漏问题
-        unregisterReceiver(receiver);
-
         Intent intent = new Intent(this, PlayList.class);
         intent.putExtra("cmd", "save");
         startService(intent);

@@ -1,4 +1,4 @@
-package com.example.music_redo.device;
+package com.example.music_redo.player;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -10,7 +10,6 @@ import android.media.AudioManager;
 import android.view.KeyEvent;
 
 import com.example.music_redo.MusicList;
-import com.example.music_redo.player.PlayTime;
 
 public class MediaReceiver extends BroadcastReceiver {
 

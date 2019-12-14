@@ -2,7 +2,10 @@ package com.example.music_redo.player;
 
 import android.app.Activity;
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.IBinder;
@@ -23,6 +26,8 @@ public class PlayTime extends Service {
     static public Activity myActivity;
 
     static public MediaPlayer player;// 媒体播放器
+    public MediaReceiver receiver;// 接收`蓝牙/媒体`信号
+    static public BluetoothAdapter bluetoothAdapter;// 蓝牙
 
     // 时间管理
     static public int total_time;
@@ -46,6 +51,7 @@ public class PlayTime extends Service {
         super.onCreate();
         initData();
         initPlayer();
+        initReceiver();
     }
 
     public void initData() {
@@ -65,6 +71,23 @@ public class PlayTime extends Service {
                 next();
             }
         });
+    }
+
+    public void initReceiver() {// TODO 将按键与其他action分离
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();// 获取蓝牙适配器
+        receiver = new MediaReceiver();
+
+        IntentFilter intentFilter = new IntentFilter();
+
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);// 监视蓝牙设备与APP连接的状态
+        intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);// 监听有线耳机的插拔
+        intentFilter.addAction(Intent.ACTION_MEDIA_BUTTON);// TODO 重复?
+
+        registerReceiver(this.receiver, intentFilter);// 注册广播
+        receiver.registerReceiver(this);
+
     }
 
     public void play(int mode) {
@@ -309,6 +332,14 @@ public class PlayTime extends Service {
             }
         }
         return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        // 解决泄漏问题
+        unregisterReceiver(receiver);
+
+        super.onDestroy();
     }
 
     @Nullable
