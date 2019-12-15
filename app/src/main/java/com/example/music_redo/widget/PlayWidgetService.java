@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.widget.RemoteViews;
 
@@ -50,10 +51,10 @@ public class PlayWidgetService extends Service {// 用于部件交互
                     }
                 }
                 initListener();// TODO 创建时就进行初始化
+                PlayWidgetService.super.onCreate();// TODO
             }
         }).start();
 
-        super.onCreate();
     }
 
     @Nullable
@@ -152,13 +153,26 @@ public class PlayWidgetService extends Service {// 用于部件交互
         if (PlayTime.player == null) {// TODO 播放器无效
             intent = new Intent(this, PlayTime.class);
             intent.putExtra("cmd", "init");
-            startService(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent);
+            } else {
+                startService(intent);
+            }
         }
 
         if (PlayList.curMix == null) {// TODO 需要恢复歌单
             intent = new Intent(this, PlayList.class);
             intent.putExtra("cmd", "init");
-            startService(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent);
+            } else {
+                startService(intent);
+            }
+        }
+
+        // TODO
+        if (remoteViews == null) {
+            remoteViews = new RemoteViews(this.getPackageName(), R.layout.play_widget);
         }
     }
 
