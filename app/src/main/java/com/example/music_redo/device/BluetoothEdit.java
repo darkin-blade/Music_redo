@@ -118,7 +118,12 @@ public class BluetoothEdit extends DialogFragment {
             Method createBond = device.getClass().getMethod("createBond");
             createBond.setAccessible(true);
             result = (Boolean) createBond.invoke(device);
-            MusicList.infoLog("link result: " + result);
+            if (result == false) {// TODO 如果出现配对异常
+                Method removeBond = device.getClass().getMethod("removeBond");
+                removeBond.setAccessible(true);
+                removeBond.invoke(device);
+                result = (Boolean) createBond.invoke(device);
+            }
         } catch (NoSuchMethodException e) {// getMethod
             e.printStackTrace();
         } catch (IllegalAccessException e) {// invoke
