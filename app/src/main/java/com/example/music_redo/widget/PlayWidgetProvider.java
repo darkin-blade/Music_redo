@@ -1,14 +1,19 @@
 package com.example.music_redo.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.RemoteViews;
 
 import com.example.music_redo.MusicList;
+import com.example.music_redo.R;
 
 import java.util.ArrayList;
+
+import static com.example.music_redo.widget.PlayWidgetService.remoteViews;
 
 public class PlayWidgetProvider extends AppWidgetProvider {
 
@@ -27,44 +32,6 @@ public class PlayWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-
-        // TODO 初始化变量
-//        if (appWidgetIds == null) {
-//            appWidgetIds = new ArrayList<>();
-//            MusicList.infoLog("init ids");
-//        }
-//
-//        String action = intent.getAction();
-//        MusicList.infoLog("widget provider receive " + action);
-//        if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {// TODO 增加widget
-//            Bundle extras = intent.getExtras();
-//            if (extras != null) {
-//                int[] ids = extras.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-//                if (ids != null && ids.length > 0) {
-//                    for (int i = 0; i < ids.length; i ++) {
-//                        appWidgetIds.add(ids[i]);
-//                    }
-//                }
-//            }
-//        } else if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {// TODO 删除widget
-//            Bundle extras = intent.getExtras();
-//            if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
-//                int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
-//                appWidgetIds.remove(appWidgetIds.indexOf(appWidgetId));
-//            }
-//        } else {
-//            return;
-//        }
-//
-//        int[] ids = new int[appWidgetIds.size()];
-//        for (int i = 0; i < appWidgetIds.size(); i ++) {
-//            ids[i] = appWidgetIds.get(i);
-//        }
-//
-//        Intent tmp = new Intent(context, PlayWidgetService.class);
-//        tmp.putExtra("mode", MODE_INIT);
-//        tmp.putExtra("appWidgetIds", ids);
-//        context.startService(tmp);
     }
 
     @Override
@@ -88,6 +55,8 @@ public class PlayWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         MusicList.infoLog("provider update");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
+
+        // TODO 初始化widget
     }
 
     @Override

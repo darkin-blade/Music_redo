@@ -74,7 +74,7 @@ public class PlayWidgetService extends Service {// 用于部件交互
         int[] ids = intent.getIntArrayExtra("appWidgetIds");
 
         // 更新layout
-//        MusicList.infoLog("widget service: " + cmd_mode);
+        MusicList.infoLog("widget service: " + cmd_mode);
 
         Intent playCmd = new Intent(this, PlayTime.class);
         switch (cmd_mode) {
@@ -205,12 +205,15 @@ public class PlayWidgetService extends Service {// 用于部件交互
             remoteViews.setTextViewText(R.id.cur_music, PlayList.curMix + "    " + PlayList.curMusic.replaceAll(".*/", ""));
         }
 
-        remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_play);
-        Intent intent = new Intent(this, PlayWidgetService.class);
-        intent.putExtra("fromWidgetService", true);
-        intent.putExtra("mode", MODE_PLAY);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_play);
+            Intent intent = new Intent(this, PlayWidgetService.class);
+            intent.putExtra("fromWidgetService", true);
+            intent.putExtra("mode", MODE_PLAY);
+            PendingIntent pendingIntent = null;
+            pendingIntent = PendingIntent.getForegroundService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
+        }
 
         if (isInit == 1) {
             updateUI();
@@ -227,12 +230,14 @@ public class PlayWidgetService extends Service {// 用于部件交互
             remoteViews.setTextViewText(R.id.cur_music, PlayList.curMix + "    " + PlayList.curMusic.replaceAll(".*/", ""));
         }
 
-        remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_pause);
-        Intent intent = new Intent(this, PlayWidgetService.class);
-        intent.putExtra("fromWidgetService", true);
-        intent.putExtra("mode", MODE_PAUSE);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            remoteViews.setImageViewResource(R.id.button_play, R.drawable.player_pause);
+            Intent intent = new Intent(this, PlayWidgetService.class);
+            intent.putExtra("fromWidgetService", true);
+            intent.putExtra("mode", MODE_PAUSE);
+            PendingIntent pendingIntent = PendingIntent.getForegroundService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            remoteViews.setOnClickPendingIntent(R.id.button_play, pendingIntent);
+        }
 
         if (isInit == 1) {
             updateUI();
@@ -240,18 +245,23 @@ public class PlayWidgetService extends Service {// 用于部件交互
     }
 
     public void initNext() {
-        Intent intent = new Intent(this, PlayWidgetService.class);
-        intent.putExtra("fromWidgetService", true);
-        intent.putExtra("mode", MODE_NEXT);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.button_next, pendingIntent);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            MusicList.infoLog("widget service next");
+            Intent intent = new Intent(this, PlayWidgetService.class);
+            intent.putExtra("fromWidgetService", true);
+            intent.putExtra("mode", MODE_NEXT);
+            PendingIntent pendingIntent = PendingIntent.getForegroundService(this, 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            remoteViews.setOnClickPendingIntent(R.id.button_next, pendingIntent);
+        }
     }
 
     public void initPrev() {
-        Intent intent = new Intent(this, PlayWidgetService.class);
-        intent.putExtra("fromWidgetService", true);
-        intent.putExtra("mode", MODE_PREV);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 3, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.button_prev, pendingIntent);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            Intent intent = new Intent(this, PlayWidgetService.class);
+            intent.putExtra("fromWidgetService", true);
+            intent.putExtra("mode", MODE_PREV);
+            PendingIntent pendingIntent = PendingIntent.getForegroundService(this, 3, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            remoteViews.setOnClickPendingIntent(R.id.button_prev, pendingIntent);
+        }
     }
 }

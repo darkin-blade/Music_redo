@@ -51,6 +51,7 @@
         <receiver android:name=".widget.PlayWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"></action>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"></action>
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
