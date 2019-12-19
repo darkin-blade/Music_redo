@@ -43,11 +43,7 @@ public class PlayNotification extends Service {
             String action = intent.getAction();
 
             if (Intent.ACTION_SCREEN_ON.equals(action)) {// 亮屏
-                MusicList.infoLog("build null? " + (builder == null));
-                if (builder != null) {
-                    PlayNotification.this.stopForeground(true);
-                    PlayNotification.this.startForeground(100, builder.build());
-                }
+                refresh();
             }
         }
     }
@@ -183,6 +179,14 @@ public class PlayNotification extends Service {
             remoteViews.setProgressBar(R.id.music_bar, PlayTime.total_time, PlayTime.cur_time, false);// 明确进度
             builder.setContent(remoteViews);
             startForeground(100, builder.build());
+        }
+    }
+
+    public void refresh() {// TODO 关闭通知并重新显示
+        if (builder != null) {
+            stopForeground(true);
+            startForeground(100, builder.build());
+            MusicList.infoLog("refresh");
         }
     }
 
