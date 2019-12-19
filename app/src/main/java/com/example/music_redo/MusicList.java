@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -158,101 +159,104 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         itemList = findViewById(R.id.item_list);
 
         button_play.setBackgroundDrawable(getResources().getDrawable(R.drawable.player_play));// 启动时为暂停
-        button_play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MusicList.this, PlayTime.class);
-                if (PlayTime.player.isPlaying() == true) {
-                    intent.putExtra("cmd", "pause");
-                } else {
-                    intent.putExtra("cmd", "play");
-                    intent.putExtra("mode", 0);
-                }
-                startService(intent);
-            }
-        });
 
-        button_next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 下一首
-                Intent intent = new Intent(MusicList.this, PlayTime.class);
-                intent.putExtra("cmd", "next");
-                startService(intent);
-            }
-        });
-
-        button_prev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 上一首
-                Intent intent = new Intent(MusicList.this, PlayTime.class);
-                intent.putExtra("cmd", "prev");
-                startService(intent);
-            }
-        });
-
-        button_mix.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (window_num == MUSIC_LIST) {
-                    // 切换至歌单列表
-                    window_num = MIX_LIST;
-                    listManager.listMix();
-                    MusicList.listManager.showMix("mix_list");
-
-                    Intent intent = new Intent(MusicList.this, PlayList.class);
-                    intent.putExtra("cmd", "highlightMusic");
-                    startService(intent);
-                } else {
-                    // 切换到当前歌单
-                    if (PlayList.curMusic.length() > 0) {
-                        listManager.listMusic(PlayList.curMix);
-                        window_num = MUSIC_LIST;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {// TODO 强行启动service
+            button_play.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MusicList.this, PlayTime.class);
+                    if (PlayTime.player.isPlaying() == true) {
+                        intent.putExtra("cmd", "pause");
                     } else {
-                        infoToast(MusicList.this, "no current mix");
+                        intent.putExtra("cmd", "play");
+                        intent.putExtra("mode", 0);
+                    }
+                    startForegroundService(intent);
+                }
+            });
+
+            button_next.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 下一首
+                    Intent intent = new Intent(MusicList.this, PlayTime.class);
+                    intent.putExtra("cmd", "next");
+                    startForegroundService(intent);
+                }
+            });
+
+            button_prev.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 上一首
+                    Intent intent = new Intent(MusicList.this, PlayTime.class);
+                    intent.putExtra("cmd", "prev");
+                    startForegroundService(intent);
+                }
+            });
+
+            button_mix.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (window_num == MUSIC_LIST) {
+                        // 切换至歌单列表
+                        window_num = MIX_LIST;
+                        listManager.listMix();
+                        MusicList.listManager.showMix("mix_list");
+
+                        Intent intent = new Intent(MusicList.this, PlayList.class);
+                        intent.putExtra("cmd", "highlightMusic");
+                        startForegroundService(intent);
+                    } else {
+                        // 切换到当前歌单
+                        if (PlayList.curMusic.length() > 0) {
+                            listManager.listMusic(PlayList.curMix);
+                            window_num = MUSIC_LIST;
+                        } else {
+                            infoToast(MusicList.this, "no current mix");
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        button_bluetooth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 打开蓝牙管理器
-                bluetoothList.show(getSupportFragmentManager(), "bluetooth");
-            }
-        });
-
-        button_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (window_num == MUSIC_LIST) {
-                    musicEdit.show(getSupportFragmentManager(), "edit music");
-                } else if (window_num == MIX_LIST) {
-                    mixEdit.show(getSupportFragmentManager(), "edit mix");
+            button_bluetooth.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 打开蓝牙管理器
+                    bluetoothList.show(getSupportFragmentManager(), "bluetooth");
                 }
-            }
-        });
+            });
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                ;
-            }
+            button_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (window_num == MUSIC_LIST) {
+                        musicEdit.show(getSupportFragmentManager(), "edit music");
+                    } else if (window_num == MIX_LIST) {
+                        mixEdit.show(getSupportFragmentManager(), "edit mix");
+                    }
+                }
+            });
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                ;
-            }
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    ;
+                }
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                Intent intent = new Intent(MusicList.this, PlayTime.class);
-                intent.putExtra("cmd", "getBar");
-                startService(intent);
-            }
-        });
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    ;
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    Intent intent = new Intent(MusicList.this, PlayTime.class);
+                    intent.putExtra("cmd", "getBar");
+                    startForegroundService(intent);
+                }
+            });
+        }
 
         musicName.setSelected(true);// 跑马灯
     }
@@ -274,24 +278,24 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
         if (PlayTime.player == null) {
             intent = new Intent(this, PlayTime.class);
             intent.putExtra("cmd", "init");
-            startService(intent);
+            startForegroundService(intent);
         }
         listManager.init();
         if (PlayList.curMix == null) {
             intent = new Intent(this, PlayList.class);
             intent.putExtra("cmd", "init");
-            startService(intent);
+            startForegroundService(intent);
         } else {// TODO 恢复ui
             intent = new Intent(this, PlayList.class);
             intent.putExtra("cmd", "loadMix");
             intent.putExtra("nextMix", PlayList.curMix);
             intent.putExtra("nextMusic", PlayList.curMusic);
             intent.putExtra("mode", 2);
-            startService(intent);
+            startForegroundService(intent);
 
             intent = new Intent(this, PlayTime.class);
             intent.putExtra("cmd", "load");
-            startService(intent);
+            startForegroundService(intent);
 
             listManager.listMusic(PlayList.curMix);
             listManager.showMix(PlayList.curMix);
@@ -348,7 +352,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     public void onPause() {
         Intent intent = new Intent(this, PlayList.class);
         intent.putExtra("cmd", "save");
-        startService(intent);
+        startForegroundService(intent);
         super.onPause();
     }
 
@@ -356,7 +360,7 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
     public void onDestroy() {
         Intent intent = new Intent(this, PlayList.class);
         intent.putExtra("cmd", "save");
-        startService(intent);
+        startForegroundService(intent);
         super.onDestroy();
     }
 
@@ -441,6 +445,6 @@ public class MusicList extends AppCompatActivity implements DialogInterface.OnDi
             default:
                 return;
         }
-        startService(intent);// TODO
+        startForegroundService(intent);// TODO
     }
 }

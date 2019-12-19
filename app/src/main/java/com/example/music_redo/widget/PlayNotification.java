@@ -4,7 +4,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.IBinder;
 import android.widget.RemoteViews;
@@ -33,6 +36,23 @@ public class PlayNotification extends Service {
     static final int MODE_CLOSE = 5;
 
     int isShown;// 是否显示在状态栏
+
+    public class ScreenReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if (Intent.ACTION_SCREEN_ON.equals(action)) {// 亮屏
+                MusicList.infoLog("build null? " + (builder == null));
+                if (builder != null) {
+                    PlayNotification.this.stopForeground(true);
+                    PlayNotification.this.startForeground(100, builder.build());
+                }
+            }
+        }
+    }
+
+    static public ScreenReceiver screenReceiver;// 监听锁屏
 
     @Override
     public void onCreate() {
@@ -132,6 +152,7 @@ public class PlayNotification extends Service {
                     .setOngoing(true);// TODO
         }
 
+        initReceiver();
         initNext();
         initPrev();
         initClose();
@@ -163,6 +184,17 @@ public class PlayNotification extends Service {
             builder.setContent(remoteViews);
             startForeground(100, builder.build());
         }
+    }
+
+    public void initReceiver() {
+        screenReceiver = new ScreenReceiver();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        intentFilter.addAction(Intent.ACTION_USER_PRESENT);
+
+        registerReceiver(screenReceiver, intentFilter);
     }
 
     public void initPlay() {
