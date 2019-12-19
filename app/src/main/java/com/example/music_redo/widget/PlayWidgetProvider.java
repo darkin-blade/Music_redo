@@ -6,14 +6,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.RemoteViews;
 
 import com.example.music_redo.MusicList;
-import com.example.music_redo.R;
-
-import java.util.ArrayList;
-
-import static com.example.music_redo.widget.PlayWidgetService.remoteViews;
 
 public class PlayWidgetProvider extends AppWidgetProvider {
 
