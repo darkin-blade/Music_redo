@@ -37,19 +37,6 @@ public class PlayNotification extends Service {
 
     int isShown;// 是否显示在状态栏
 
-    public class ScreenReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-
-            if (Intent.ACTION_SCREEN_ON.equals(action)) {// 亮屏
-                refresh();
-            }
-        }
-    }
-
-    static public ScreenReceiver screenReceiver;// 监听锁屏
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -148,7 +135,6 @@ public class PlayNotification extends Service {
                     .setOngoing(true);// TODO
         }
 
-        initReceiver();
         initNext();
         initPrev();
         initClose();
@@ -180,25 +166,6 @@ public class PlayNotification extends Service {
             builder.setContent(remoteViews);
             startForeground(100, builder.build());
         }
-    }
-
-    public void refresh() {// TODO 关闭通知并重新显示
-        if (builder != null) {
-            stopForeground(true);
-            startForeground(100, builder.build());
-            MusicList.infoLog("refresh");
-        }
-    }
-
-    public void initReceiver() {
-        screenReceiver = new ScreenReceiver();
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
-        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        intentFilter.addAction(Intent.ACTION_USER_PRESENT);
-
-        registerReceiver(screenReceiver, intentFilter);
     }
 
     public void initPlay() {
